@@ -1,6 +1,9 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
+const path = require('path');
+const fs = require('fs');
+const https = require('https');
 const session = require("express-session");
 const {engine} = require("express-handlebars");
 const registerR = require("./routes/register.r");
@@ -43,6 +46,11 @@ app.get("/chatbox", (req, res) => {
     res.render("chatbox");
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-})
+// app.listen(port, () => {
+//     console.log(`Listening on port ${port}`);
+// })
+const server = https.createServer({
+    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+}, app);
+server.listen(port, () => console.log(`Secure server on port ${port}`));
