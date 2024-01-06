@@ -27,7 +27,7 @@ require('./config/passport-setup.js')(app);
 require("./config/passport-login.js")(app);
 
 app.get("/", (req, res) => {
-    res.render('login');
+    res.render('home');
 });
 
 app.use("/login", authLogin);

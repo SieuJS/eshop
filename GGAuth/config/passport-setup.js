@@ -17,7 +17,7 @@ module.exports = (app) => {
     new GoogleStrategy({
         clientID: "865295487079-akv1tle2d37bplmsrdnn6be1mhivrac1.apps.googleusercontent.com",
         clientSecret: "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",
-        callbackURL: "http://localhost:3000/auth/google/redirect"
+        callbackURL: "https://localhost:3000/auth/google/redirect"
     }, (accessToken, refreshToken, profile, done) => {
         // call done to change next stage
         done(null, profile.id);
