@@ -42,7 +42,7 @@ module.exports = {
     },
     insert: async (tbName, entity, idName = "id") => {
         const query = pgp.helpers.insert(entity, null, tbName);
-        const data = await db.one(query + `RETURNING "${idName}"`);
+        const data = await db.one(query + `RETURNING ${idName}`);
         return data;
     },
     getAllJoin: async (tbName1, tbName2, field1, field2, value) => {

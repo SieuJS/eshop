@@ -1,13 +1,13 @@
 const db = require("../utils/db");
 
 module.exports = class Account {
-    constructor({Name, Username, Email, Password, DOB, Permission}) {
+    constructor({Name, Username, Email, Password, DOB, Role}) {
         this.Name = Name;
         this.Username = Username;
         this.Email = Email;
         this.Password = Password;
         this.DOB = DOB;
-        this.Permission = Permission;
+        this.Role = Role
     }
 
     static async getByUsername(un) {
@@ -16,7 +16,7 @@ module.exports = class Account {
     }
 
     static async add(acc) {
-        const data = await db.insert("Users", acc, "ID");
+        const data = await db.insert("Users", acc, "*");
         return data;
     }
 }
