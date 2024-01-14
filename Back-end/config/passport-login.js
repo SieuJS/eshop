@@ -29,9 +29,6 @@ module.exports = (app) => {
             return done(null, rs);
         }
         done("invalid auth login", null);
-    }, {
-        username: "un",
-        password: "pw"
     }));
 
 }
