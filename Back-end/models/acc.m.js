@@ -1,22 +1,54 @@
 const db = require("../utils/db");
+const pgp = require("pg-promise")({capSQL: true});
 
 module.exports = class Account {
-    constructor({Name, Username, Email, Password, DOB, Permission}) {
+    constructor({Name, Username, Email, Password, DOB, Role}) {
         this.Name = Name;
         this.Username = Username;
         this.Email = Email;
         this.Password = Password;
         this.DOB = DOB;
-        this.Permission = Permission;
+        this.Role = Role
     }
 
     static async getByUsername(un) {
-        const rs = await db.get("Users", "Username", un);
-        return rs;
+        try {
+            const data = await db.oneOrNone(`SELECT * FROM "Users" WHERE "Username" = $1`, [un]);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getByUserID(id) {
+        try {
+            const data = await db.oneOrNone(`SELECT * FROM "Users" WHERE "ID" = $1`, [id]);
+            return data;
+        } catch (error) {
+            throw error;
+        }
     }
 
     static async add(acc) {
-        const data = await db.insert("Users", acc, "ID");
+        try {
+            const query = pgp.helpers.insert(acc, null, "Users");
+            const data = await db.one(query + "RETURNING *");
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    static async updateUser(newValues) {
+        const data = await db.func("update_user", newValues);
         return data;
+    }
+
+    static async deleteUser(username) {
+        try {
+            await db.proc("proc_delete_user", [username])
+        } catch (error) {
+            throw error;
+        }
     }
 }

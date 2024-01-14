@@ -9,7 +9,6 @@ router.get("/google", passport.authenticate('google', {
 
 // callback route of OAuth
 router.get("/google/redirect", passport.authenticate('google', {
-    successRedirect: "/categories",
     failureRedirect: "/"
 }));
 
