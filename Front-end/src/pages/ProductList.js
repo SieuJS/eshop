@@ -8,7 +8,6 @@ export default function () {
         <>
             <Topbar />
             <Navbar />
-            <PageHeader />
             <ProductList />
         </>
     )

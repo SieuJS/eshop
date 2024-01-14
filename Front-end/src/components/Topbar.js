@@ -40,14 +40,14 @@ export default function Topbar() {
                     </a>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
-                    <form action="">
+                    <form action="http://localhost:3000/search">
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Search for products" />
-                            <div className="input-group-append">
+                            <input type="text" name="keyword" className="form-control" placeholder="Search for products" />
+                            <button type="submit" className="input-group-append">
                                 <span className="input-group-text bg-transparent text-primary">
                                     <i className="fa fa-search"></i>
                                 </span>
-                            </div>
+                            </button>
                         </div>
                     </form>
                 </div>

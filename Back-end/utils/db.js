@@ -56,5 +56,22 @@ module.exports = {
         }finally {
             dbcn.done();
         }
+    },
+    getProductbySearch: async (name,catID) => {
+        let dbcn = null;
+        try {
+            dbcn = await db.connect();
+            var data;
+            if (catID != null) {
+                data = await dbcn.any(`SELECT * FROM "Products" WHERE "CatID" = ${catID} AND "ProName" LIKE '%${name}%'`);
+            }  
+            else {
+                data = await dbcn.any(`SELECT * FROM "Products" WHERE "ProName" LIKE '%${name}%'`);
+            }
+            return data;
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 }
