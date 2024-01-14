@@ -1,3 +1,5 @@
+import './AdminProduct.css'
+
 export default function AdminProduct() {
     return (
     <main className="main-container">

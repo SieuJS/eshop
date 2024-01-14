@@ -1,4 +1,5 @@
 import $ from 'jquery'
+import './AdminCat.css'
 
 export default function AdminCat() {
 

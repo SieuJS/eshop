@@ -1,3 +1,5 @@
+import './AdminHeader.css'
+
 export default function AdminHeader() {
     return (
         <header className="header">
