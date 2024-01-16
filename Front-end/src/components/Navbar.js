@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import useFetch from "../hooks/useFetch"
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
 
     const [showCatNav, setShowCatNav] = useState(false);
+    const {data: categories, isPending, error} = useFetch('http://localhost:3000/api/categories');
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }
@@ -20,25 +23,15 @@ export default function Navbar() {
                         <i className="fa fa-angle-down text-dark"></i>
                     </button>
                     {showCatNav && (
-                        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
-                            <div className="navbar-nav w-100 overflow-hidden" style={{ height: "410px" }}>
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link" data-toggle="dropdown">Dresses <i className="fa fa-angle-down float-right mt-1"></i></a>
-                                    <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                        <a href="" className="dropdown-item">Men's Dresses</a>
-                                        <a href="" className="dropdown-item">Women's Dresses</a>
-                                        <a href="" className="dropdown-item">Baby's Dresses</a>
-                                    </div>
-                                </div>
-                                <a href="" className="nav-item nav-link">Shirts</a>
-                                <a href="" className="nav-item nav-link">Jeans</a>
-                                <a href="" className="nav-item nav-link">Swimwear</a>
-                                <a href="" className="nav-item nav-link">Sleepwear</a>
-                                <a href="" className="nav-item nav-link">Sportswear</a>
-                                <a href="" className="nav-item nav-link">Jumpsuits</a>
-                                <a href="" className="nav-item nav-link">Blazers</a>
-                                <a href="" className="nav-item nav-link">Jackets</a>
-                                <a href="" className="nav-item nav-link">Shoes</a>
+                        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" >
+                            <div className="navbar-nav w-100 overflow-hidden" >
+                                {
+                                    categories && (
+                                        categories.map(cat => (
+                                            <Link to={`/category/${cat.CatID}`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
+                                        ))
+                                    )
+                                }
                             </div>
                         </nav>
                     )}

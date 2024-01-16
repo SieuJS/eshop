@@ -6,7 +6,6 @@ module.exports = {
         let name = req.query.keyword || "";
         let max = req.query.max? parseInt(req.query.max) : null;
         let min = req.query.min? parseInt(req.query.min): null;
-        console.log(min);
         let page = req.query.page || 1;
         const productsPerPage = 9;  //Mặc định mỗi trang 9 sản phẩm. Có thể đổi nếu muốn
 

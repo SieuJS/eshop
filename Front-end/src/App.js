@@ -15,6 +15,8 @@ function App() {
             <Route path='/admin/product' exact element={<Product/>} />
             <Route path='/productlist' exact element={<ProductList />} />
             <Route path='/search' exact element={<ProductList/>} />
+            <Route path='/category/:catid' exact element= {<ProductList/>}/>
+            <Route path='/product/:proid' exact element = {<Detail/>} />
           </Routes>
       </BrowserRouter>
     </>
