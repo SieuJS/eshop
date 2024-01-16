@@ -22,7 +22,7 @@ require('./config/passport-setup.js')(app);
 require("./config/passport-login.js")(app);
 
 app.use("/api/account", accountRoute);
-//app.use("/auth", authGoogleRoute);
+//app.use("/auth", authGoogleRoute); 
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
