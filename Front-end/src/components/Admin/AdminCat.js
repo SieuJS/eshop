@@ -1,7 +1,10 @@
 import $ from 'jquery'
 import './AdminCat.css'
+import { useEffect, useContext } from 'react';
+import { CatContext } from '../../context/CatContext.js';
 
 export default function AdminCat() {
+  const {allCategories, setAllCategories, isLoading, isError} = useContext(CatContext);
 
   function openAddItemForm() {
       window.$('#addItemModal').modal('show');
@@ -11,11 +14,44 @@ export default function AdminCat() {
       window.$('#addItemModal').modal('hide');
   }
 
-  function submitAddItemForm() {
-      window.$('#addItemModal').modal('hide');
+  async function submitAddItemForm() {
+    const entity = {
+      CatName : $('#catName').val()
+    }
+
+    const data = await fetch('https://localhost:3000/api/categories/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entity),
+    })
+    const res = await data.json();
+    if (res.success) {
+      entity.CatID = res.data.CatID;
+      setAllCategories([...allCategories, entity])
+    }
+    window.$('#addItemModal').modal('hide');
   }
 
-  function editRow(icon) {
+  async function deleteRow(icon, id) {
+    // var row = $(icon).closest('tr');
+    var confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa hàng này không?');
+
+    if (confirmDelete) {
+      try {
+        const result = await fetch(`https://localhost:3000/api/categories/delete?CatID=${id}`);
+        const data = await result.json();
+        if (data.success) {
+          setAllCategories(allCategories.filter((item) => item.CatID !== id));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  async function editRow(icon) {
       const row = $(icon).closest('tr');
       const catCode = row.find('th:nth-child(1)').text();
       const catName = row.find('td:nth-child(2)').text();
@@ -25,8 +61,32 @@ export default function AdminCat() {
 
       window.$('#editItemModal').modal('show');
   }
-  function saveChanges(){
-      window.$('#editItemModal').modal('hide');
+  async function saveChanges() {
+    const entity = {
+      CatID: $('#editCatCode').val(),
+      CatName: $('#editCatName').val(),
+    }
+    const data = await fetch('https://localhost:3000/api/categories/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(entity),
+    })
+    const res = await data.json();
+    if (res.success) {
+      setAllCategories(prevCategories => {
+        const updatedCategories = [...prevCategories];
+        updatedCategories.forEach(cat => {
+          if (cat.CatID == entity.CatID) {
+            cat.CatName = entity.CatName
+          }
+        })
+        return updatedCategories;
+      })
+    }
+
+    window.$('#editItemModal').modal('hide');
   }
   function cancelEdit() {
       window.$('#editItemModal').modal('hide');
@@ -64,30 +124,30 @@ export default function AdminCat() {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <th scope="row">1</th>
-                      <td>Mark</td>
-                      <td className="text-center">
-                      <button className="btn btn-primary btn-sm me-2" onClick={(event)=>editRow(event.target)}>
-                          <i className="fa fa-pencil"></i>
-                      </button>
-                      <button href="" className="btn btn-danger btn-sm">
-                        <i className="fa fa-trash"></i>
-                      </button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th scope="row">2</th>
-                      <td>Mark2</td>
-                      <td className="text-center">
-                      <button className="btn btn-primary btn-sm me-2" onClick={(event)=>editRow(event.target)}>
-                          <i className="fa fa-pencil"></i>
-                        </button>
-                        <button href="" className="btn btn-danger btn-sm">
-                          <i className="fa fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
+                  { isError == false && isLoading == false && allCategories &&
+                  allCategories.map(cat => {
+                    return <tr key={cat.CatID} >
+                              <th scope="row">{cat.CatID }</th>
+                              <td>{cat.CatName}</td>
+                              <td className="text-center">
+                              <button className="btn btn-primary btn-sm me-2" onClick={(event)=>editRow(event.target)}>
+                                  <i className="fa fa-pencil"></i>
+                              </button>
+                              <button href="" className="btn btn-danger btn-sm" onClick={(event)=>deleteRow(event.target, cat.CatID)}>
+                                <i className="fa fa-trash"></i>
+                              </button>
+                              </td>
+                            </tr>
+                  })}
+                  {
+                  isLoading == true && <th colSpan={5} style={{textAlign: 'center'}}>
+                                          <div>  
+                                          <div class="spinner-border" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                          </div>
+                                          </div>
+                                      </th>
+                  }
                   </tbody>
                 </table>
                 <nav aria-label="Page navigation example">
@@ -122,15 +182,12 @@ export default function AdminCat() {
               </button>
             </div>
             <div className="modal-body">
-              <label for="catCode">Category number:</label>
-              <input type="text" id="catCode" name="catCode" className="form-control"/>
-      
               <label for="catName">Category name:</label>
               <input type="text" id="catName" name="catName" className="form-control"/>
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelAddItemForm()}>Cancel</button>
-                          <button type="submit" className="btn btn-primary" onClick={() => submitAddItemForm()}>Add</button>
+                          <button type="button" className="btn btn-primary" onClick={() => submitAddItemForm()}>Add</button>
             </div>
           </form>
         </div>
@@ -148,14 +205,14 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label for="catCode">Category number:</label>
-              <input type="text" id="editCatCode" name="editCatCode" className="form-control"/>
+              <input type="text" id="editCatCode" name="editCatCode" className="form-control" readOnly/>
       
               <label for="catName">Category name:</label>
               <input type="text" id="editCatName" name="editCatName" className="form-control"/>
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelEdit()}>Cancel</button>
-                          <button type="submit" className="btn btn-primary" onClick={saveChanges()}>Save</button>
+              <button type="button" className="btn btn-primary" onClick={() => { saveChanges() }}>Save</button>
             </div>
           </form>
         </div>
