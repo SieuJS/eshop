@@ -1,6 +1,18 @@
 import react from "react";
+import { useState } from "react";
+import {useNavigate} from 'react-router-dom'
 
 export default function Topbar() {
+    const [keyword, setKeyword] = useState();
+    const navigate = useNavigate();
+    const submitHandler = (e) => {
+        if (keyword.trim()) {
+            navigate(`/search?keyword=${keyword}`);
+        }
+        else {
+            navigate('/');
+        }
+    }
     return (
         <div className="container-fluid">
             <div className="row bg-secondary py-2 px-xl-5">
@@ -40,14 +52,14 @@ export default function Topbar() {
                     </a>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
-                    <form action="">
+                    <form onSubmit={submitHandler}>
                         <div className="input-group">
-                            <input type="text" className="form-control" placeholder="Search for products" />
-                            <div className="input-group-append">
+                            <input type="text" name="keyword" className="form-control" placeholder="Search for products" onChange={(e)=>{setKeyword(e.target.value)}}/>
+                            <button className="input-group-append">
                                 <span className="input-group-text bg-transparent text-primary">
                                     <i className="fa fa-search"></i>
                                 </span>
-                            </div>
+                            </button>
                         </div>
                     </form>
                 </div>

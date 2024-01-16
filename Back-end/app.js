@@ -9,6 +9,9 @@ const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const port = 3000;
 const secret = "My secret";
+const searchC = require('./controllers/search.c.js')
+const cors =  require('cors');
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }));
 
@@ -23,6 +26,8 @@ require("./config/passport-login.js")(app);
 
 app.use("/api/account", accountRoute);
 //app.use("/auth", authGoogleRoute);
+
+app.use("/search",searchC.search);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);
