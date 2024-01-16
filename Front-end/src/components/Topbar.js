@@ -1,4 +1,5 @@
 import react from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Topbar() {
     return (
@@ -35,31 +36,29 @@ export default function Topbar() {
             </div>
             <div className="row align-items-center py-3 px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <a href="" className="text-decoration-none">
+                    <NavLink to="/home" className="text-decoration-none">
                         <h1 className="m-0 display-5 font-weight-semi-bold"><span className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
-                    </a>
+                    </NavLink>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
-                    <form action="">
+                    <form>
                         <div className="input-group">
                             <input type="text" className="form-control" placeholder="Search for products" />
-                            <div className="input-group-append">
-                                <span className="input-group-text bg-transparent text-primary">
+                            <button className="btn border py-0 px-4 my-0 mx-2 input-group-text bg-transparent text-primary">
                                     <i className="fa fa-search"></i>
-                                </span>
-                            </div>
+                            </button>
                         </div>
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <a href="" className="btn border">
+                    <NavLink to="/favorite" className="btn border">
                         <i className="fas fa-heart text-primary"></i>
                         <span className="p-1">0</span>
-                    </a>
-                    <a href="" className="btn border">
+                    </NavLink>
+                    <NavLink to="/cart" className="btn border">
                         <i className="fas fa-shopping-cart text-primary"></i>
                         <span className="p-1">0</span>
-                    </a>
+                    </NavLink>
                 </div>
             </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import {NavLink} from "react-router-dom";
 
 export default function Navbar() {
 
@@ -6,7 +7,6 @@ export default function Navbar() {
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }
-    // navlink phan nav
     return (
         <div className="container-fluid mb-5">
             <div className="row border-top px-xl-5">
@@ -22,23 +22,12 @@ export default function Navbar() {
                     {showCatNav && (
                         <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
                             <div className="navbar-nav w-100 overflow-hidden" style={{ height: "410px" }}>
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link" data-toggle="dropdown">Dresses <i className="fa fa-angle-down float-right mt-1"></i></a>
-                                    <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                        <a href="" className="dropdown-item">Men's Dresses</a>
-                                        <a href="" className="dropdown-item">Women's Dresses</a>
-                                        <a href="" className="dropdown-item">Baby's Dresses</a>
-                                    </div>
-                                </div>
-                                <a href="" className="nav-item nav-link">Shirts</a>
-                                <a href="" className="nav-item nav-link">Jeans</a>
-                                <a href="" className="nav-item nav-link">Swimwear</a>
-                                <a href="" className="nav-item nav-link">Sleepwear</a>
-                                <a href="" className="nav-item nav-link">Sportswear</a>
-                                <a href="" className="nav-item nav-link">Jumpsuits</a>
-                                <a href="" className="nav-item nav-link">Blazers</a>
-                                <a href="" className="nav-item nav-link">Jackets</a>
-                                <a href="" className="nav-item nav-link">Shoes</a>
+                                <NavLink to="/products/shirt" className="nav-item nav-link">Shirts</NavLink>
+                                <NavLink to="/products/jeans" className="nav-item nav-link">Jeans</NavLink>
+                                <NavLink to="/products/mensdresses" className="nav-item nav-link">Swimwear</NavLink>
+                                <NavLink to="/products/sleepwear" className="nav-item nav-link">Sleepwear</NavLink>
+                                <NavLink to="/products/blazers" className="nav-item nav-link">Blazers</NavLink>
+                                <NavLink to="/products/jackets" className="nav-item nav-link">Jackets</NavLink>
                             </div>
                         </nav>
                     )}
@@ -55,21 +44,15 @@ export default function Navbar() {
                         </button>
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div className="navbar-nav mr-auto py-0">
-                                <a href="index.html" className="nav-item nav-link active">Home</a>
-                                <a href="shop.html" className="nav-item nav-link">Shop</a>
-                                <a href="detail.html" className="nav-item nav-link">Shop Detail</a>
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                                    <div className="dropdown-menu rounded-0 m-0">
-                                        <a href="cart.html" className="dropdown-item">Shopping Cart</a>
-                                        <a href="checkout.html" className="dropdown-item">Checkout</a>
-                                    </div>
-                                </div>
-                                <a href="contact.html" className="nav-item nav-link">Contact</a>
+                                <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
+                                <NavLink to="/shop" className="nav-item nav-link">Shop</NavLink>
+                                <NavLink to="/detail" className="nav-item nav-link">Shop Detail</NavLink>
+                                
+                                <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <a href="" className="nav-item nav-link">Login</a>
-                                <a href="" className="nav-item nav-link">Register</a>
+                                <NavLink to="/login" className="nav-item nav-link">Login</NavLink>
+                                <NavLink to="/register" className="nav-item nav-link">Register</NavLink>
                             </div>
                         </div>
                     </nav>
