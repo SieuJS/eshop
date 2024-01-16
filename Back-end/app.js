@@ -10,6 +10,8 @@ const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const port = 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
+const cors =  require('cors');
+app.use(cors())
 
 app.use(express.urlencoded({ extended: true }));
 

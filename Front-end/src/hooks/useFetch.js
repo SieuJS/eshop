@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-const useEffect = (url) => {
+const useFetch = (url) => {
     const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
@@ -22,4 +22,7 @@ const useEffect = (url) => {
                 setError(err.message);
             })
     },[url]);
+    return {data,isPending,error};
 }
+
+export default useFetch;
