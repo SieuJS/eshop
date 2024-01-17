@@ -5,16 +5,16 @@ import Cart from "./pages/Cart.js";
 import ProductList from "./pages/ProductList.js"
 import Product from './pages/Admin/Products.js';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Shop from './Customer'
+import Admin from './Admin'
 
 function App() {
   return (
     <>
         <BrowserRouter>  
           <Routes>
-            <Route path='/' element={<Home />} />
-            <Route path='/admin/product' exact element={<Product/>} />
-            <Route path='/productlist' exact element={<ProductList />} />
-            <Route path='/search' exact element={<ProductList/>} />
+            <Route path='/*' element={<Shop />} />
+            <Route path='/admin/*' exact element={<Admin/>} />
           </Routes>
       </BrowserRouter>
     </>
