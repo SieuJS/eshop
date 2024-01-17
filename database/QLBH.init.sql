@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS "OrderDetails";
 CREATE TABLE "OrderDetails" (
   "ID" serial NOT NULL,
   "OrderID" int4 NOT NULL,
-  "ProductName" varchar(80) NOT NULL,
+  "ProductName" varchar(40) NOT NULL,
   "ProID" int4,
   "Quantity" int4 NOT NULL,
   "Price" numeric(19,4) NOT NULL,
@@ -84,21 +84,22 @@ CREATE TABLE "Products" (
   "FullDes" text NOT NULL,
   "Price" numeric(19,4) NOT NULL,
   "CatID" int4 NOT NULL,
-  "Quantity" int4 NOT NULL
+  "Quantity" int4 NOT NULL,
+  "ImageUrl" text
 )
 ;
 
 -- ----------------------------
 -- Table structure for Image of Products
 -- ----------------------------
-DROP TABLE IF EXISTS "ProductImages";
-CREATE TABLE "ProductImages" (
-  "ProID" int4 NOT NULL,
-  "ImageUrl" text NOT NULL,
+-- DROP TABLE IF EXISTS "ProductImages";
+-- CREATE TABLE "ProductImages" (
+--   "ProID" int4 NOT NULL,
+--   "ImageUrl" text NOT NULL,
 
-  PRIMARY KEY ("ProID", "ImageUrl")
-)
-;
+--   PRIMARY KEY ("ProID", "ImageUrl")
+-- )
+-- ;
 
 -- ----------------------------
 -- Records of Products

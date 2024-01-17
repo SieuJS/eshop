@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 var cors = require('cors')
 const https = require('https');
+const bodyParser = require('body-parser');
 const session = require("express-session");
 const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
@@ -15,6 +16,7 @@ const secret = "My secret";
 
 app.use(cors())
 app.use(express.static(__dirname + '/public'))
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

@@ -12,6 +12,15 @@ module.exports = class Product{
         }
     }
 
+    static async getMaxID() {
+        try {
+            const data = await db.one(`SELECT MAX("ProID") FROM "${tbName}"`);
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     static async add(entity) {
         try {
             const query = pgp.helpers.insert(entity, null, tbName);

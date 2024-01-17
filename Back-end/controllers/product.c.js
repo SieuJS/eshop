@@ -13,15 +13,19 @@ module.exports = {
 
     addProduct: async (req, res, next) => {
         try {
+            const maxProID = await productM.getMaxID();
             const entity = {
-                ProName: req.body.productName,
-                TinyDes: req.body.description,
-                FullDes: req.body.fullDescription,
-                Price: req.body.productPrice,
+                ProID: maxProID.max + 1,
+                ProName: req.body.proName,
+                TinyDes: req.body.proTinyDes,
+                FullDes: req.body.proFullDes,
+                Price: req.body.proPrice,
                 CatID: req.body.catID,
-                Quantity:req.body.productQuantity
+                Quantity:req.body.proQuantity
             }
-            console.log(req.body);
+            if (req.file) {
+                entity.ImageUrl = `https://localhost:3000/images/${req.file.filename}`
+            }
             const data = await productM.add(entity);
             res.json({success: true, data:data})
         } catch (error) {

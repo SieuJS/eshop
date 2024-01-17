@@ -1,4 +1,4 @@
-import './AdminProduct.css'
+// import './AdminProduct.css'
 import { useEffect, useState } from "react"
 import { useParams, Link } from "react-router-dom";
 import useFetch from '../../customize/useFetch';
@@ -72,7 +72,7 @@ export default function AdminProduct() {
                     { allProducts.map(pro => {
                       return <tr className="text-center" key={pro.ProID} style={{verticalAlign: 'middle'}}>
                               <th scope="row">{pro.ProID}</th>
-                              <th><img src="https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg" alt="" width="52px" className="rounded-2"/></th>
+                              <th><img src={pro.ImageUrl || "https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg"} alt="" width="52px" className="rounded-2"/></th>
                               <td>{pro.ProName}</td>
                               <td>{parseFloat(pro.Price).toLocaleString()}</td>
                               <td>{pro.Quantity}</td>

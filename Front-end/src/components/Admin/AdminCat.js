@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import './AdminCat.css'
+// import './AdminCat.css'
 import { useEffect, useContext } from 'react';
 import { CatContext } from '../../context/CatContext.js';
 

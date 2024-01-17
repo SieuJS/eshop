@@ -4,7 +4,7 @@ import AdminProduct from '../../components/Admin/AdminProduct';
 import AdminCatProduct from '../../components/Admin/AdminCatProduct';
 import AdminAddProduct from '../../components/Admin/AdminAddProduct';
 import {Routes, Route } from 'react-router-dom'
-import './admin.css'
+// import './admin.css'
 
 export default function Products() {
     return (
