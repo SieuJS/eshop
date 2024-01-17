@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const path = require('path');
 const fs = require('fs');
-var cors = require('cors')
+const cors = require('cors')
 const https = require('https');
 const bodyParser = require('body-parser');
 const session = require("express-session");
@@ -14,10 +14,8 @@ const productRoute = require("./routes/product.r")
 const port = 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
-const cors =  require('cors');
 app.use(cors())
 
-app.use(cors())
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.json());
 app.use(express.json());
