@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 
 export default function ProductList(props) {
     const products = props.products;
+    const pages = props.pages;
+    console.log(pages);
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
@@ -285,11 +287,11 @@ export default function ProductList(props) {
                         <div className="col-12 pb-1">
                             <nav aria-label="Page navigation">
                                 <ul className="pagination justify-content-center mb-3">
-                                    <li className="page-item disabled">
-                                        <a className="page-link" href="#" aria-label="Previous">
+                                    <li className="page-item">
+                                        <Link className="page-link" to={`?page=3`} aria-label="Previous">
                                             <span aria-hidden="true">«</span>
                                             <span className="sr-only">Previous</span>
-                                        </a>
+                                        </Link>
                                     </li>
                                     <li className="page-item active">
                                         <a className="page-link" href="#">
