@@ -1,6 +1,7 @@
-export default function ProductDetail() {
+export default function ProductDetail({data}) {
+    const product = data[0];
     return (
-        <div className="container-fluid py-5">
+        <div className="container-fluid py-5" key={product.ProID}>
             <div className="row px-xl-5">
                 <div className="col-lg-5 pb-5">
                     <div id="product-carousel" className="carousel slide" data-ride="carousel">
@@ -28,7 +29,7 @@ export default function ProductDetail() {
                 </div>
 
                 <div className="col-lg-7 pb-5">
-                    <h3 className="font-weight-semi-bold">Colorful Stylish Shirt</h3>
+                    <h3 className="font-weight-semi-bold">{product.ProName}</h3>
                     <div className="d-flex mb-3">
                         <div className="text-primary mr-2">
                             <small className="fas fa-star"></small>
@@ -39,8 +40,8 @@ export default function ProductDetail() {
                         </div>
                         <small className="pt-1">(50 Reviews)</small>
                     </div>
-                    <h3 className="font-weight-semi-bold mb-4">$150.00</h3>
-                    <p className="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.</p>
+                    <h3 className="font-weight-semi-bold mb-4">{product.Price} VND</h3>
+                    <p className="mb-4"></p>
                     <div className="d-flex mb-3">
                         <p className="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
                         <form>

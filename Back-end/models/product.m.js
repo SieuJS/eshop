@@ -30,6 +30,10 @@ module.exports = class Product{
             throw err;
         }
     }
+    static async getById(_id) {
+        const rs = await db.query(`SELECT * FROM "Products" WHERE "ProID" = ${_id}`);
+        return rs;
+    }
 
     // static async getMaxID() {
     //     try {

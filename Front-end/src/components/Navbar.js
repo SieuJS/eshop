@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
+import useFetch from "../hooks/useFetch"
+import { Link } from "react-router-dom";
 import {NavLink} from "react-router-dom";
 
 export default function Navbar() {
 
     const [showCatNav, setShowCatNav] = useState(false);
+    const {data: categories, isPending, error} = useFetch('/api/categories');
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }
@@ -20,14 +23,15 @@ export default function Navbar() {
                         <i className="fa fa-angle-down text-dark"></i>
                     </button>
                     {showCatNav && (
-                        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
-                            <div className="navbar-nav w-100 overflow-hidden" style={{ height: "410px" }}>
-                                <NavLink to="/products/shirt" className="nav-item nav-link">Shirts</NavLink>
-                                <NavLink to="/products/jeans" className="nav-item nav-link">Jeans</NavLink>
-                                <NavLink to="/products/mensdresses" className="nav-item nav-link">Swimwear</NavLink>
-                                <NavLink to="/products/sleepwear" className="nav-item nav-link">Sleepwear</NavLink>
-                                <NavLink to="/products/blazers" className="nav-item nav-link">Blazers</NavLink>
-                                <NavLink to="/products/jackets" className="nav-item nav-link">Jackets</NavLink>
+                        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" >
+                            <div className="navbar-nav w-100 overflow-hidden" >
+                                {
+                                    categories && (
+                                        categories.map(cat => (
+                                            <Link to={`/category/${cat.CatID}?page=1`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
+                                        ))
+                                    )
+                                }
                             </div>
                         </nav>
                     )}
