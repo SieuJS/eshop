@@ -34,6 +34,7 @@ require('./config/passport-setup.js')(app);
 require("./config/passport-login.js")(app);
 
 app.use("/api/account", accountRoute);
+
 app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 //app.use("/auth", authGoogleRoute);

@@ -40,12 +40,14 @@ module.exports = class Account {
     }
 
     static async updateUser(newValues) {
+        // update_user is a custome function of Postgresql database
         const data = await db.func("update_user", newValues);
         return data;
     }
 
     static async deleteUser(username) {
         try {
+            // update_user is a custome procedure of Postgresql database
             await db.proc("proc_delete_user", [username])
         } catch (error) {
             throw error;

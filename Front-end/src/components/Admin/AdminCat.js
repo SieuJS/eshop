@@ -19,7 +19,7 @@ export default function AdminCat() {
       CatName : $('#catName').val()
     }
 
-    const data = await fetch('https://localhost:3000/api/categories/add', {
+    const data = await fetch('/api/categories/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -40,7 +40,7 @@ export default function AdminCat() {
 
     if (confirmDelete) {
       try {
-        const result = await fetch(`https://localhost:3000/api/categories/delete?CatID=${id}`);
+        const result = await fetch(`/api/categories/delete?CatID=${id}`);
         const data = await result.json();
         if (data.success) {
           setAllCategories(allCategories.filter((item) => item.CatID !== id));
@@ -66,7 +66,7 @@ export default function AdminCat() {
       CatID: $('#editCatCode').val(),
       CatName: $('#editCatName').val(),
     }
-    const data = await fetch('https://localhost:3000/api/categories/update', {
+    const data = await fetch('/api/categories/update', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -140,13 +140,16 @@ export default function AdminCat() {
                             </tr>
                   })}
                   {
-                  isLoading == true && <th colSpan={5} style={{textAlign: 'center'}}>
+                  isLoading == true && <tr>
+                                      <th colSpan={5} style={{ textAlign: 'center' }}>
                                           <div>  
-                                          <div class="spinner-border" role="status">
-                                            <span class="sr-only">Loading...</span>
+                                          <div className="spinner-border" role="status">
+                                            <span className="sr-only">Loading...</span>
                                           </div>
                                           </div>
                                       </th>
+                                      </tr>
+                                      
                   }
                   </tbody>
                 </table>
@@ -182,7 +185,7 @@ export default function AdminCat() {
               </button>
             </div>
             <div className="modal-body">
-              <label for="catName">Category name:</label>
+              <label htmlFor="catName">Category name:</label>
               <input type="text" id="catName" name="catName" className="form-control"/>
             </div>
             <div className="modal-footer">
@@ -204,10 +207,10 @@ export default function AdminCat() {
               </button>
             </div>
             <div className="modal-body">
-              <label for="catCode">Category number:</label>
+              <label htmlFor="catCode">Category number:</label>
               <input type="text" id="editCatCode" name="editCatCode" className="form-control" readOnly/>
       
-              <label for="catName">Category name:</label>
+              <label htmlFor="catName">Category name:</label>
               <input type="text" id="editCatName" name="editCatName" className="form-control"/>
             </div>
             <div className="modal-footer">

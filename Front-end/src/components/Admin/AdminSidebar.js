@@ -1,13 +1,17 @@
 // import './AdminSidebar.css'
 
 export default function AdminSidebar() {
+    const closeSidebar = () => {
+        console.log('close');
+    }
+
     return (
         <aside id="sidebar">
             <div className="sidebar-title">
             <div className="sidebar-brand">
                 <span className="material-icons-outlined">shopping_cart</span> STORE
             </div>
-            <span className="material-icons-outlined" onclick="closeSidebar()">close</span>
+            <span className="material-icons-outlined" onClick={(e) => closeSidebar()}>close</span>
             </div>
 
             <ul className="sidebar-list">

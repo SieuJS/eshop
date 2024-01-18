@@ -1,4 +1,4 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, NavLink} from "react-router-dom";
 import {useContext } from "react"
 import {CatContext} from "../../context/CatContext";
 
@@ -8,13 +8,12 @@ export default function AdminCatProduct() {
     return (
         <>
             {
-                isLoading == true && <th colSpan={5} style={{textAlign: 'center'}}>
-                                        <div>  
-                                        <div class="spinner-border" role="status">
-                                        <span class="sr-only">Loading...</span>
+                isLoading == true &&
+                                        <div style={{textAlign: 'center'}}>  
+                                            <div className="spinner-border" role="status">
+                                                <span className="sr-only">Loading...</span>
+                                            </div>
                                         </div>
-                                        </div>
-                                    </th>
             }
             <div className="side-title col-sm-3">
             <div className="table-cards">
@@ -26,7 +25,7 @@ export default function AdminCatProduct() {
                     <div className="list-group list-group-flush">
                     { isError == false && isLoading == false && allCategories &&
                         allCategories.map((cat) => {
-                        return <Link to={`/admin/product/${cat.CatID}`} className="list-group-item list-group-item-action" key={cat.CatID}>{cat.CatName}</Link>
+                        return <NavLink to={`/admin/product/${cat.CatID}`} className="list-group-item list-group-item-action" key={cat.CatID}>{cat.CatName}</NavLink>
                         })
                     }
                     </div>

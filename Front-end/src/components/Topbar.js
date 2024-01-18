@@ -1,4 +1,5 @@
 import react from "react";
+import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import {useNavigate} from 'react-router-dom'
 
@@ -47,9 +48,9 @@ export default function Topbar() {
             </div>
             <div className="row align-items-center py-3 px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <a href="" className="text-decoration-none">
+                    <NavLink to="/home" className="text-decoration-none">
                         <h1 className="m-0 display-5 font-weight-semi-bold"><span className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
-                    </a>
+                    </NavLink>
                 </div>
                 <div className="col-lg-6 col-6 text-left">
                     <form onSubmit={submitHandler}>
@@ -64,14 +65,14 @@ export default function Topbar() {
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <a href="" className="btn border">
+                    <NavLink to="/favorite" className="btn border">
                         <i className="fas fa-heart text-primary"></i>
                         <span className="p-1">0</span>
-                    </a>
-                    <a href="" className="btn border">
+                    </NavLink>
+                    <NavLink to="/cart" className="btn border">
                         <i className="fas fa-shopping-cart text-primary"></i>
                         <span className="p-1">0</span>
-                    </a>
+                    </NavLink>
                 </div>
             </div>
         </div>
