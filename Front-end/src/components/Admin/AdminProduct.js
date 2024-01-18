@@ -5,22 +5,27 @@ import useFetch from '../../customize/useFetch';
 
 export default function AdminProduct() {
   const { catID } = useParams()
-  const [allProducts, setAllProducts] = useState([]);
+  // const [allProducts, setAllProducts] = useState([]);
+  const { dataFetch, isLoading, isError} = useFetch(`/api/product/${catID}`);
 
-  const fetchData = async () => {
-    try {
-      let proData = await fetch(`https://localhost:3000/api/product/${catID}`);
-      let proRes = await proData.json();
-      setAllProducts(proRes.data)
-    } catch (error) {
-      console.log(error);
-    }
+  // const fetchData = async () => {
+  //   try {
+  //     let proData = await fetch(`https://localhost:3000/api/product/${catID}`);
+  //     let proRes = await proData.json();
+  //     setAllProducts(proRes.data)
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+
+  const openAddItemForm = () => {
+    console.log('open');
   }
 
   useEffect(() => {
-    console.log("useEffect");
-    fetchData();
-  },[catID])
+    console.log("useEffect product " + isLoading);
+    // fetchData();
+  }, [dataFetch, isLoading])
 
     return (
       <div className="side-title col-sm-9">
@@ -51,7 +56,7 @@ export default function AdminProduct() {
                         </div>
                       </div>
                       <div className="btn-add-item d-flex col-sm-4 col-4">
-                        <Link to={`/admin/product/add/${catID}`} type="button" className="btn btn-primary ms-auto" onclick="openAddItemForm()">
+                        <Link to={`/admin/product/add/${catID}`} type="button" className="btn btn-primary ms-auto" onClick={(e) => openAddItemForm()}>
                             <i className="fa-solid fa-circle-plus"></i>
                               Add Product 
                         </Link>
@@ -69,7 +74,7 @@ export default function AdminProduct() {
                       </tr>
                     </thead>
                     <tbody>
-                    { allProducts.map(pro => {
+                    { isError == false && isLoading == false && dataFetch && dataFetch.data.map(pro => {
                       return <tr className="text-center" key={pro.ProID} style={{verticalAlign: 'middle'}}>
                               <th scope="row">{pro.ProID}</th>
                               <th><img src={pro.ImageUrl || "https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg"} alt="" width="52px" className="rounded-2"/></th>
@@ -86,6 +91,18 @@ export default function AdminProduct() {
                               </td>
                             </tr>
                     })
+                    }
+                    {
+                    isLoading == true && <tr>
+                                        <th colSpan={6} style={{ textAlign: 'center' }}>
+                                            <div>  
+                                            <div className="spinner-border" role="status">
+                                              <span className="sr-only">Loading...</span>
+                                            </div>
+                                            </div>
+                                        </th>
+                                        </tr>
+                                        
                     }
                     </tbody>
                   </table>
