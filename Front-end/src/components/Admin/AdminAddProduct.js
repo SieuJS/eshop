@@ -35,7 +35,7 @@ export default function AdminAddProduct() {
             formData.append('proImage', fileList[0]);
         }
 
-        const res = await fetch('https://localhost:3000/api/product/add', {
+        const res = await fetch('/api/product/add', {
             method: 'POST',
             body: formData,
         })
@@ -46,23 +46,23 @@ export default function AdminAddProduct() {
     
     return (
         <>    
-        <div class="main-title">
+        <div className="main-title">
             <h2>           
-                <Link to={`/admin/product/${catID}`} class="btn btn-secondary">
-                    <i class="fa-solid fa-left-long"></i>
+                <Link to={`/admin/product/${catID}`} className="btn btn-secondary">
+                    <i className="fa-solid fa-left-long"></i>
                 </Link>
                 ADD PRODUCT
             </h2>
         </div>
 
-        <div class="row">
-            <div class="side-title col-sm-4">
-              <div class="table-cards">
-                <div class="cat-card card">
-                    <div class="card-header">
+        <div className="row">
+            <div className="side-title col-sm-4">
+              <div className="table-cards">
+                <div className="cat-card card">
+                    <div className="card-header">
                         Add Images
                     </div>
-                    <div class="card-body">
+                    <div className="card-body">
                         <FileInput
                         fileList={fileList}
                         setFileList={setFileList}/>
@@ -70,39 +70,38 @@ export default function AdminAddProduct() {
                 </div>               
               </div>
             </div>
-            <div class="side-title col-sm-8">
-                <div class="table-cards">
-                  <div class="cat-card card">
-                    <div class="card-header">
+            <div className="side-title col-sm-8">
+                <div className="table-cards">
+                  <div className="cat-card card">
+                    <div className="card-header">
                       Add Information
                     </div>
-                    <div class="card-body">
+                    <div className="card-body">
                         <form method="post">
-                            <input type="text" class="form-control" name="catID" value = {catID} hidden/>
-                            <div class="mb-3">
-                              <label for="inputProductName" class="form-label">Name Product</label>
-                              <input type="text" class="form-control" id="productName" name="productName" onChange={(e) => setProName(e.target.value)}/>
+                            <div className="mb-3">
+                              <label htmlFor="inputProductName" className="form-label">Name Product</label>
+                              <input type="text" className="form-control" id="productName" name="productName" onChange={(e) => setProName(e.target.value)}/>
                             </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label for="inputProductPrice" class="form-label">Price</label>
-                                    <input type="text" class="form-control" id="productPrice" name="productPrice" onChange={(e) => setProPrice(e.target.value)}/>
+                            <div className="row mb-3">
+                                <div className="col">
+                                    <label htmlFor="inputProductPrice" className="form-label">Price</label>
+                                    <input type="text" className="form-control" id="productPrice" name="productPrice" onChange={(e) => setProPrice(e.target.value)}/>
                                 </div>
-                                <div class="col">
-                                    <label for="inputProductQuantity" class="form-label">Quantity</label>
-                                    <input type="text" class="form-control" id="productQuantity" name="productQuantity" onChange={(e) => setProQuantity(e.target.value)}/>
+                                <div className="col">
+                                    <label htmlFor="inputProductQuantity" className="form-label">Quantity</label>
+                                    <input type="text" className="form-control" id="productQuantity" name="productQuantity" onChange={(e) => setProQuantity(e.target.value)}/>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" onChange={(e) => setProTinyDes(e.target.value)}></textarea>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlTextarea1" className="form-label">Description</label>
+                                <textarea className="form-control" id="description" name="description" rows="3" onChange={(e) => setProTinyDes(e.target.value)}></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="exampleFormControlTextarea1" class="form-label">Full Description</label>
-                                <textarea class="form-control" id="fullDescription" name="fullDescription" rows="3" onChange={(e) => setProFullDes(e.target.value)} ></textarea>
+                            <div className="mb-3">
+                                <label htmlFor="exampleFormControlTextarea1" className="form-label">Full Description</label>
+                                <textarea className="form-control" id="fullDescription" name="fullDescription" rows="3" onChange={(e) => setProFullDes(e.target.value)} ></textarea>
                             </div>
-                            <button class="btn btn-secondary">Back</button>
-                            <button type="submit" onClick={(e) => handleSubmit(e)} class="btn btn-primary">Save</button>
+                            <button className="btn btn-secondary">Back</button>
+                            <button type="submit" onClick={(e) => handleSubmit(e)} className="btn btn-primary">Save</button>
                         </form>
                     </div>
                   </div>

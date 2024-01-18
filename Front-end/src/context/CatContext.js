@@ -5,7 +5,7 @@ import useFetch from "../customize/useFetch";
 export const CatContext = createContext(null);
 
 const CatContextProvider = (props) => {    
-    const { dataFetch, isLoading, isError} = useFetch(`https://localhost:3000/api/categories`);
+    const { dataFetch, isLoading, isError} = useFetch(`/api/categories`);
     const [allCategories, setAllCategories] = useState([]);
     useEffect(() => {
         console.log('useEffect context');

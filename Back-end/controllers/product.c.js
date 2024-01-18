@@ -13,9 +13,9 @@ module.exports = {
 
     addProduct: async (req, res, next) => {
         try {
-            const maxProID = await productM.getMaxID();
+            // const maxProID = await productM.getMaxID();
             const entity = {
-                ProID: maxProID.max + 1,
+                // ProID: maxProID.max + 1,
                 ProName: req.body.proName,
                 TinyDes: req.body.proTinyDes,
                 FullDes: req.body.proFullDes,
@@ -24,7 +24,7 @@ module.exports = {
                 Quantity:req.body.proQuantity
             }
             if (req.file) {
-                entity.ImageUrl = `https://localhost:3000/images/${req.file.filename}`
+                entity.ImageUrl = `http://localhost:3000/images/${req.file.filename}`
             }
             const data = await productM.add(entity);
             res.json({success: true, data:data})

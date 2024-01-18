@@ -12,9 +12,9 @@ module.exports = {
 
     addCategory: async (req, res, next) => {
         try {
-            const maxCatID = await categoryM.getMaxID();
+            // const maxCatID = await categoryM.getMaxID();
             const entity = {
-                CatID: maxCatID.max + 1,
+                // CatID: maxCatID.max + 1,
                 CatName: req.body.CatName
             }
             const data = await categoryM.add(entity);

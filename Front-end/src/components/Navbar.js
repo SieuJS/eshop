@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 
 export default function Navbar() {
 
@@ -9,7 +10,6 @@ export default function Navbar() {
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }
-    // navlink phan nav
     return (
         <div className="container-fluid mb-5">
             <div className="row border-top px-xl-5">
@@ -48,21 +48,15 @@ export default function Navbar() {
                         </button>
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div className="navbar-nav mr-auto py-0">
-                                <a href="index.html" className="nav-item nav-link active">Home</a>
-                                <a href="shop.html" className="nav-item nav-link">Shop</a>
-                                <a href="detail.html" className="nav-item nav-link">Shop Detail</a>
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                                    <div className="dropdown-menu rounded-0 m-0">
-                                        <a href="cart.html" className="dropdown-item">Shopping Cart</a>
-                                        <a href="checkout.html" className="dropdown-item">Checkout</a>
-                                    </div>
-                                </div>
-                                <a href="contact.html" className="nav-item nav-link">Contact</a>
+                                <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
+                                <NavLink to="/shop" className="nav-item nav-link">Shop</NavLink>
+                                <NavLink to="/detail" className="nav-item nav-link">Shop Detail</NavLink>
+                                
+                                <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <a href="" className="nav-item nav-link">Login</a>
-                                <a href="" className="nav-item nav-link">Register</a>
+                                <NavLink to="/login" className="nav-item nav-link">Login</NavLink>
+                                <NavLink to="/register" className="nav-item nav-link">Register</NavLink>
                             </div>
                         </div>
                     </nav>

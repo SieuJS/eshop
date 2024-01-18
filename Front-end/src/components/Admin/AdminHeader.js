@@ -1,9 +1,14 @@
 // import './AdminHeader.css'
 
 export default function AdminHeader() {
+
+    const openSidebar = () => {
+        console.log('open');
+    }
+
     return (
         <header className="header">
-            <div className="menu-icon" onclick="openSidebar()">
+            <div className="menu-icon" onClick={(e) => openSidebar()}>
                 <span className="material-icons-outlined">menu</span>
             </div>
             <div className="header-left">
