@@ -10,7 +10,8 @@ function Customer() {
       <>
           <Routes>
             <Route path='/' exact element={<Home />} />
-            <Route path='/detail' exact element={<Detail />} />
+            <Route path='/category/:catid' exact element= {<ProductList/>}/>
+            <Route path='/product/:proid' exact element = {<Detail/>} />
             <Route path='/productlist' exact element={<ProductList />} />
             <Route path='/search' exact element={<ProductList/>} />
           </Routes>

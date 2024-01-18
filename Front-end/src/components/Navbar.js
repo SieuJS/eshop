@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
 
     const [showCatNav, setShowCatNav] = useState(false);
-    const {data: categories, isPending, error} = useFetch('api/categories');
+    const {data: categories, isPending, error} = useFetch('/api/categories');
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 export default function ProductList(props) {
     const products = props.products;
     const pages = props.pages;
-    console.log(pages);
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">

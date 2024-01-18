@@ -11,11 +11,12 @@ export default function () {
     const params = new URLSearchParams(curUrl);
     const _keyword = params.get('keyword') || "";
     const _catid = params.get('catid') || useParams().catid;
+    console.log(_catid);
     const _page = params.get('page') || 1;
+    var urlFetch = `/api/search?keyword=${_keyword}&page=${_page}`;
     if (_catid!=null) {
         urlFetch += `&catid=${_catid}`
     }
-    var urlFetch = `/api/search?keyword=${_keyword}&page=${_page}`;
     const {data: products,pages, isPending, Error} = usePaginationFetch(urlFetch);
 
     return (
