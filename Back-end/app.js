@@ -14,7 +14,6 @@ const productRoute = require("./routes/product.r")
 const port = 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
-const categoriesC = require('./controllers/categories.c.js')
 
 app.use(cors())
 

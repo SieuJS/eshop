@@ -3,8 +3,8 @@ const useFetch = (url) => {
     const [data, setData] = useState(null);
     const [isPending, setIsPending] = useState(true);
     const [error, setError] = useState(null);
-    const [pages,setPages] = useState(1);
-
+    const [page,setPage] = useState();
+    const [pages,setPages] = useState();
 
     useEffect(() => {
         fetch(url)
@@ -16,6 +16,10 @@ const useFetch = (url) => {
             }) 
             .then(data => {
                 setData(data.products);
+                let params = new URLSearchParams(url);
+                let _page = params.get('page') || 1;
+                _page = parseInt(_page);
+                setPage(_page);
                 setPages(data.pages);
                 setIsPending(false);
                 setError(null);
@@ -24,9 +28,8 @@ const useFetch = (url) => {
                 setIsPending(false);
                 setError(err.message);
             })
-    },[pages,url]);
-    const nextPage = () => setPages()
-    return {data,pages,isPending,error};
+    },[page,url]);
+    return {data,page,pages,isPending,error};
 }
 
 export default useFetch;
