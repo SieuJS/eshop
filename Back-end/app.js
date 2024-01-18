@@ -15,7 +15,6 @@ const port = 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
 const categoriesC = require('./controllers/categories.c.js')
-const productC = require('./controllers/product.c.js');
 
 app.use(cors())
 
@@ -39,8 +38,6 @@ app.use("/api/product", productRoute);
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search",searchC.search);
-app.use("/api/categories",categoriesC.getAll);
-app.use("/api/product/:proid", productC.getById);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

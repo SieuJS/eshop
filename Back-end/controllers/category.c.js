@@ -4,7 +4,7 @@ module.exports = {
     getAllCat: async (req, res, next) => {
         try {
             const category = await categoryM.getAll();
-            res.json({ success: true, data: category})
+            res.json(category)
         } catch (error) {
             next(error)
         }
