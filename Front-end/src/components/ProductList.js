@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 export default function ProductList(props) {
     const products = props.products;
     const pages = props.pages;
+    const page = props.page;
+    const pageNumbers = Array.from({ length: pages }, (_, index) => index + 1);
+    const onPageChange = props.onPageChange;
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
@@ -282,36 +285,39 @@ export default function ProductList(props) {
                             )
                             )
                         }
-                        
+
                         <div className="col-12 pb-1">
                             <nav aria-label="Page navigation">
                                 <ul className="pagination justify-content-center mb-3">
                                     <li className="page-item">
-                                        <Link className="page-link" to={`?page=3`} aria-label="Previous">
+                                        <button className="page-link" aria-label="Previous" onClick={() => {
+                                            if (page != 1) {
+                                                onPageChange(page-1);
+                                            }
+                                        }}>
                                             <span aria-hidden="true">«</span>
                                             <span className="sr-only">Previous</span>
-                                        </Link>
+                                        </button>
                                     </li>
-                                    <li className="page-item active">
-                                        <a className="page-link" href="#">
-                                            1
-                                        </a>
-                                    </li>
+                                    {
+                                        pageNumbers.map((index) => (
+                                            <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
+                                                <button className="page-link" onClick={() => onPageChange(index)}>
+                                                    {index}
+                                                </button>
+                                            </li>
+                                        )
+                                        )
+                                    }
                                     <li className="page-item">
-                                        <a className="page-link" href="#">
-                                            2
-                                        </a>
-                                    </li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="#">
-                                            3
-                                        </a>
-                                    </li>
-                                    <li className="page-item">
-                                        <a className="page-link" href="#" aria-label="Next">
+                                        <button className="page-link" aria-label="Next" onClick={() => {
+                                            if (page != pages) {
+                                                onPageChange(page+1);
+                                            }
+                                        }}>
                                             <span aria-hidden="true">»</span>
                                             <span className="sr-only">Next</span>
-                                        </a>
+                                        </button>
                                     </li>
                                 </ul>
                             </nav>

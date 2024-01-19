@@ -48,7 +48,7 @@ export default function Topbar() {
             </div>
             <div className="row align-items-center py-3 px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <NavLink to="/home" className="text-decoration-none">
+                    <NavLink to="/" className="text-decoration-none">
                         <h1 className="m-0 display-5 font-weight-semi-bold"><span className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper</h1>
                     </NavLink>
                 </div>
