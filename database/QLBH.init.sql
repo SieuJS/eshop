@@ -85,7 +85,7 @@ CREATE TABLE "Products" (
   "Price" numeric(19,4) NOT NULL,
   "CatID" int4 NOT NULL,
   "Quantity" int4 NOT NULL,
-  "ImageUrl" text
+  "Image" text
 )
 ;
 

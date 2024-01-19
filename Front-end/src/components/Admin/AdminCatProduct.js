@@ -25,7 +25,7 @@ export default function AdminCatProduct() {
                     <div className="list-group list-group-flush">
                     { isError == false && isLoading == false && allCategories &&
                         allCategories.map((cat) => {
-                        return <NavLink to={`/admin/product/${cat.CatID}`} className="list-group-item list-group-item-action" key={cat.CatID}>{cat.CatName}</NavLink>
+                        return <NavLink to={`/admin/product/${cat.CatID}`} className="list-group-item list-group-item-action" style = {{'borderRadius': '6px', 'margin': '2px 0'}} key={cat.CatID}>{cat.CatName}</NavLink>
                         })
                     }
                     </div>

@@ -56,7 +56,7 @@ export default function FileInput(props) {
                     fileList.map((item, index) => (    
                         <div className="file-input-preview_item" key={index}>
                             <div className="preview-item-wrap">
-                                <img src={URL.createObjectURL(item)} alt=""/>
+                                <img src={URL.createObjectURL(item)} alt="" style={{'borderRadius': '6px'}} />
                                 <div className="file-input-preview_info">
                                     <div>{item.name}</div>
                                 </div>
