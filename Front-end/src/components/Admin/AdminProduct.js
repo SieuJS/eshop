@@ -6,7 +6,7 @@ import useFetch from '../../customize/useFetch';
 export default function AdminProduct() {
   const { catID } = useParams()
   const [allProducts, setAllProducts] = useState([]);
-  const { dataFetch, isLoading, isError} = useFetch(`/api/product/${catID}`);
+  const { dataFetch, isLoading, isError} = useFetch(`/api/product/get-by-cat/${catID}`);
 
   // const fetchData = async () => {
   //   try {
