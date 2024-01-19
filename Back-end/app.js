@@ -32,12 +32,21 @@ require('./config/passport-setup.js')(app);
 require("./config/passport-login.js")(app);
 
 app.use("/api/account", accountRoute);
-
 app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search",searchC.search);
+app.use((error, req, res, next) => {
+    // Check that Have the res been sent ?
+    if (req.headerSent) {
+        return next(error);
+    }
+    // Check the status and set it 
+    res.status(error.code || 500);
+    // Leave the message 
+    res.json({ message: error.message || "There some errors occured " });
+});
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

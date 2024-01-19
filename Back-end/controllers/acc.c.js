@@ -1,21 +1,44 @@
 const accM = require("../models/acc.m");
 const bcrypt = require("bcrypt");
+const HttpError = require("../models/http-error");
 const saltRound = 10;
 
 module.exports = {
+    getUserById: async (req, res, next) => {
+        const userId = req.params.userId;
+        const user = await accM.getByUserID(userId);
+        if (!user) {
+            next(new HttpError("Invalid user"));
+            return;
+        }
+        res.json(user);
+    },
+    checkUsername: async (req, res, next) => {
+        const username = req.params.username;
+        const acc = await accM.getByUsername(username);
+        console.log
+        if (!acc) {
+            res.json({
+                valid: true
+            })
+        }else {
+            res.json({
+                valid: false
+            })
+        }
+    },
     signUpHandler: async (req, res, next) => {
         const un = req.body.username;
         const acc = await accM.getByUsername(un);
 
         if (acc) {
-            console.log(`This username '${acc.Username}' has been existed`);
-            //console.log(acc);
-            res.json({ message: `This username '${acc.Username}' has been existed` });
+            //console.log(`This username '${acc.Username}' has been existed`);
+            next(new HttpError(`This username '${acc.Username}' has been existed`));
         } else {
             const { name, email, password, dob, role } = req.body;
 
             if (!name || !email || !password || !dob || !role) {
-                res.json({ message: "You have to fill out all the fields" });
+                next(new HttpError("You have to fill out all the fields"));
             } else {
 
                 const hashedPw = await bcrypt.hash(password, saltRound);
@@ -29,11 +52,11 @@ module.exports = {
                 }));
 
                 //console.log(rs);
-                req.session.auth = true;
+                //req.session.auth = true;
                 res.json({
                     message: "Register new account successfully",
                     account: {
-                        id: result.ID,
+                        userId: result.ID,
                         name: result.Name,
                         username: result.Username,
                         email: result.Email
@@ -49,19 +72,19 @@ module.exports = {
 
         const acc = await accM.getByUsername(username);
         if (!acc) {
-            console.log("none acc");
-            return res.json({ message: `The username '${username}' does not exist` });
+            next(new HttpError(`The username '${username}' does not exist`));
+            return;
         }
 
         const check = await bcrypt.compare(password, acc.Password);
 
         if (!check) {
-            console.log("Incorrect password");
-            return res.json({ message: "Incorrect password" });
+            next(new HttpError("Incorrect password"));
+            return;
         }
 
-        req.session.auth = true;
-        res.json({ message: "Log in successfully" });
+        //req.session.auth = true;
+        res.json({ message: "Log in successfully", userId: acc.ID });
     },
 
     updateHandler: async (req, res) => {
@@ -69,7 +92,8 @@ module.exports = {
         const acc = await accM.getByUserID(userID);
 
         if (!acc) {
-            res.json({ message: "Invalid user" });
+            next(new HttpError("Invalid user id"));
+            return;
         } else {
             const newUsername = req.body.newUsername ? req.body.newUsername : null;
             const newPw = req.body.newPassword ? req.body.newPassword : null;
@@ -77,9 +101,8 @@ module.exports = {
             const newEmail = req.body.newEmail ? req.body.newEmail : null;
             const newDOB = req.body.newDOB ? req.body.newDOB : null;
             if (!newUsername && !newPw && !newName && !newEmail && !newDOB) {
-                return res.json({
-                    message: "You have to provide at least one new information to update"
-                });
+                next (new HttpError("You have to provide at least one new information to update"));
+                return;
             }
 
             const newValues = {
@@ -100,9 +123,7 @@ module.exports = {
                     user: result[0]
                 })
             }else {
-                res.json({
-                    message: "Fail to update user"
-                })
+                next(new HttpError("Fail to update"));
             }
         }
     },
@@ -110,18 +131,14 @@ module.exports = {
     deleteHandler: async (req, res) => {
         const {username, password} = req.body;
         if (!username || !password) {
-            return res.json({
-                isSuccess: false,
-                message: "Invalid field username or password or both of them"
-            })
+            next(new HttpError("Invalid field username or password or both of them"));
+            return;
         }
 
         const acc = await accM.getByUsername(username);
         if (!acc) {
-            return res.json({
-                isSuccess: false,
-                message: "The user does not exist"
-            })
+            next (new HttpError("The user does not exist"));
+            return;
         }else {
             let checkPw = false;
             checkPw = await bcrypt.compare(password, acc.Password);
@@ -132,10 +149,7 @@ module.exports = {
                     message: `The user '${username}' has been deleted`
                 })
             } else {
-                res.json({
-                    isSuccess: false,
-                    message: "Fail to delete the user. The password is incorrect"
-                })
+                next (new HttpError("Fail to delete the user. The password is incorrect"));
             }
         }
     }
