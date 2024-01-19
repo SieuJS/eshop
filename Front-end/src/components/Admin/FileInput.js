@@ -1,4 +1,4 @@
-// import './FileInput.css'
+import './FileInput.css'
 import uploadImg from '../../assets/images/cloud-upload.png'
 import React, { useRef, useState } from 'react';
 
@@ -37,32 +37,32 @@ export default function FileInput(props) {
         <>    
             <div
                 ref={wrapperRef}
-                class="box-fileinput"
+                className="box-fileinput"
                 onDragEnter={onDragEnter}
                 onDragLeave={onDragLeave}
-                onDragDrop = {onDrop}
+                onDrop = {onDrop}
             >
-                <div class="file-input-label">
-                    <img src={uploadImg} alt="" class = "file-input-label_image"/>
+                <div className="file-input-label">
+                    <img src={uploadImg} alt="" className = "file-input-label_image"/>
                     <p>Drag & Drop your files here</p>
                 </div>
                 <input type="file" name="productImage" id="productImage" onChange={onFileDrop}></input>
             </div>
             {
                 fileList.length > 0 && 
-                <div class="file-input-preview">
-                    <p class="file-input-preview_title">Ready to upload</p>
+                <div className="file-input-preview">
+                    <p className="file-input-preview_title">Ready to upload</p>
                 {
                     fileList.map((item, index) => (    
-                        <div class="file-input-preview_item" key={index}>
-                            <div class="preview-item-wrap">
+                        <div className="file-input-preview_item" key={index}>
+                            <div className="preview-item-wrap">
                                 <img src={URL.createObjectURL(item)} alt=""/>
-                                <div class="file-input-preview_info">
+                                <div className="file-input-preview_info">
                                     <div>{item.name}</div>
                                 </div>
                             </div>
-                            <span class="btn btn-danger btn-sm file-input-delete" onClick={() => fileRemove(item)}>
-                                <i class="fa fa-trash"></i>
+                            <span className="btn btn-danger btn-sm file-input-delete" onClick={() => fileRemove(item)}>
+                                <i className="fa fa-trash"></i>
                             </span>
                         </div>
                     ))

@@ -1,4 +1,4 @@
-const productM = require("../models/product.m");
+const productM = require('../models/product.m')
 
 module.exports = {
     getProductByCat: async (req, res, next) => {
@@ -13,9 +13,9 @@ module.exports = {
 
     addProduct: async (req, res, next) => {
         try {
-            const maxProID = await productM.getMaxID();
+            // const maxProID = await productM.getMaxID();
             const entity = {
-                ProID: maxProID.max + 1,
+                // ProID: maxProID.max + 1,
                 ProName: req.body.proName,
                 TinyDes: req.body.proTinyDes,
                 FullDes: req.body.proFullDes,
@@ -24,7 +24,7 @@ module.exports = {
                 Quantity:req.body.proQuantity
             }
             if (req.file) {
-                entity.ImageUrl = `https://localhost:3000/images/${req.file.filename}`
+                entity.ImageUrl = `http://localhost:3000/images/${req.file.filename}`
             }
             const data = await productM.add(entity);
             res.json({success: true, data:data})
@@ -32,7 +32,12 @@ module.exports = {
             next(error);
         }
     },
-
+    getById: async (req,res,next) => {
+        const id = req.params.proid;
+        const rs = await productM.getById(id);
+        rs[0].Price = parseInt(rs[0].Price,10);
+        res.json(rs);
+    }
     // deleteCategory: async (req, res, next) => {
     //     try {
     //         const catID = req.query.CatID;

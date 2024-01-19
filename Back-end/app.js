@@ -14,6 +14,8 @@ const productRoute = require("./routes/product.r")
 const port = 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
+const categoriesC = require('./controllers/categories.c.js')
+
 app.use(cors())
 
 app.use(express.static(__dirname + '/public'))
@@ -35,7 +37,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 //app.use("/auth", authGoogleRoute);
 
-app.use("/search",searchC.search);
+app.use("/api/search",searchC.search);
 
 app.listen(port, () => {
     console.log(`Listening on port ${port}`);

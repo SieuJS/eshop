@@ -4,7 +4,7 @@ module.exports = {
     getAllCat: async (req, res, next) => {
         try {
             const category = await categoryM.getAll();
-            res.json({ success: true, data: category})
+            res.json(category)
         } catch (error) {
             next(error)
         }
@@ -12,9 +12,9 @@ module.exports = {
 
     addCategory: async (req, res, next) => {
         try {
-            const maxCatID = await categoryM.getMaxID();
+            // const maxCatID = await categoryM.getMaxID();
             const entity = {
-                CatID: maxCatID.max + 1,
+                // CatID: maxCatID.max + 1,
                 CatName: req.body.CatName
             }
             const data = await categoryM.add(entity);
