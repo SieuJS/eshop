@@ -12,6 +12,15 @@ module.exports = class Product{
         }
     }
 
+    static async getByProID(proID) {
+        try {
+            const data = await db.any(`SELECT * FROM "${tbName}" WHERE "ProID" = ${proID}`, [proID]);
+            return data;
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async getMaxID() {
         try {
             const data = await db.one(`SELECT MAX("ProID") FROM "${tbName}"`);
@@ -28,6 +37,33 @@ module.exports = class Product{
             return data;
         } catch (err) {
             throw err;
+        }
+    }
+
+    static async updateProduct(entity) {
+        try {
+            // update_product is a custome procedure of Postgresql database
+            await db.proc("proc_update_product", [
+                entity.ProID,
+                entity.ProName,
+                entity.TinyDes,
+                entity.FullDes,
+                entity.Price,
+                entity.CatID,
+                entity.Quantity,
+                entity.Image
+            ])
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteProduct(proID) {
+        try {
+            // update_product is a custome procedure of Postgresql database
+            await db.proc("proc_delete_product", [proID])
+        } catch (error) {
+            throw error;
         }
     }
 

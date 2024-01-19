@@ -1,10 +1,13 @@
 import $ from 'jquery'
 // import './AdminCat.css'
-import { useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { CatContext } from '../../context/CatContext.js';
 
 export default function AdminCat() {
-  const {allCategories, setAllCategories, isLoading, isError} = useContext(CatContext);
+  const { allCategories, setAllCategories, isLoading, isError } = useContext(CatContext);
+  const [catName, setCatName ] = useState('');
+  const [catNameEdit, setCatNameEdit] = useState('');
+  const [catID, setCatID] = useState('');
 
   function openAddItemForm() {
       window.$('#addItemModal').modal('show');
@@ -16,7 +19,7 @@ export default function AdminCat() {
 
   async function submitAddItemForm() {
     const entity = {
-      CatName : $('#catName').val()
+      CatName : catName
     }
 
     const data = await fetch('/api/categories/add', {
@@ -51,20 +54,16 @@ export default function AdminCat() {
     }
   }
 
-  async function editRow(icon) {
-      const row = $(icon).closest('tr');
-      const catCode = row.find('th:nth-child(1)').text();
-      const catName = row.find('td:nth-child(2)').text();
-
-      $('#editCatCode').val(catCode);
-      $('#editCatName').val(catName);
+  async function editRow(catID, catNameEdit) {
+    setCatID(catID);
+    setCatNameEdit(catNameEdit)
 
       window.$('#editItemModal').modal('show');
   }
   async function saveChanges() {
     const entity = {
-      CatID: $('#editCatCode').val(),
-      CatName: $('#editCatName').val(),
+      CatID: catID,
+      CatName: catNameEdit,
     }
     const data = await fetch('/api/categories/update', {
       method: 'POST',
@@ -130,7 +129,7 @@ export default function AdminCat() {
                               <th scope="row">{cat.CatID }</th>
                               <td>{cat.CatName}</td>
                               <td className="text-center">
-                              <button className="btn btn-primary btn-sm me-2" onClick={(event)=>editRow(event.target)}>
+                              <button className="btn btn-primary btn-sm me-2" onClick={(event)=>editRow(cat.CatID, cat.CatName)}>
                                   <i className="fa fa-pencil"></i>
                               </button>
                               <button href="" className="btn btn-danger btn-sm" onClick={(event)=>deleteRow(event.target, cat.CatID)}>
@@ -186,7 +185,7 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label htmlFor="catName">Category name:</label>
-              <input type="text" id="catName" name="catName" className="form-control"/>
+              <input type="text" id="catName" name="catName" className="form-control" onChange = {(e) => setCatName(e.target.value)}/>
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelAddItemForm()}>Cancel</button>
@@ -208,10 +207,10 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label htmlFor="catCode">Category number:</label>
-              <input type="text" id="editCatCode" name="editCatCode" className="form-control" readOnly/>
+              <input type="text" id="editCatCode" name="editCatCode" className="form-control" readOnly value={catID}/>
       
               <label htmlFor="catName">Category name:</label>
-              <input type="text" id="editCatName" name="editCatName" className="form-control"/>
+              <input type="text" id="editCatName" name="editCatName" className="form-control" onChange={(e) => setCatNameEdit(e.target.value) } value={catNameEdit} />
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelEdit()}>Cancel</button>

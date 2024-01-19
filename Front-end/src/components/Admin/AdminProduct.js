@@ -5,7 +5,7 @@ import useFetch from '../../customize/useFetch';
 
 export default function AdminProduct() {
   const { catID } = useParams()
-  // const [allProducts, setAllProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const { dataFetch, isLoading, isError} = useFetch(`/api/product/${catID}`);
 
   // const fetchData = async () => {
@@ -23,9 +23,25 @@ export default function AdminProduct() {
   }
 
   useEffect(() => {
-    console.log("useEffect product " + isLoading);
-    // fetchData();
+    setAllProducts(dataFetch.data)
   }, [dataFetch, isLoading])
+
+  async function deleteRow(proID) {
+    // var row = $(icon).closest('tr');
+    var confirmDelete = window.confirm('Bạn có chắc chắn muốn xóa hàng này không?');
+
+    if (confirmDelete) {
+      try {
+        const result = await fetch(`/api/product/delete?proID=${proID}`);
+        const data = await result.json();
+        if (data.success) {
+          setAllProducts(allProducts.filter((item) => item.ProID !== proID));
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 
     return (
       <div className="side-title col-sm-9">
@@ -74,18 +90,18 @@ export default function AdminProduct() {
                       </tr>
                     </thead>
                     <tbody>
-                    { isError == false && isLoading == false && dataFetch && dataFetch.data.map(pro => {
+                    { isError == false && isLoading == false && allProducts?.length > 0 && allProducts.map(pro => {
                       return <tr className="text-center" key={pro.ProID} style={{verticalAlign: 'middle'}}>
                               <th scope="row">{pro.ProID}</th>
-                              <th><img src={pro.ImageUrl || "https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg"} alt="" width="52px" className="rounded-2"/></th>
+                              <th><img src={pro.Image || "https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg"} alt="" width="52px" className="rounded-2"/></th>
                               <td>{pro.ProName}</td>
                               <td>{parseFloat(pro.Price).toLocaleString()}</td>
                               <td>{pro.Quantity}</td>
                               <td>
-                                <a href="/admin/product/edit" className="btn btn-primary btn-sm me-2">
+                                <Link to={`/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm me-2">
                                   <i className="fa fa-pencil"></i>
-                                </a>
-                                <button href="" className="btn btn-danger btn-sm">
+                                </Link>
+                                <button href="" className="btn btn-danger btn-sm" onClick={(e) => deleteRow(pro.ProID)}>
                                   <i className="fa fa-trash"></i>
                                 </button>
                               </td>
