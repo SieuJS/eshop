@@ -3,6 +3,16 @@ const bcrypt = require("bcrypt");
 const saltRound = 10;
 
 module.exports = {
+    getUser: async (req, res, next) => {
+        const userId = req.params.userId;
+        const user = await accM.getByUserID(userId);
+        if (!user) {
+            res.json("Invalid user id");
+            return;
+        }
+        res.json(user);
+    },
+
     signUpHandler: async (req, res, next) => {
         const un = req.body.username;
         const acc = await accM.getByUsername(un);
