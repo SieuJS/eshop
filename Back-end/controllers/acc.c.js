@@ -128,7 +128,7 @@ module.exports = {
       return next(error);
     }
 
-    const check = await bcrypt.compare(password, acc.Password);
+    const check = await bcrypt.compare(password, identifierUser.Password);
 
     if (!check) {
       const error = new HttpError("Incorrect password", 420);

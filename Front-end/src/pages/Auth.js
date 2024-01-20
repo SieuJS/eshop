@@ -103,7 +103,9 @@ function Auth() {
             password: formState.inputs.password.value,
           })
         );
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
     } else {
       try {
         console.log(apiSignin);
@@ -126,14 +128,16 @@ function Auth() {
             name : formState.inputs.name.value,
             email : formState.inputs.email.value,
             dob : formState.inputs.dob.value,
-            role : "0"
+            role : "user"
           }));
-      } catch (err) {}
+      } catch (err) {
+        console.log(err)
+      }
     }
     if (data) {
         console.log(data)
       auth.login(data.user.userId,data.user.role, data.user.token);
-    //   navigate("/");
+      navigate("/");
     } else {
     }
   };
@@ -290,11 +294,11 @@ function Auth() {
                       Forgot password?
                     </a>
                     <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                      Don't have an account?{" "}
+                    {isLoginMode ? "Don't have an account ?" : "Already have an account ?"}{" "}
                       <Button
                       onClick={switchModeHandler}
                       style={{ color: "#393f81" }}
-                      variant="text">Register here</Button>
+                      variant="text"> {isLoginMode ? "Register here" : "Login here"}</Button>
                     </p>
                     <a href="#!" className="small text-muted">
                       Terms of use.

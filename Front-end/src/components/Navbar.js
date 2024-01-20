@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
 import {NavLink} from "react-router-dom";
-
+import { AuthContext } from "../context/AuthContext";
+import { Button } from "@mui/material";
 export default function Navbar() {
-
+    const auth = useContext(AuthContext)
     const [showCatNav, setShowCatNav] = useState(false);
     const {data: categories, isPending, error} = useFetch('/api/categories');
     function toggleCat() {
@@ -55,8 +56,18 @@ export default function Navbar() {
                                 <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
-                                <NavLink to="/login" className="nav-item nav-link">Login</NavLink>
-                                <NavLink to="/register" className="nav-item nav-link">Register</NavLink>
+                                {!auth.isLoggedIn && <NavLink to="/login" className="nav-item nav-link">Login</NavLink>}
+
+                                {auth.isLoggedIn && 
+                                <Button
+                                    onClick={auth.logout}
+                                >
+                                    Logout
+                                </Button>}
+                                {
+                                    auth.role === "admin" &&
+                                    <NavLink to="/admin" className="nav-item nav-link">Admin</NavLink>
+                                }
                             </div>
                         </div>
                     </nav>
