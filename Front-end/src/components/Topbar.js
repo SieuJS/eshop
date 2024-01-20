@@ -71,7 +71,7 @@ export default function Topbar() {
                     </NavLink>
                     <NavLink to="/cart" className="btn border">
                         <i className="fas fa-shopping-cart text-primary"></i>
-                        <span className="p-1">0</span>
+                        {/* <span className="p-1">0</span> */}
                     </NavLink>
                 </div>
             </div>

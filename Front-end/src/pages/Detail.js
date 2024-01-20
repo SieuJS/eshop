@@ -5,7 +5,7 @@ import ProductDetail from "../components/ProductDetail.js";
 import { useParams } from "react-router-dom";
 import useFetch from "../hooks/useFetch.js";
 
-export default function Detail() {
+export default function Detail(props) {
     const {proid} = useParams();
     const {data, isPending, Error} = useFetch(`http://localhost:3000/api/product/${proid}`);
     return (

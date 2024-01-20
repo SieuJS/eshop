@@ -1,5 +1,22 @@
-export default function ProductDetail({data}) {
-    const product = data[0];
+import {useState} from 'react';
+import cartSlice from '../redux/cartSlice';
+import { UseDispatch, useDispatch } from 'react-redux';
+
+export default function ProductDetail(props) {
+    const disPatch = useDispatch();
+
+    const product = props.data[0];
+    const [quantity, setQuantity] = useState(1);
+
+    const handleMinusClick = () => {
+        // Giảm giá trị một đơn vị, nhưng không dưới 1
+        setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
+      };
+    
+      const handlePlusClick = () => {
+        // Tăng giá trị lên một đơn vị
+        setQuantity((prevQuantity) => prevQuantity + 1);
+      };
     return (
         <div className="container-fluid py-5" key={product.ProID}>
             <div className="row px-xl-5">
@@ -47,23 +64,23 @@ export default function ProductDetail({data}) {
                         <form>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="size-1" name="size" />
-                                    <label className="custom-control-label" for="size-1">XS</label>
+                                <label className="custom-control-label" for="size-1">XS</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="size-2" name="size" />
-                                    <label className="custom-control-label" for="size-2">S</label>
+                                <label className="custom-control-label" for="size-2">S</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="size-3" name="size" />
-                                    <label className="custom-control-label" for="size-3">M</label>
+                                <label className="custom-control-label" for="size-3">M</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="size-4" name="size" />
-                                    <label className="custom-control-label" for="size-4">L</label>
+                                <label className="custom-control-label" for="size-4">L</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="size-5" name="size" />
-                                    <label className="custom-control-label" for="size-5">XL</label>
+                                <label className="custom-control-label" for="size-5">XL</label>
                             </div>
                         </form>
                     </div>
@@ -72,41 +89,41 @@ export default function ProductDetail({data}) {
                         <form>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="color-1" name="color" />
-                                    <label className="custom-control-label" for="color-1">Black</label>
+                                <label className="custom-control-label" for="color-1">Black</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="color-2" name="color" />
-                                    <label className="custom-control-label" for="color-2">White</label>
+                                <label className="custom-control-label" for="color-2">White</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="color-3" name="color" />
-                                    <label className="custom-control-label" for="color-3">Red</label>
+                                <label className="custom-control-label" for="color-3">Red</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="color-4" name="color" />
-                                    <label className="custom-control-label" for="color-4">Blue</label>
+                                <label className="custom-control-label" for="color-4">Blue</label>
                             </div>
                             <div className="custom-control custom-radio custom-control-inline">
                                 <input type="radio" className="custom-control-input" id="color-5" name="color" />
-                                    <label className="custom-control-label" for="color-5">Green</label>
+                                <label className="custom-control-label" for="color-5">Green</label>
                             </div>
                         </form>
                     </div>
                     <div className="d-flex align-items-center mb-4 pt-2">
-                        <div className="input-group quantity mr-3" style={{width: "130px"}}>
+                        <div className="input-group quantity mr-3" style={{ width: "130px" }}>
                             <div className="input-group-btn">
-                                <button className="btn btn-primary btn-minus" >
+                                <button className="btn btn-primary btn-minus" onClick={handleMinusClick} >
                                     <i className="fa fa-minus"></i>
                                 </button>
                             </div>
-                            <input type="text" className="form-control bg-secondary text-center" value="1" />
-                                <div className="input-group-btn">
-                                    <button className="btn btn-primary btn-plus">
-                                        <i className="fa fa-plus"></i>
-                                    </button>
-                                </div>
+                            <input type="text" className="form-control bg-secondary text-center" value={quantity} />
+                            <div className="input-group-btn">
+                                <button className="btn btn-primary btn-plus" onClick={handlePlusClick}>
+                                    <i className="fa fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
-                        <button className="btn btn-primary px-3"><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        <button className="btn btn-primary px-3" onClick={() => disPatch(cartSlice.actions.add({ProID: product.ProID,ProName: product.ProName,Price: product.Price ,Quantity: quantity}))}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                     </div>
                     <div className="d-flex pt-2">
                         <p className="text-dark font-weight-medium mb-0 mr-2">Share on:</p>
@@ -183,18 +200,18 @@ export default function ProductDetail({data}) {
                                 <div className="col-md-6">
                                     <h4 className="mb-4">1 review for "Colorful Stylish Shirt"</h4>
                                     <div className="media mb-4">
-                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{width: "45px"}} />
-                                            <div className="media-body">
-                                                <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                                <div className="text-primary mb-2">
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star"></i>
-                                                    <i className="fas fa-star-half-alt"></i>
-                                                    <i className="far fa-star"></i>
-                                                </div>
-                                                <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        <img src="img/user.jpg" alt="Image" className="img-fluid mr-3 mt-1" style={{ width: "45px" }} />
+                                        <div className="media-body">
+                                            <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                            <div className="text-primary mb-2">
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star"></i>
+                                                <i className="fas fa-star-half-alt"></i>
+                                                <i className="far fa-star"></i>
                                             </div>
+                                            <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-md-6">
