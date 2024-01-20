@@ -51,14 +51,14 @@ module.exports = {
     try {
       token = jwt.sign(
         {
-          userId : newUser.ID, 
-          username : newUser.Username
+          userId: newUser.ID,
+          username: newUser.Username
         },
         process.env.JWT_KEY,
-        {expiresIn : "1h"}
+        { expiresIn: "1h" }
       );
-    } catch(err) {
-      const error = new HttpError (
+    } catch (err) {
+      const error = new HttpError(
         'Something wrong when add jwt', 500
       );
       return next(error);
@@ -71,7 +71,7 @@ module.exports = {
         name: newUser.Name,
         username: newUser.Username,
         email: newUser.Email,
-        token : token
+        token: token
       },
     });
   },
@@ -94,19 +94,19 @@ module.exports = {
     try {
       token = jwt.sign(
         {
-          userId : acc.ID, 
-          username : acc.Username
+          userId: acc.ID,
+          username: acc.Username
         },
         process.env.JWT_KEY,
-        {expiresIn : "1h"}
+        { expiresIn: "1h" }
       );
-    } catch(err) {
-      const error = new HttpError (
+    } catch (err) {
+      const error = new HttpError(
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
-    
+
     res.status(201).json({
       message: "Login success",
       user: {
@@ -114,7 +114,7 @@ module.exports = {
         name: acc.Name,
         username: acc.Username,
         email: acc.Email,
-        token : token
+        token: token
       },
     });
   },
@@ -194,4 +194,30 @@ module.exports = {
       }
     }
   },
+  checkUsername: async (req, res, next) => {
+    const username = req.params.username;
+    const user = await accM.getByUsername(username);
+    if (!user) {
+      res.json({ valid: false });
+    } else {
+      res.json({
+        valid: true,
+        user: {
+          id: user.ID,
+          username: user.Username,
+          email: user.Email
+        }
+      })
+    }
+  },
+  getUserById: async (req, res, next) => {
+    const userId = req.params.userId;
+    const user = await accM.getByUserID(userId);
+    if (!user) {
+      next( new HttpError("Invalid user id. Cannot get by id"));
+      return;
+    }else {
+      res.json(user)
+    }
+  }
 };
