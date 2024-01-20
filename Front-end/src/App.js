@@ -12,7 +12,7 @@ import AccountDashboard from "./components/Account/Dashboard.js"
 import Orders from "./components/Account/Orders.js";
 import Password from "./components/Account/Password.js";
 import EditInfo from "./components/Account/EditInfo.js";
-
+import Auth from './pages/Auth.js'
 function App() {
   return (
     <>
@@ -26,6 +26,7 @@ function App() {
             <Route path="orders" element={<Orders />} />
             <Route path="password" element={<Password />} />
           </Route>
+          <Route path = "/auth" element = {<Auth/>}/>
         </Routes>
       </BrowserRouter>
     </>

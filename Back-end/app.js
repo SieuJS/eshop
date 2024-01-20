@@ -11,7 +11,7 @@ const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const categoryRoute = require("./routes/category.r")
 const productRoute = require("./routes/product.r")
-const port = 3000;
+const port = process.env.PORT || 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
 
