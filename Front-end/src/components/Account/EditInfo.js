@@ -1,19 +1,47 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useImperativeHandle } from "react";
+import { useHttpClient } from "../../hooks/http-hook";
+
 export default function EditInfo({ userId }) {
-    const [userInfo, setUserInfo] = useState({});
+    const {isLoading, sendRequest, error, clearError} = useHttpClient();
     const [userFormData, setUserFormData] = useState({
-        newName: userInfo.Name || "",
-        newUsername: userInfo.Username || "",
-        newEmail: userInfo.Email || "",
-        newDOB: userInfo.DOB || ""
+        newName: "",
+        newUsername: "",
+        newEmail: "",
+        newDOB: ""
     });
     useEffect(() => {
-        async function fettUserInfo() {
+        /* async function fettUserInfo() {
             const response = await fetch(`http://localhost:3000/api/account/11`);
             const info = await response.json();
-            setUserInfo(info);
+            setUserFormData({
+                newName: info.Name,
+                newUsername: info.Username,
+                newEmail: info.Email,
+                newDOB: info.DOB
+            });
         }
-        //fettUserInfo();
+        fettUserInfo(); */
+
+        async function fetchUser() {
+            try {
+                const info = await sendRequest(
+                    "http://localhost:3000/api/account/11",
+                    "GET",
+                    {
+                        'Content-Type': 'application/json'
+                    });
+                setUserFormData({
+                    newName: info.Name,
+                    newUsername: info.Username,
+                    newEmail: info.Email,
+                    newDOB: info.DOB.substring(0, 10)
+                });
+            }
+            catch (err) {
+                throw err;
+            }
+        }
+        fetchUser();
     }, []);
 
     function handleChange(event) {
@@ -25,6 +53,7 @@ export default function EditInfo({ userId }) {
                 [targetName]: targetValue
             }
         });
+        console.log("formdata", userFormData);
     }
     function handleSubmit(event) {
         event.preventDefault();

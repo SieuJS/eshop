@@ -1,14 +1,26 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+import { useHttpClient } from "../../hooks/http-hook";
 
-export default function Dashboard({userId}) {
+export default function Dashboard({ userId }) {
+    const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
-        async function fettUserInfo() {
-            const response = await fetch(`http://localhost:3000/api/account/11`);
-            const info = await response.json();
-            setUserInfo(info);
+        async function fetchUser() {
+            try {
+                const data = await sendRequest(
+                    "http://localhost:3000/api/account/11",
+                    "GET",
+                    {
+                        'Content-Type': 'application/json'
+                    });
+                
+                setUserInfo({...data});
+            }
+            catch (err) {
+                throw err;
+            }
         }
-        fettUserInfo();
+        fetchUser();
     }, []);
     return (
         <>
