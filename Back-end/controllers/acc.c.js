@@ -1,10 +1,11 @@
+require('dotenv').config()
 const accM = require("../models/acc.m");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
-
+const jwtKey = process.env.JWT_SECRET_KEY;
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
@@ -38,14 +39,17 @@ module.exports = {
 
 
   signUpHandler: async (req, res, next) => {
+
     const un = req.body.username;
-    console.log(un)
+    
     const acc = await accM.getByUsername(un);
     const { name, email, password, dob, role } = req.body;
+
     if (acc) {
       console.log(`This username '${acc.Username}' has been existed`);
-      //console.log(acc);
+      console.log('exit')
       const error = new HttpError(
+
         `This username '${acc.Username}' has been existed`,
         420
       );
@@ -72,28 +76,30 @@ module.exports = {
           Role: role,
         })
       );
-
     } catch (err) {
+      console.error(err)
       const error = new HttpError("Something wrong when signup", 500);
       return next(error);
     }
     // adding token
+    
     try {
       token = jwt.sign(
         {
           userId : newUser.ID, 
-          username : newUser.Username
+          username : newUser.Username,
+          role
         },
-        process.env.JWT_KEY,
+        jwtKey,
         {expiresIn : "1h"}
       );
     } catch(err) {
+      console.error(err)
       const error = new HttpError (
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
-    //console.log(rs);
     res.status(201).json({
       message: "Register new account successfully",
       user: {
@@ -101,7 +107,8 @@ module.exports = {
         name: newUser.Name,
         username: newUser.Username,
         email: newUser.Email,
-        token : token
+        token : token,
+        role : newUser.Role
       },
     });
   },
@@ -109,8 +116,14 @@ module.exports = {
   logInHandler: async (req, res, next) => {
     const { username, password } = req.body;
 
-    const acc = await accM.getByUsername(username);
-    if (!acc) {
+    let identifierUser
+    try {
+      identifierUser = await accM.getByUsername(username);
+    }catch (err){
+      console.error(err)
+      return next(new HttpError("Some error occurs when find your account", 500));
+    }
+    if (!identifierUser) {
       const error = new HttpError(`The username '${username}' does not exist`, 404);
       return next(error);
     }
@@ -124,13 +137,15 @@ module.exports = {
     try {
       token = jwt.sign(
         {
-          userId : acc.ID, 
-          username : acc.Username
+          userId : identifierUser.ID, 
+          username : identifierUser.Username,
+          role : identifierUser.Role
         },
-        process.env.JWT_KEY,
+        jwtKey,
         {expiresIn : "1h"}
       );
     } catch(err) {
+      console.err(err)
       const error = new HttpError (
         'Something wrong when add jwt', 500
       );
@@ -140,10 +155,11 @@ module.exports = {
     res.status(201).json({
       message: "Login success",
       user: {
-        id: acc.ID,
-        name: acc.Name,
-        username: acc.Username,
-        email: acc.Email,
+        id: identifierUser.ID,
+        name: identifierUser.Name,
+        username: identifierUser.Username,
+        email: identifierUser.Email,
+        role : identifierUser.Role,
         token : token
       },
     });

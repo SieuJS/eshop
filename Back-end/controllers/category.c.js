@@ -1,4 +1,6 @@
 const categoryM = require("../models/category.m");
+const HttpError = require('../models/http-error')
+
 
 module.exports = {
     getAllCat: async (req, res, next) => {
@@ -6,7 +8,8 @@ module.exports = {
             const category = await categoryM.getAll();
             res.json(category)
         } catch (error) {
-            next(error)
+            console.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
         }
     },
 
@@ -20,7 +23,8 @@ module.exports = {
             const data = await categoryM.add(entity);
             res.json({success: true, data:data})
         } catch (error){
-            next(error);
+            onsole.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
         }
     },
 
@@ -30,7 +34,8 @@ module.exports = {
             const data = await categoryM.deleteByID(catID);
             res.json({ success: true, data: data })
         } catch (error) {
-            next(error);
+            onsole.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
         }
     },
 

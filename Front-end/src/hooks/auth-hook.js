@@ -4,7 +4,7 @@ export default function AuthHook() {
     const [token, setToken] = useState(null);
     const [userId, setUserId] = useState();
     const [deadlineToken, setDeadlineToken] = useState();
-  
+    const [role, setRole] = useState();
   
     const tokenTimeRef = useRef();
   
@@ -18,17 +18,18 @@ export default function AuthHook() {
       }
     } , []);
   
-    const login = useCallback((userId, token, expiredDateToken) => {
+    const login = useCallback((userId, role, token, expiredDateToken) => {
   
       setToken(token);
       setUserId(userId);
+      setRole(role);
       const userData = {
         userId ,
+        role,
         token,
       }
   
-    
-      const deadline  = expiredDateToken || new Date(new Date().getTime() + 5*1000);
+      const deadline  = expiredDateToken || new Date(new Date().getTime() + 3600*1000);
       userData.expiredDateToken = deadline;
       setDeadlineToken(deadline );
       localStorage.setItem('userData', JSON.stringify(userData));
@@ -39,6 +40,7 @@ export default function AuthHook() {
       console.log('loged out')
       setToken(null);
       setUserId(null);
+      setRole(null);
       localStorage.removeItem('userData');
     },[]);
   
@@ -51,5 +53,5 @@ export default function AuthHook() {
         clearTimeout(tokenTimeRef);
       }
     }, [token, logout])
-  return {login, logout, token, userId};
+  return {login, logout, token, userId, role};
 }
