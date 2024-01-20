@@ -1,30 +1,66 @@
 // import './AdminProduct.css'
 import { useEffect, useState } from "react"
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import useFetch from '../../customize/useFetch';
+import usePaginationFetch from "../../hooks/usePaginationFetch";
+
 
 export default function AdminProduct() {
+  // const navigate = useNavigate();
   const { catID } = useParams()
-  const [allProducts, setAllProducts] = useState([]);
-  const { dataFetch, isLoading, isError} = useFetch(`/api/product/get-by-cat/${catID}`);
+  // const [searchParams] = useSearchParams()
+  // const page = parseInt(searchParams.get("page")) || 1;
+  // const name = searchParams.get("keyword") || '';
+  const [page, setPage] = useState(1);
+  const [name, setName] = useState('');
 
-  // const fetchData = async () => {
-  //   try {
-  //     let proData = await fetch(`https://localhost:3000/api/product/${catID}`);
-  //     let proRes = await proData.json();
-  //     setAllProducts(proRes.data)
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  const [allProducts, setAllProducts] = useState([]);
+  const [totalPage, setTotalPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+  // const { dataFetch, isLoading, isError } = useFetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}`);
 
   const openAddItemForm = () => {
     console.log('open');
   }
 
+  const onPageChange = (index) => {
+    console.log(index);
+    setPage(index)
+    fetchData(index, name)
+  }
+
+  const handleSearh = () => {
+    setPage(1)
+    // setName(value)
+    fetchData(1, name)
+  }
+
+  const fetchData = async (page, name) => {
+    try {
+      setIsLoading(true)
+      let proData = await fetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}`);
+      let proRes = await proData.json();
+      setAllProducts(proRes.data);
+      setIsLoading(false)
+      setIsError(false)
+
+      setTotalPage(proRes.totalPage)
+    } catch (error) {
+      setIsError(true);
+      setIsLoading(false)
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    setAllProducts(dataFetch.data)
-  }, [dataFetch, isLoading])
+    console.log('USEREFFECT');
+    setPage(1)
+    setName('')
+    fetchData(1, '')
+    // setPage(1)
+  }, [catID])
 
   async function deleteRow(proID) {
     // var row = $(icon).closest('tr');
@@ -54,8 +90,8 @@ export default function AdminProduct() {
                   <div className="row mb-3">
                       <div className="search col-sm-5 col-5 offset-sm-0 offset-0">
                         <form className="d-flex search-item" role="search">
-                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                            <button className="btn btn-primary" type="submit">Search</button>
+                            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" value={name} onChange={(e) => setName(e.target.value) } />
+                            <div className="btn btn-primary" onClick={(e) => handleSearh()}>Search</div>
                         </form>
                       </div>
                       <div className="btn-add-item d-flex col-sm-3 col-3">
@@ -127,17 +163,32 @@ export default function AdminProduct() {
                 <nav aria-label="Page navigation example">
                     <ul className="pagination">
                       <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Previous">
+                        <button className="page-link" aria-label="Previous" onClick={() => {
+                              if (page != 1) {
+                                  onPageChange(page-1);
+                              }
+                          }}>
                           <span aria-hidden="true">&laquo;</span>
-                        </a>
+                        </button>
                       </li>
-                      <li className="page-item"><a className="page-link" href="#">1</a></li>
-                      <li className="page-item active"><a className="page-link" href="#">2</a></li>
-                      <li className="page-item"><a className="page-link" href="#">3</a></li>
+                      {
+                          pageNumbers.map((index) => (
+                              <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
+                                  <button className="page-link" onClick={() => onPageChange(index)}>
+                                      {index}
+                                  </button>
+                              </li>
+                          )
+                          )
+                      }               
                       <li className="page-item">
-                        <a className="page-link" href="#" aria-label="Next">
+                        <button className="page-link" aria-label="Next" onClick={() => {
+                            if (page != totalPage) {
+                                onPageChange(page+1);
+                            }
+                        }}>
                           <span aria-hidden="true">&raquo;</span>
-                        </a>
+                        </button>
                       </li>
                     </ul>
                   </nav>
