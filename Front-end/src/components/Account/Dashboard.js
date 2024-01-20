@@ -9,10 +9,7 @@ export default function Dashboard({ userId }) {
             try {
                 const data = await sendRequest(
                     "http://localhost:3000/api/account/11",
-                    "GET",
-                    {
-                        'Content-Type': 'application/json'
-                    });
+                    "GET");
                 
                 setUserInfo({...data});
             }
@@ -25,14 +22,14 @@ export default function Dashboard({ userId }) {
     return (
         <>
             <div className="info-title mb-4">
-                <h3>Thông tin tài khoản</h3>
+                <h3>Your personal information</h3>
                 <p></p>
             </div>
             <div className="info-content">
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
-                            <p>Tên tài khoản:</p>
+                            <p>Username:</p>
                         </div>
                         <div className="col-8">
                             <p>{userInfo.Username}</p>
@@ -42,7 +39,7 @@ export default function Dashboard({ userId }) {
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
-                            <p>Tên người dùng:</p>
+                            <p>Your fullname:</p>
                         </div>
                         <div className="col-8">
                             <p>{userInfo.Name}</p>
@@ -62,7 +59,7 @@ export default function Dashboard({ userId }) {
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
-                            <p>Ngày sinh:</p>
+                            <p>Date of birth:</p>
                         </div>
                         <div className="col-8">
                             <p>{userInfo.DOB}</p>
