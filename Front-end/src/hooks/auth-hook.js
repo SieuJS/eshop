@@ -10,11 +10,12 @@ export default function AuthHook() {
   
     useEffect(() => {
       const userData = JSON.parse(localStorage.getItem('userData'));
+      console.log(userData)
       if(!userData) {
         return ;
       }
       else {
-        login(userData.userId, userData.token, userData.expiredDateToken);
+        login(userData.userId,userData.role, userData.token, userData.expiredDateToken);
       }
     } , []);
   

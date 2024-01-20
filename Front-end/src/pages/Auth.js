@@ -136,7 +136,7 @@ function Auth() {
     }
     if (data) {
         console.log(data)
-      auth.login(data.user.userId,data.user.role, data.user.token);
+      auth.login(data.user.userId,data.user.role.trim(), data.user.token);
       navigate("/");
     } else {
     }
