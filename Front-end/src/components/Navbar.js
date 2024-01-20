@@ -1,40 +1,37 @@
 import { useState, useEffect } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
-import {NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
 
     const [showCatNav, setShowCatNav] = useState(false);
-    const {data: categories, isPending, error} = useFetch('/api/categories');
+    const { data: categories, isPending, error } = useFetch('/api/categories');
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }
     return (
-        <div className="container-fluid mb-5">
+        <div className="bg-light container-fluid mb-5 sticky-top border-bottom">
             <div className="row border-top px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <button className="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
-                        data-toggle="collapse"
+                    <div className="shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
                         style={{ height: "65px", marginTop: "-1px", padding: "0 30px" }}
                         onClick={toggleCat}
                     >
                         <h6 className="m-0">Categories</h6>
                         <i className="fa fa-angle-down text-dark"></i>
-                    </button>
-                    {showCatNav && (
-                        <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" >
-                            <div className="navbar-nav w-100 overflow-hidden" >
-                                {
-                                    categories && (
-                                        categories.map(cat => (
-                                            <Link to={`/category/${cat.CatID}?page=1`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
-                                        ))
-                                    )
+                    </div>
+                    {showCatNav &&
+                        <nav className="bg-primary collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" >
+                            <div className="bg-secondary navbar-nav w-100 overflow-hidden position-absolute" >
+                                {categories && (
+                                    categories.map(cat => (
+                                        <Link to={`/category/${cat.CatID}?page=1`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
+                                    )))
                                 }
                             </div>
                         </nav>
-                    )}
+                    }
                 </div>
                 <div className="col-lg-9">
                     <nav className="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0">
@@ -51,7 +48,7 @@ export default function Navbar() {
                                 <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
                                 <NavLink to="/shop" className="nav-item nav-link">Shop</NavLink>
                                 <NavLink to="/detail" className="nav-item nav-link">Shop Detail</NavLink>
-                                
+
                                 <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
