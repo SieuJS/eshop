@@ -71,6 +71,25 @@ module.exports = class Product{
         }
     }
 
+    static async getByPage(catID, name, page, pageSize) {
+        try {
+            const offset = (page - 1) * pageSize;
+            const limit = pageSize;
+            const catCondition = catID ? `AND "CatID" = ${catID}` : ''
+            const data = await db.any(`SELECT * FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition} LIMIT ${limit} OFFSET ${offset}`);
+            const total = await db.one(`SELECT COUNT(*) FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition}`);
+            const totalData = parseInt(total.count)
+            const totalPage = Math.ceil(totalData / pageSize);
+            return {
+                data: data,
+                totalPage: totalPage,
+                total: total.count
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // static async getMaxID() {
     //     try {
     //         const data = await db.one(`SELECT MAX("CatID") FROM "${tbName}"`);
