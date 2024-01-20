@@ -9,7 +9,7 @@ import {Routes, Route } from 'react-router-dom'
 
 export default function Products() {
     return (
-        <div className="grid-container">
+        <div className="grid-container page-admin">
             <AdminHeader />
             <AdminSidebar />
             <main className="main-container">

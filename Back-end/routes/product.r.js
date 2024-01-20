@@ -16,6 +16,7 @@ const upload = multer({storage})
 
 router.get("/delete" , productC.delete);
 router.get("/get-by-cat/:catID", productC.getProductByCat);
+router.get("/get-by-page", productC.getProductByPage);
 router.get("/:proid", productC.getById);
 router.get("/get-by-pro/:proID", productC.getProductByProID);
 router.post("/add", upload.single('proImage'), productC.addProduct);

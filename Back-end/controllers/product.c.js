@@ -11,6 +11,19 @@ module.exports = {
         }
     },
 
+    getProductByPage: async (req, res, next) => {
+        try {
+            const page = req.query.page || 1;
+            const catID = req.query.catID;
+            const name = req.query.keyword || ''
+            const pageSize = 4; // số dòng trên 1 trang  
+            const result = await productM.getByPage(catID, name, page, pageSize);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     getProductByProID: async (req, res, next) => {
         try {
             const proID = req.params.proID;
