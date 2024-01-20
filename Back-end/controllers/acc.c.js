@@ -6,8 +6,38 @@ const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 
 module.exports = {
+  getUserById : async (req, res, next) => {
+    const {userId} = req.params;
+    let identifierUser ;
+    try {
+      identifierUser = accM.getByUserID(userId);
+    }
+    catch(err) {
+      console.error(err)
+      return next (new HttpError("Some error when find user") , 500)
+    }
+    if(!identifierUser) 
+      return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
+    return res.status(200).json({user : identifierUser});
+  },
+
+  checkUsername : async (req, res, next) => {
+    const {username} = req.params;
+    let identifierUser ;
+    try {
+      identifierUser= accM.getByUsername(username);
+    }
+    catch(err) {
+      console.error(err)
+      return next (new HttpError("Some error when find user") , 500)
+    }
+    if(!identifierUser) 
+      return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
+    return res.status(200).json({user : identifierUser});
+  },
+
+
   signUpHandler: async (req, res, next) => {
-    console.log(req.body)
     const un = req.body.username;
     console.log(un)
     const acc = await accM.getByUsername(un);
