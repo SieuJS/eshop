@@ -29,7 +29,7 @@ export default function Navbar() {
                                 {
                                     categories && (
                                         categories.map(cat => (
-                                            <Link to={`/category/${cat.CatID}?page=1`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
+                                            <Link to={`/category/?catid=${cat.CatID}&page=1`} className="nav-item nav-link" key={cat.CatID}>{cat.CatName}</Link>
                                         ))
                                     )
                                 }
