@@ -2,6 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
 import {NavLink} from "react-router-dom";
+import {AuthContext} from "../context/AuthContext"
+import {Button} from "@mui/material"
+
 export default function Navbar() {
     const auth = useContext(AuthContext)
     const [showCatNav, setShowCatNav] = useState(false);
