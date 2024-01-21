@@ -90,8 +90,8 @@ module.exports = {
           username : newUser.Username,
           role
         },
-        jwtKey,
-        {expiresIn : "1h"}
+        process.env.JWT_KEY,
+        { expiresIn : "1h" }
       );
     } catch(err) {
       console.error(err)
@@ -145,13 +145,12 @@ module.exports = {
         {expiresIn : "1h"}
       );
     } catch(err) {
-      console.err(err)
       const error = new HttpError (
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
-    
+
     res.status(201).json({
       message: "Login success",
       user: {
@@ -165,12 +164,13 @@ module.exports = {
     });
   },
 
-  updateHandler: async (req, res) => {
+  updateHandler: async (req, res, next) => {
     const userID = req.body.ID;
     const acc = await accM.getByUserID(userID);
 
     if (!acc) {
-      res.json({ message: "Invalid user" });
+      next(new HttpError("Invalid user id"));
+      return;
     } else {
       const newUsername = req.body.newUsername ? req.body.newUsername : null;
       const newPw = req.body.newPassword ? req.body.newPassword : null;
@@ -178,9 +178,8 @@ module.exports = {
       const newEmail = req.body.newEmail ? req.body.newEmail : null;
       const newDOB = req.body.newDOB ? req.body.newDOB : null;
       if (!newUsername && !newPw && !newName && !newEmail && !newDOB) {
-        return res.json({
-          message: "You have to provide at least one new information to update",
-        });
+        next(new HttpError("You have to provided at least a new field to update"));
+        return;
       }
 
       const newValues = {
@@ -201,9 +200,7 @@ module.exports = {
           user: result[0],
         });
       } else {
-        res.json({
-          message: "Fail to update user",
-        });
+        next(new HttpError("Fail to update user"));
       }
     }
   },
@@ -240,4 +237,41 @@ module.exports = {
       }
     }
   },
+  checkUsername: async (req, res, next) => {
+    const username = req.params.username;
+    const user = await accM.getByUsername(username);
+    if (!user) {
+      res.json({ valid: false });
+    } else {
+      res.json({
+        valid: true,
+        user: {
+          id: user.ID,
+          username: user.Username,
+          email: user.Email
+        }
+      })
+    }
+  },
+  getUserById: async (req, res, next) => {
+    const userId = req.params.userId;
+    const user = await accM.getByUserID(userId);
+    if (!user) {
+      next(new HttpError("Invalid user id. Cannot get by id"));
+      return;
+    } else {
+      res.json(user)
+    }
+  },
+  checkPassword: async (req, res, next) => {
+    const {userId, password} = req.body;
+    console.log("checkPassword function", password);
+    const user = await accM.getByUserID(userId);
+    if(!user) {
+      next(new HttpError("Invalid user id. Cannot get by id"));
+      return;
+    }
+    const match = await bcrypt.compare(password, user.Password);
+    res.json({match: match});
+  }
 };
