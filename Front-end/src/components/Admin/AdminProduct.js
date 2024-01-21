@@ -19,7 +19,21 @@ export default function AdminProduct() {
   const [totalPage, setTotalPage] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+  // const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+  const renderPagination = () => {
+    const maxPagesToShow = 5; // Số trang tối đa được hiển thị
+    const middleIndex = Math.ceil(maxPagesToShow / 2);
+    let startPage = 1;
+    
+    if (totalPage > maxPagesToShow) {
+      startPage = Math.max(1, page - middleIndex + 1);
+      if (page + middleIndex > totalPage) {
+        startPage = totalPage - maxPagesToShow + 1;
+      }
+    }
+  
+    return Array.from({ length: Math.min(totalPage, maxPagesToShow) }, (_, index) => startPage + index);
+  };
   // const { dataFetch, isLoading, isError } = useFetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}`);
 
   // sort
@@ -174,14 +188,23 @@ export default function AdminProduct() {
                       <li className="page-item">
                         <button className="page-link" aria-label="Previous" onClick={() => {
                               if (page != 1) {
-                                  onPageChange(page-1);
+                                  onPageChange(1);
                               }
                           }}>
                           <span aria-hidden="true">&laquo;</span>
                         </button>
                       </li>
+                      <li className="page-item">
+                        <button className="page-link" aria-label="Previous" onClick={() => {
+                              if (page != 1) {
+                                  onPageChange(page-1);
+                              }
+                          }}>
+                          <span aria-hidden="true">&lt;</span>
+                        </button>
+                      </li>
                       {
-                          pageNumbers.map((index) => (
+                          renderPagination().map((index) => (
                               <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
                                   <button className="page-link" onClick={() => onPageChange(index)}>
                                       {index}
@@ -189,11 +212,20 @@ export default function AdminProduct() {
                               </li>
                           )
                           )
-                      }               
+                      }
                       <li className="page-item">
                         <button className="page-link" aria-label="Next" onClick={() => {
                             if (page != totalPage) {
                                 onPageChange(page+1);
+                            }
+                        }}>
+                          <span aria-hidden="true">&gt;</span>
+                        </button>
+                      </li>               
+                      <li className="page-item">
+                        <button className="page-link" aria-label="Next" onClick={() => {
+                            if (page != totalPage) {
+                                onPageChange(totalPage);
                             }
                         }}>
                           <span aria-hidden="true">&raquo;</span>

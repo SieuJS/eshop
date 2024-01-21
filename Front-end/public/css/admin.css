@@ -264,6 +264,10 @@
   .page-admin h2{
     color: white;
   }
+
+  .page-admin .pagination{
+    justify-content: center;
+  }
   
   .charts {
     display: grid;
