@@ -9,7 +9,9 @@ const CatContextProvider = (props) => {
     const [allCategories, setAllCategories] = useState([]);
     useEffect(() => {
         console.log('useEffect context');
-        setAllCategories(dataFetch.data)
+        if (dataFetch?.length > 0) {
+            setAllCategories(dataFetch);
+        }
     },[dataFetch])
     
     return (

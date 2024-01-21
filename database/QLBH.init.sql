@@ -85,7 +85,7 @@ CREATE TABLE "Products" (
   "Price" numeric(19,4) NOT NULL,
   "CatID" int4 NOT NULL,
   "Quantity" int4 NOT NULL,
-  "ImageUrl" text
+  "Image" text
 )
 ;
 
@@ -365,7 +365,7 @@ CREATE TABLE "Users" (
   "Name" varchar(50) NOT NULL,
   "Email" varchar(50) NOT NULL,
   "DOB" timestamp NOT NULL,
-  "Permission" int4 NOT NULL
+  "Role" char(50) NOT NULL
 );
 
 DROP Table If Exists "Carts" ;

@@ -12,6 +12,15 @@ module.exports = class Product{
         }
     }
 
+    static async getByProID(proID) {
+        try {
+            const data = await db.any(`SELECT * FROM "${tbName}" WHERE "ProID" = ${proID}`, [proID]);
+            return data;
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async getMaxID() {
         try {
             const data = await db.one(`SELECT MAX("ProID") FROM "${tbName}"`);
@@ -33,6 +42,52 @@ module.exports = class Product{
     static async getById(_id) {
         const rs = await db.query(`SELECT * FROM "Products" WHERE "ProID" = ${_id}`);
         return rs;
+    }
+
+    static async updateProduct(entity) {
+        try {
+            // update_product is a custome procedure of Postgresql database
+            await db.proc("proc_update_product", [
+                entity.ProID,
+                entity.ProName,
+                entity.TinyDes,
+                entity.FullDes,
+                entity.Price,
+                entity.CatID,
+                entity.Quantity,
+                entity.Image
+            ])
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async deleteProduct(proID) {
+        try {
+            // update_product is a custome procedure of Postgresql database
+            await db.proc("proc_delete_product", [proID])
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getByPage(catID, name, page, pageSize) {
+        try {
+            const offset = (page - 1) * pageSize;
+            const limit = pageSize;
+            const catCondition = catID ? `AND "CatID" = ${catID}` : ''
+            const data = await db.any(`SELECT * FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition} LIMIT ${limit} OFFSET ${offset}`);
+            const total = await db.one(`SELECT COUNT(*) FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition}`);
+            const totalData = parseInt(total.count)
+            const totalPage = Math.ceil(totalData / pageSize);
+            return {
+                data: data,
+                totalPage: totalPage,
+                total: total.count
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 
     // static async getMaxID() {

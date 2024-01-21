@@ -5,7 +5,7 @@ import AdminCat from '../../components/Admin/AdminCat';
 
 export default function Categories() {
     return (
-        <div className="grid-container">
+        <div className="grid-container page-admin">
             <AdminHeader />
             <AdminSidebar />
             <AdminCat/>

@@ -11,6 +11,29 @@ module.exports = {
         }
     },
 
+    getProductByPage: async (req, res, next) => {
+        try {
+            const page = req.query.page || 1;
+            const catID = req.query.catID;
+            const name = req.query.keyword || ''
+            const pageSize = 4; // số dòng trên 1 trang  
+            const result = await productM.getByPage(catID, name, page, pageSize);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    getProductByProID: async (req, res, next) => {
+        try {
+            const proID = req.params.proID;
+            const category = await productM.getByProID(proID);
+            res.json({ success: true, data: category})
+        } catch (error) {
+            next(error)
+        }
+    },
+
     addProduct: async (req, res, next) => {
         try {
             // const maxProID = await productM.getMaxID();
@@ -24,7 +47,7 @@ module.exports = {
                 Quantity:req.body.proQuantity
             }
             if (req.file) {
-                entity.ImageUrl = `http://localhost:3000/images/${req.file.filename}`
+                entity.Image = `http://localhost:3000/images/${req.file.filename}`
             }
             const data = await productM.add(entity);
             res.json({success: true, data:data})
@@ -37,7 +60,7 @@ module.exports = {
         const rs = await productM.getById(id);
         rs[0].Price = parseInt(rs[0].Price,10);
         res.json(rs);
-    }
+    },
     // deleteCategory: async (req, res, next) => {
     //     try {
     //         const catID = req.query.CatID;
@@ -48,17 +71,35 @@ module.exports = {
     //     }
     // },
 
-    // updateCategory: async (req, res, next) => {
-    //     try{
-    //         const entity = {
-    //             CatID: req.body.CatID,
-    //             CatName: req.body.CatName
-    //         }
-    //         const data = await categoryM.updateByID(entity, entity.CatID);
-    //         res.json({success: true, data:data})
-    //     } catch (error){
-    //         next(error);
-    //     }
-    // }
+    delete: async (req, res, next) => {
+        try {
+            const proID = req.query.proID;
+            const data = await productM.deleteProduct(proID)
+            res.json({ success: true, data: data })
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    updateProduct: async (req, res, next) => {
+        try{
+            const entity = {
+                ProID: parseInt(req.body.proID),
+                ProName: req.body.proName,
+                TinyDes: req.body.proTinyDes,
+                FullDes: req.body.proFullDes,
+                Price: parseFloat(req.body.proPrice),
+                CatID: parseInt(req.body.catID),
+                Quantity:parseInt(req.body.proQuantity)
+            }
+            if (req.file) {
+                entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            }
+            const data = await productM.updateProduct(entity)
+            res.json({success: true, data:data})
+        } catch (error){
+            next(error);
+        }
+    }
 
 }
