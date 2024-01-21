@@ -48,10 +48,10 @@ export default function EditInfo({ userId }) {
         fetchUser();
     }, []);
 
-    async function handleChange(event) {
+    function handleChange(event) {
         const targetName = event.target.name;
         const targetValue = event.target.value;
-        await setUserFormData(prevFormData => {
+        setUserFormData(prevFormData => {
             return {
                 ...prevFormData,
                 [targetName]: targetValue
@@ -284,6 +284,7 @@ export default function EditInfo({ userId }) {
                             <button
                                 className="btn btn-success"
                                 onClick={(e) => handleSubmit}
+                                type='submit'
                             >
                                 Save
                             </button>
