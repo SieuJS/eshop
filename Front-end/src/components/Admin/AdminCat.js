@@ -48,6 +48,10 @@ export default function AdminCat() {
   }
 
   async function submitAddItemForm() {
+    if (!catName) {
+      alert('Fail');
+      return;
+    }
     const entity = {
       CatName : catName
     }
@@ -139,7 +143,7 @@ export default function AdminCat() {
                     </div>
                     <div className="btn-add-item d-flex col-sm-4 col-4">
                   <button type="button" className="btn btn-primary ms-auto" onClick = {()=>openAddItemForm()}>
-                        <i className="fa-solid fa-circle-plus"></i>
+                        <i className="fa-solid fa-circle-plus m-1"></i>
                         Add Category
                     </button>
                     </div>
@@ -155,6 +159,7 @@ export default function AdminCat() {
                   <tbody>
                   { isError == false && isLoading == false && categories &&
                   categories.map(cat => {
+                    if(cat.CatID == 7) return ''
                     return <tr key={cat.CatID} >
                               <th scope="row">{cat.CatID }</th>
                               <td>{cat.CatName}</td>
@@ -223,7 +228,7 @@ export default function AdminCat() {
       {/* <!-- Modal for Add Item --> */}
       <div className="modal fade" id="addItemModal" tabIndex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <form className="modal-content" method="post" action="/">
+          <form className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="addItemModalLabel">Add Category</h5>
                           <button type="button" className="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close" onClick={() => cancelAddItemForm()}>
@@ -232,7 +237,7 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label htmlFor="catName">Category name:</label>
-              <input type="text" id="catName" name="catName" className="form-control" onChange = {(e) => setCatName(e.target.value)}/>
+              <input type="text" id="catName" name="catName" className="form-control" required onChange = {(e) => setCatName(e.target.value)}/>
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelAddItemForm()}>Cancel</button>

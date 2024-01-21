@@ -1,4 +1,5 @@
 const categoryM = require("../models/category.m");
+const productM = require('../models/product.m');
 
 module.exports = {
     getAllCat: async (req, res, next) => {
@@ -38,6 +39,7 @@ module.exports = {
     deleteCategory: async (req, res, next) => {
         try {
             const catID = req.query.CatID;
+            const data2 = await productM.updateCatID(catID, 7);
             const data = await categoryM.deleteByID(catID);
             res.json({ success: true, data: data })
         } catch (error) {

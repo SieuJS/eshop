@@ -11,12 +11,12 @@ export default function AdminSidebar() {
             <div className="sidebar-brand">
                 <span className="material-icons-outlined">shopping_cart</span> STORE
             </div>
-            <span className="material-icons-outlined" onClick={(e) => closeSidebar()}>close</span>
+            <span className="material-icons-outlined" onClick={() => closeSidebar()}>close</span>
             </div>
 
             <ul className="sidebar-list">
             <li className="sidebar-list-item">
-                <a href="/" target="_blank">
+                <a href="/admin/">
                 <span className="material-icons-outlined">dashboard</span> Dashboard
                 </a>
             </li>
