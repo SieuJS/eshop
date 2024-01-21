@@ -1,11 +1,23 @@
 import { Link } from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux'
+import cartSlice from "../redux/cartSlice"
+import { useRef } from "react";
 
 export default function ProductList(props) {
+    const cart = useSelector((state) => state.cart)
+    const disPatch = useDispatch();
     const products = props.products;
     const pages = props.pages;
     const page = props.page;
     const pageNumbers = Array.from({ length: pages }, (_, index) => index + 1);
     const onPageChange = props.onPageChange;
+    const handleFilterPrice = props.handleFilterPrice;
+    
+    const min = props.min;
+    const max = props.max;
+    const minRef = useRef(null);
+    const maxRef = useRef(null);
+
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
@@ -14,75 +26,29 @@ export default function ProductList(props) {
                     {/* Price Start */}
                     <div className="border-bottom mb-4 pb-4">
                         <h5 className="font-weight-semi-bold mb-4">Filter by price</h5>
-                        <form>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                        
+                            <div className="d-flex align-items-center justify-content-between mb-3">
                                 <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    defaultChecked=""
-                                    id="price-all"
+                                    type="number"
+                                    className="w-100 m-3"
+                                    placeholder="MIN"
+                                    id="price-min"
+                                    defaultValue={min}
+                                    ref={minRef}
                                 />
-                                <label className="custom-control-label" htmlFor="price-all">
-                                    All Price
-                                </label>
-                                <span className="badge border font-weight-normal">1000</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                                 <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    id="price-1"
+                                    type="number"
+                                    className="w-100 m-3"
+                                    placeholder="MAX"
+                                    id="price-max"
+                                    defaultValue={max}
+                                    ref={maxRef}
                                 />
-                                <label className="custom-control-label" htmlFor="price-1">
-                                    $0 - $100
-                                </label>
-                                <span className="badge border font-weight-normal">150</span>
                             </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    id="price-2"
-                                />
-                                <label className="custom-control-label" htmlFor="price-2">
-                                    $100 - $200
-                                </label>
-                                <span className="badge border font-weight-normal">295</span>
+                            <div className="d-flex align-items-center justify-content-between mb-3">
+                                <button className="w-100" onClick={()=>handleFilterPrice(minRef.current.value,maxRef.current.value)}>Filter</button>
                             </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    id="price-3"
-                                />
-                                <label className="custom-control-label" htmlFor="price-3">
-                                    $200 - $300
-                                </label>
-                                <span className="badge border font-weight-normal">246</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    id="price-4"
-                                />
-                                <label className="custom-control-label" htmlFor="price-4">
-                                    $300 - $400
-                                </label>
-                                <span className="badge border font-weight-normal">145</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                                <input
-                                    type="radio"
-                                    className="custom-control-input"
-                                    id="price-5"
-                                />
-                                <label className="custom-control-label" htmlFor="price-5">
-                                    $400 - $500
-                                </label>
-                                <span className="badge border font-weight-normal">168</span>
-                            </div>
-                        </form>
+                        
                     </div>
                     {/* Price End */}
                     {/* Color Start */}
@@ -159,80 +125,6 @@ export default function ProductList(props) {
                         </form>
                     </div>
                     {/* Color End */}
-                    {/* Size Start */}
-                    <div className="mb-5">
-                        <h5 className="font-weight-semi-bold mb-4">Filter by size</h5>
-                        <form>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    defaultChecked=""
-                                    id="size-all"
-                                />
-                                <label className="custom-control-label" htmlFor="size-all">
-                                    All Size
-                                </label>
-                                <span className="badge border font-weight-normal">1000</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="size-1"
-                                />
-                                <label className="custom-control-label" htmlFor="size-1">
-                                    XS
-                                </label>
-                                <span className="badge border font-weight-normal">150</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="size-2"
-                                />
-                                <label className="custom-control-label" htmlFor="size-2">
-                                    S
-                                </label>
-                                <span className="badge border font-weight-normal">295</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="size-3"
-                                />
-                                <label className="custom-control-label" htmlFor="size-3">
-                                    M
-                                </label>
-                                <span className="badge border font-weight-normal">246</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="size-4"
-                                />
-                                <label className="custom-control-label" htmlFor="size-4">
-                                    L
-                                </label>
-                                <span className="badge border font-weight-normal">145</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="size-5"
-                                />
-                                <label className="custom-control-label" htmlFor="size-5">
-                                    XL
-                                </label>
-                                <span className="badge border font-weight-normal">168</span>
-                            </div>
-                        </form>
-                    </div>
-                    {/* Size End */}
                 </div>
                 {/* Shop Sidebar End */}
                 {/* Shop Product Start */}
@@ -257,7 +149,7 @@ export default function ProductList(props) {
                             </div>
                         </div>
                         {
-                            products.map((product) => (
+                            products && products.map((product) => (
 
                                 <div className="col-lg-4 col-md-6 col-sm-12 pb-1" key={product.ProID}>
                                     <div className="card product-item border-0 mb-4">
@@ -275,10 +167,10 @@ export default function ProductList(props) {
                                                 <i className="fas fa-eye text-primary mr-1" />
                                                 View Detail
                                             </Link>
-                                            <a href="" className="btn btn-sm text-dark p-0">
+                                            <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({ProID: product.ProID,ProName: product.ProName, Price: product.Price,Quantity: 1}))}>
                                                 <i className="fas fa-shopping-cart text-primary mr-1" />
                                                 Add To Cart
-                                            </a>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -300,7 +192,7 @@ export default function ProductList(props) {
                                         </button>
                                     </li>
                                     {
-                                        pageNumbers.map((index) => (
+                                        pageNumbers && pageNumbers.map((index) => (
                                             <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
                                                 <button className="page-link" onClick={() => onPageChange(index)}>
                                                     {index}

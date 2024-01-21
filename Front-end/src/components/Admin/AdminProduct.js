@@ -13,6 +13,7 @@ export default function AdminProduct() {
   // const name = searchParams.get("keyword") || '';
   const [page, setPage] = useState(1);
   const [name, setName] = useState('');
+  const [sort, setSort] = useState('none')
 
   const [allProducts, setAllProducts] = useState([]);
   const [totalPage, setTotalPage] = useState(0);
@@ -21,26 +22,37 @@ export default function AdminProduct() {
   const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
   // const { dataFetch, isLoading, isError } = useFetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}`);
 
+  // sort
+
+
   const openAddItemForm = () => {
     console.log('open');
   }
 
   const onPageChange = (index) => {
     console.log(index);
-    setPage(index)
-    fetchData(index, name)
+    setPage(index);
+    fetchData(index, name, sort)
   }
 
   const handleSearh = () => {
     setPage(1)
     // setName(value)
+    setSort('none')
     fetchData(1, name)
   }
 
-  const fetchData = async (page, name) => {
+  const handleSort = (e) => {
+    const value = e.target.value
+    setSort(value);
+    setPage(1)
+    fetchData(1, name, value)
+  }
+
+  const fetchData = async (page, name, sort) => {
     try {
       setIsLoading(true)
-      let proData = await fetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}`);
+      let proData = await fetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}&sort=${sort}`);
       let proRes = await proData.json();
       setAllProducts(proRes.data);
       setIsLoading(false)
@@ -58,7 +70,8 @@ export default function AdminProduct() {
     console.log('USEREFFECT');
     setPage(1)
     setName('')
-    fetchData(1, '')
+    setSort('none')
+    fetchData(1, '', '')
     // setPage(1)
   }, [catID])
 
@@ -96,20 +109,16 @@ export default function AdminProduct() {
                       </div>
                       <div className="btn-add-item d-flex col-sm-3 col-3">
                         <div className="dropdown">
-                          <a className="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Sort by
-                          </a>
-
-                          <ul className="dropdown-menu">
-                            <li><a className="dropdown-item" href="#">Action</a></li>
-                            <li><a className="dropdown-item" href="#">Another action</a></li>
-                            <li><a className="dropdown-item" href="#">Something else here</a></li>
-                          </ul>
+                        <select className="form-select" aria-label="Default select example" onChange={(e) => handleSort(e)} value={sort}>
+                          <option value="none">None Sort</option>
+                          <option value="asc">Price ASC</option>
+                          <option value="desc">Price DSC</option>
+                        </select>
                         </div>
                       </div>
                       <div className="btn-add-item d-flex col-sm-4 col-4">
                         <Link to={`/admin/product/add/${catID}`} type="button" className="btn btn-primary ms-auto" onClick={(e) => openAddItemForm()}>
-                            <i className="fa-solid fa-circle-plus"></i>
+                            <i className="fa-solid fa-circle-plus m-1"></i>
                               Add Product 
                         </Link>
                       </div>
@@ -129,15 +138,15 @@ export default function AdminProduct() {
                     { isError == false && isLoading == false && allProducts?.length > 0 && allProducts.map(pro => {
                       return <tr className="text-center" key={pro.ProID} style={{verticalAlign: 'middle'}}>
                               <th scope="row">{pro.ProID}</th>
-                              <th><img src={pro.Image || "https://myshoes.vn/image/cache/catalog/2023/adidas/adi2/giay-adidas-galaxy-6-nam-den-01-500x500.jpg"} alt="" width="52px" className="rounded-2"/></th>
+                              <th><img src={pro.Image || "https://as1.ftcdn.net/v2/jpg/04/34/72/82/1000_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg"} alt="" width="52px" className="rounded-2"/></th>
                               <td>{pro.ProName}</td>
                               <td>{parseFloat(pro.Price).toLocaleString()}</td>
                               <td>{pro.Quantity}</td>
                               <td>
-                                <Link to={`/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm me-2">
+                                <Link to={`/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm m-1">
                                   <i className="fa fa-pencil"></i>
                                 </Link>
-                                <button href="" className="btn btn-danger btn-sm" onClick={(e) => deleteRow(pro.ProID)}>
+                                <button href="" className="btn btn-danger btn-sm m-1" onClick={(e) => deleteRow(pro.ProID)}>
                                   <i className="fa fa-trash"></i>
                                 </button>
                               </td>
