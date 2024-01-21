@@ -43,9 +43,12 @@
     cursor: pointer;
   }
   
-  .sidebar-list-item > a {
+  .sidebar-list-item > .sidebar-navlink {
     text-decoration: none;
     color: #9e9ea4;
+  }
+  .sidebar-list-item > .active {
+    color: orange;
   }
   
   .sidebar-responsive {

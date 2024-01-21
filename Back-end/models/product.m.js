@@ -62,10 +62,42 @@ module.exports = class Product{
         }
     }
 
+    static async updateCatID(currentCatID, newCatID) {
+        try {
+            const query = `UPDATE "${tbName}" SET "CatID" = ${newCatID} WHERE "CatID" = ${currentCatID}`
+            const data = await db.oneOrNone(query);
+            return data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     static async deleteProduct(proID) {
         try {
             // update_product is a custome procedure of Postgresql database
             await db.proc("proc_delete_product", [proID])
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    static async getByPage(catID, name, page, pageSize, sort) {
+        try {
+            const offset = (page - 1) * pageSize;
+            const limit = pageSize;
+            const catCondition = catID ? `AND "CatID" = ${catID}` : ''
+            let sortCondition = '';
+            if (sort === 'asc') sortCondition = `ORDER BY "Price" ASC`;
+            else if (sort=== 'desc') sortCondition = `ORDER BY "Price" DESC`
+            const data = await db.any(`SELECT * FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition} ${sortCondition} LIMIT ${limit} OFFSET ${offset}`);
+            const total = await db.one(`SELECT COUNT(*) FROM "${tbName}" WHERE "ProName" ILIKE '%${name}%' ${catCondition}`);
+            const totalData = parseInt(total.count)
+            const totalPage = Math.ceil(totalData / pageSize);
+            return {
+                data: data,
+                totalPage: totalPage,
+                total: total.count
+            }
         } catch (error) {
             throw error;
         }

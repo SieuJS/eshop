@@ -1,9 +1,24 @@
 const categoryM = require("../models/category.m");
+const HttpError = require('../models/http-error')
+
+const productM = require('../models/product.m');
 
 module.exports = {
     getAllCat: async (req, res, next) => {
         try {
             const category = await categoryM.getAll();
+            res.json(category)
+        } catch (error) {
+            console.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
+        }
+    },
+
+    getByPage: async (req, res, next) => {
+        try {
+            const page = req.query.page || 1;
+            const pageSize = 4; // số dòng trên 1 trang
+            const category = await categoryM.getByPage(page, pageSize);
             res.json(category)
         } catch (error) {
             next(error)
@@ -20,17 +35,20 @@ module.exports = {
             const data = await categoryM.add(entity);
             res.json({success: true, data:data})
         } catch (error){
-            next(error);
+            onsole.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
         }
     },
 
     deleteCategory: async (req, res, next) => {
         try {
             const catID = req.query.CatID;
+            const data2 = await productM.updateCatID(catID, 7);
             const data = await categoryM.deleteByID(catID);
             res.json({ success: true, data: data })
         } catch (error) {
-            next(error);
+            onsole.error(error)
+            return next (new HttpError("Some error orrcurs", 500))
         }
     },
 

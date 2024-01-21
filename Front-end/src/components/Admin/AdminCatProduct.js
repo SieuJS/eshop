@@ -1,9 +1,21 @@
 import { Outlet, NavLink} from "react-router-dom";
-import {useContext } from "react"
+import {useContext, useState } from "react"
 import {CatContext} from "../../context/CatContext";
 
 export default function AdminCatProduct() {
-    const {allCategories, setAllCategories, isLoading, isError} = useContext(CatContext);
+    const { allCategories, setAllCategories, isLoading, isError } = useContext(CatContext);
+    
+    const [page, setPage] = useState(1)
+    const pageSize = 4
+    const lastIndex = page * pageSize;
+    const firstIndex = lastIndex - pageSize;
+    const categories = allCategories.slice(firstIndex, lastIndex);
+    const totalPage = Math.ceil(allCategories.length / pageSize);
+    const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+
+    const onPageChange = (index) => {
+        setPage(index)
+      }
 
     return (
         <>
@@ -24,30 +36,45 @@ export default function AdminCatProduct() {
                 <div className="card-body">
                     <div className="list-group list-group-flush">
                     { isError == false && isLoading == false && allCategories &&
-                        allCategories.map((cat) => {
+                        categories.map((cat) => {
                         return <NavLink to={`/admin/product/${cat.CatID}`} className="list-group-item list-group-item-action" style = {{'borderRadius': '6px', 'margin': '2px 0'}} key={cat.CatID}>{cat.CatName}</NavLink>
                         })
                     }
                     </div>
                 </div>
                 <div className="card-footer">
-                    <nav aria-label="Page navigation example">
-                        <ul className="pagination">
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
-                        <li className="page-item"><a className="page-link" href="#">1</a></li>
-                        <li className="page-item active"><a className="page-link" href="#">2</a></li>
-                        <li className="page-item"><a className="page-link" href="#">3</a></li>
-                        <li className="page-item">
-                            <a className="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                        </ul>
-                    </nav>
+                <nav aria-label="Page navigation example">
+                    <ul className="pagination">
+                    <li className="page-item">
+                        <button className="page-link" aria-label="Previous" onClick={() => {
+                            if (page != 1) {
+                                onPageChange(page-1);
+                            }
+                        }}>
+                        <span aria-hidden="true">&laquo;</span>
+                        </button>
+                    </li>
+                    {
+                        pageNumbers.map((index) => (
+                            <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
+                                <button className="page-link" onClick={() => onPageChange(index)}>
+                                    {index}
+                                </button>
+                            </li>
+                        )
+                        )
+                    }               
+                    <li className="page-item">
+                        <button className="page-link" aria-label="Next" onClick={() => {
+                            if (page != totalPage) {
+                                onPageChange(page+1);
+                            }
+                        }}>
+                        <span aria-hidden="true">&raquo;</span>
+                        </button>
+                    </li>
+                    </ul>
+                </nav>
                 </div>
             </div>               
             </div>

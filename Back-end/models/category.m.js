@@ -17,6 +17,24 @@ module.exports = class Category{
         }
     }
 
+    static async getByPage(page, pageSize) {
+        try {
+            const offset = (page - 1) * pageSize;
+            const limit = pageSize;
+            const data = await db.any(`SELECT * FROM "${tbName}" LIMIT ${limit} OFFSET ${offset}`);
+            const total = await db.one(`SELECT COUNT(*) FROM "${tbName}"`);
+            const totalData = parseInt(total.count)
+            const totalPage = Math.ceil(totalData / pageSize);
+            return {
+                data: data,
+                totalPage: totalPage,
+                total: total.count
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
     static async add(entity) {
         try {
             const query = pgp.helpers.insert(entity, null, tbName);

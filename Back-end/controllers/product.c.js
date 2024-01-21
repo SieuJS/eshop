@@ -11,6 +11,20 @@ module.exports = {
         }
     },
 
+    getProductByPage: async (req, res, next) => {
+        try {
+            const page = req.query.page || 1;
+            const catID = req.query.catID;
+            const name = req.query.keyword || ''
+            const sort = req.query.sort || ''
+            const pageSize = 4; // số dòng trên 1 trang  
+            const result = await productM.getByPage(catID, name, page, pageSize, sort);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
+
     getProductByProID: async (req, res, next) => {
         try {
             const proID = req.params.proID;
@@ -69,7 +83,7 @@ module.exports = {
     },
 
     updateProduct: async (req, res, next) => {
-        try{
+        try {
             const entity = {
                 ProID: parseInt(req.body.proID),
                 ProName: req.body.proName,

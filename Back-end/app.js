@@ -11,25 +11,33 @@ const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const categoryRoute = require("./routes/category.r")
 const productRoute = require("./routes/product.r")
-const port = 3000;
+const port = process.env.PORT || 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
 
-app.use(cors())
+
 
 app.use(express.static(__dirname + '/public'))
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session({
-    secret: secret,
-    resave: false,
-    saveUninitialized: true,
-    cookie: {secure: false}
-}));
-require('./config/passport-setup.js')(app);
-require("./config/passport-login.js")(app);
+// app.use(session({
+//     secret: secret,
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: {secure: false}
+// }));
+// require('./config/passport-setup.js')(app);
+// require("./config/passport-login.js")(app);
+
+app.use ((req,res,next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+    next();
+})
 
 app.use("/api/account", accountRoute);
 app.use("/api/categories", categoryRoute);

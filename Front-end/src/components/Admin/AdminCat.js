@@ -1,6 +1,6 @@
 import $ from 'jquery'
 // import './AdminCat.css'
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { CatContext } from '../../context/CatContext.js';
 
 export default function AdminCat() {
@@ -9,6 +9,36 @@ export default function AdminCat() {
   const [catNameEdit, setCatNameEdit] = useState('');
   const [catID, setCatID] = useState('');
 
+  //pagination
+  // const [categories, setCategories] = useState([]) // du lieu nay dung de phan trang
+  // const [name, setName] = useState('');
+  const [page, setPage] = useState(1)
+  const pageSize = 4
+  const lastIndex = page * pageSize;
+  const firstIndex = lastIndex - pageSize;
+  const categories = allCategories.slice(firstIndex, lastIndex);
+  const totalPage = Math.ceil(allCategories.length / pageSize);
+  const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+
+  // useEffect(() => {
+  //   console.log('admincat useefect');
+  //   const lastIndex = page * pageSize;
+  //   const firstIndex = lastIndex - pageSize;
+  //   if (allCategories.length > 0) {
+  //     setCategories(allCategories.slice(firstIndex, lastIndex))
+  //   }
+  // }, [allCategories, page])
+
+  const onPageChange = (index) => {
+    setPage(index)
+  }
+
+  // const handleSearch = () => {
+  //   setAllCategories(allCategories.filter((item) => {
+  //     return item.CatName.toLowerCase().includes(name);
+  //   }))
+  // }
+  
   function openAddItemForm() {
       window.$('#addItemModal').modal('show');
   }
@@ -18,6 +48,10 @@ export default function AdminCat() {
   }
 
   async function submitAddItemForm() {
+    if (!catName) {
+      alert('Fail');
+      return;
+    }
     const entity = {
       CatName : catName
     }
@@ -99,17 +133,17 @@ export default function AdminCat() {
           </div>
 
           <div className="table-cards">
-            <div className="card-body">
+            <div className="card-body" style={{'minHeight': '65vh'}}>
                 <div className="row mb-3">
                     <div className="search container-fluid col-sm-5 col-6 offset-sm-0 offset-0">
-                    <form className="d-flex search-item" role="search">
-                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-primary" type="submit">Search</button>
-                    </form>
+                    {/* <form className="d-flex search-item" role="search">
+                        <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" onChange={(e) => {setName(e.target.value)}}/>
+                        <div className="btn btn-primary" onClick={() => handleSearch()}>Search</div>
+                    </form> */}
                     </div>
                     <div className="btn-add-item d-flex col-sm-4 col-4">
                   <button type="button" className="btn btn-primary ms-auto" onClick = {()=>openAddItemForm()}>
-                        <i className="fa-solid fa-circle-plus"></i>
+                        <i className="fa-solid fa-circle-plus m-1"></i>
                         Add Category
                     </button>
                     </div>
@@ -123,8 +157,9 @@ export default function AdminCat() {
                     </tr>
                   </thead>
                   <tbody>
-                  { isError == false && isLoading == false && allCategories &&
-                  allCategories.map(cat => {
+                  { isError == false && isLoading == false && categories &&
+                  categories.map(cat => {
+                    if(cat.CatID == 7) return ''
                     return <tr key={cat.CatID} >
                               <th scope="row">{cat.CatID }</th>
                               <td>{cat.CatName}</td>
@@ -152,31 +187,48 @@ export default function AdminCat() {
                   }
                   </tbody>
                 </table>
-                <nav aria-label="Page navigation example">
-                  <ul className="pagination">
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                    <li className="page-item active"><a className="page-link" href="#">2</a></li>
-                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-            </div>
           </div>
+          <div className="card-footer">
+            <nav aria-label="Page navigation example">
+                <ul className="pagination" style={{'margin': '0', 'padding': '25px'}}>
+                  <li className="page-item">
+                    <button className="page-link" aria-label="Previous" onClick={() => {
+                          if (page != 1) {
+                              onPageChange(page-1);
+                          }
+                      }}>
+                      <span aria-hidden="true">&laquo;</span>
+                    </button>
+                  </li>
+                  {
+                      pageNumbers.map((index) => (
+                          <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
+                              <button className="page-link" onClick={() => onPageChange(index)}>
+                                  {index}
+                              </button>
+                          </li>
+                      )
+                      )
+                  }               
+                  <li className="page-item">
+                    <button className="page-link" aria-label="Next" onClick={() => {
+                        if (page != totalPage) {
+                            onPageChange(page+1);
+                        }
+                    }}>
+                      <span aria-hidden="true">&raquo;</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+          </div>
+        </div>
       </main>
 
       {/* <!-- Modal for Add Item --> */}
       <div className="modal fade" id="addItemModal" tabIndex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <form className="modal-content" method="post" action="/">
+          <form className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title" id="addItemModalLabel">Add Category</h5>
                           <button type="button" className="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close" onClick={() => cancelAddItemForm()}>
@@ -185,7 +237,7 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label htmlFor="catName">Category name:</label>
-              <input type="text" id="catName" name="catName" className="form-control" onChange = {(e) => setCatName(e.target.value)}/>
+              <input type="text" id="catName" name="catName" className="form-control" required onChange = {(e) => setCatName(e.target.value)}/>
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelAddItemForm()}>Cancel</button>

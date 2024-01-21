@@ -48,7 +48,7 @@ export default function AdminAddProduct() {
         <>    
         <div className="main-title">
             <h2>           
-                <Link to={`/admin/product/${catID}`} className="btn btn-secondary">
+                <Link to={`/admin/product/${catID}`} className="btn btn-secondary me-3">
                     <i className="fa-solid fa-left-long"></i>
                 </Link>
                 ADD PRODUCT
@@ -100,7 +100,7 @@ export default function AdminAddProduct() {
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">Full Description</label>
                                 <textarea className="form-control" id="fullDescription" name="fullDescription" rows="3" onChange={(e) => setProFullDes(e.target.value)} ></textarea>
                             </div>
-                            <button className="btn btn-secondary">Back</button>
+                            <Link to={`/admin/product/${catID}`} className="btn btn-secondary me-2">Back</Link>
                             <button type="submit" onClick={(e) => handleSubmit(e)} className="btn btn-primary">Save</button>
                         </form>
                     </div>

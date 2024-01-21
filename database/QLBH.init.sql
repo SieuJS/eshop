@@ -365,7 +365,7 @@ CREATE TABLE "Users" (
   "Name" varchar(50) NOT NULL,
   "Email" varchar(50) NOT NULL,
   "DOB" timestamp NOT NULL,
-  "Permission" int4 NOT NULL
+  "Role" char(50) NOT NULL
 );
 
 DROP Table If Exists "Carts" ;
