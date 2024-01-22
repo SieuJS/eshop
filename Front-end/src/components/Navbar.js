@@ -68,6 +68,10 @@ export default function Navbar() {
                                     auth.role === "admin" &&
                                     <NavLink to="/admin" className="nav-item nav-link">Admin</NavLink>
                                 }
+                                                                {
+                                    auth.role === "user" &&
+                                    <NavLink to="/admin" className="nav-item nav-link">Profile</NavLink>
+                                }
                             </div>
                         </div>
                     </nav>

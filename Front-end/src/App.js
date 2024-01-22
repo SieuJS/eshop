@@ -23,6 +23,15 @@ import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
 function App() {
   const {login, logout, token, userId, role} = AuthHook();
+    let routes ;
+    if(token) {
+      routes = ( <Route path="account" element={<AccountLayout />}>
+      <Route index element={<AccountDashboard />} />
+      <Route path="editinfo" element={<EditInfo />}/>
+      <Route path="orders" element={<Orders />} />
+      <Route path="password" element={<Password />} />
+    </Route>)
+    }
   return (
     <>
       <BrowserRouter>
@@ -39,12 +48,6 @@ function App() {
         <Routes>
           <Route path='/*' element={<Shop />} />
           <Route path='/admin/*' exact element={<Admin />} />
-          <Route path="account" element={<AccountLayout />}>
-            <Route index element={<AccountDashboard />} />
-            <Route path="editinfo" element={<EditInfo />}/>
-            <Route path="orders" element={<Orders />} />
-            <Route path="password" element={<Password />} />
-          </Route>
           <Route path = "/login" element = {<Auth/>}/>
         </Routes>
         </AuthContext.Provider>

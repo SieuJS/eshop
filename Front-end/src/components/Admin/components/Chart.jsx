@@ -1,6 +1,6 @@
 import React from 'react'
 import Chart  from "react-apexcharts";
-function ShopChart() {
+function ShopChart(props) {
     const state = {
         options: {
           chart: {
@@ -18,8 +18,7 @@ function ShopChart() {
         ]
       };
   return (
-    <div className="app">
-        <div className="row">
+    <div className= {`${props.className} d-flex justify-content-center`}>
           <div className="mixed-chart">
             <Chart
               options={state.options}
@@ -28,7 +27,6 @@ function ShopChart() {
               width="500"
             />
           </div>
-        </div>
       </div>
   )
   }
