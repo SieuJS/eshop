@@ -1,20 +1,4 @@
 import * as React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Button,
-  Box,
-  InputLabel,
-  Input,
-  FormHelperText,
-  Stack,
-} from "@mui/material";
-import LockIcon from "@mui/icons-material/Lock";
-import { useHttpClient } from "../../hooks/http-hook";
-
-import { GET_PAGE_USERS as getUsersUrl } from "../../keys/BackEndKeys";
 
 export default function DataTable(props) {
   const usersData = props.usersData;
