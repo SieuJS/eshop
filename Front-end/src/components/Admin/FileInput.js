@@ -6,7 +6,7 @@ export default function FileInput(props) {
 
     const wrapperRef = useRef(null);
 
-    const { fileList, setFileList } = props
+    const { file, setFile } = props
     const onDragEnter = () => {
         wrapperRef.current.classList.add('dragover')
     }
@@ -21,16 +21,17 @@ export default function FileInput(props) {
 
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
-        if (newFile) {
-            const updateList = [...fileList, newFile];
-            setFileList(updateList)
+        console.log(newFile);
+        if (newFile && (newFile.type === 'image/png' || newFile.type === 'image/jpeg')) {
+            // const updateList = [...fileList, newFile];
+            setFile(newFile)
         }
     }
 
     const fileRemove = (file) => {
-        const updateList = [...fileList];
-        updateList.splice(fileList.indexOf(file), 1);
-        setFileList(updateList)
+        // const updateList = [...fileList];
+        // updateList.splice(fileList.indexOf(file), 1);
+        setFile(null)
     }
 
     return (
@@ -49,23 +50,23 @@ export default function FileInput(props) {
                 <input type="file" name="productImage" id="productImage" onChange={onFileDrop}></input>
             </div>
             {
-                fileList.length > 0 && 
+                file && 
                 <div className="file-input-preview">
                     <p className="file-input-preview_title">Ready to upload</p>
                 {
-                    fileList.map((item, index) => (    
-                        <div className="file-input-preview_item" key={index}>
+                    // fileList.map((item, index) => (     
+                        <div className="file-input-preview_item">
                             <div className="preview-item-wrap">
-                                <img src={URL.createObjectURL(item)} alt="" style={{'borderRadius': '6px'}} />
+                                <img src={URL.createObjectURL(file)} alt="" style={{'borderRadius': '6px'}} />
                                 <div className="file-input-preview_info">
-                                    <div>{item.name}</div>
+                                    <div>{file.name}</div>
                                 </div>
                             </div>
-                            <span className="btn btn-danger btn-sm file-input-delete" onClick={() => fileRemove(item)}>
+                            <span className="btn btn-danger btn-sm file-input-delete" onClick={() => fileRemove()}>
                                 <i className="fa fa-trash"></i>
                             </span>
-                        </div>
-                    ))
+                        </div>  
+                    // ))
                 }
                 </div>                
             }

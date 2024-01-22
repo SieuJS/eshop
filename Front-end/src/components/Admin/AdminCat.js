@@ -8,6 +8,7 @@ export default function AdminCat() {
   const [catName, setCatName ] = useState('');
   const [catNameEdit, setCatNameEdit] = useState('');
   const [catID, setCatID] = useState('');
+  const [errorInput, setErrorInput] = useState(null); 
 
   //pagination
   // const [categories, setCategories] = useState([]) // du lieu nay dung de phan trang
@@ -18,7 +19,21 @@ export default function AdminCat() {
   const firstIndex = lastIndex - pageSize;
   const categories = allCategories.slice(firstIndex, lastIndex);
   const totalPage = Math.ceil(allCategories.length / pageSize);
-  const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+  // const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+  const renderPagination = () => {
+    const maxPagesToShow = 5; // Số trang tối đa được hiển thị
+    const middleIndex = Math.ceil(maxPagesToShow / 2);
+    let startPage = 1;
+    
+    if (totalPage > maxPagesToShow) {
+      startPage = Math.max(1, page - middleIndex + 1);
+      if (page + middleIndex > totalPage) {
+        startPage = totalPage - maxPagesToShow + 1;
+      }
+    }
+  
+    return Array.from({ length: Math.min(totalPage, maxPagesToShow) }, (_, index) => startPage + index);
+  };
 
   // useEffect(() => {
   //   console.log('admincat useefect');
@@ -47,11 +62,16 @@ export default function AdminCat() {
       window.$('#addItemModal').modal('hide');
   }
 
-  async function submitAddItemForm() {
-    if (!catName) {
-      alert('Fail');
-      return;
+  async function submitAddItemForm(e) {
+    e.preventDefault();
+    setErrorInput(null)
+    if (catName === '') {
+      setErrorInput(
+        'Name is required'
+      )
+      return
     }
+
     const entity = {
       CatName : catName
     }
@@ -191,17 +211,26 @@ export default function AdminCat() {
           <div className="card-footer">
             <nav aria-label="Page navigation example">
                 <ul className="pagination" style={{'margin': '0', 'padding': '25px'}}>
+                <li className="page-item">
+                      <button className="page-link" aria-label="Previous" onClick={() => {
+                            if (page != 1) {
+                                onPageChange(1);
+                            }
+                        }}>
+                        <span aria-hidden="true">&laquo;</span>
+                      </button>
+                    </li>
                   <li className="page-item">
                     <button className="page-link" aria-label="Previous" onClick={() => {
                           if (page != 1) {
                               onPageChange(page-1);
                           }
                       }}>
-                      <span aria-hidden="true">&laquo;</span>
+                      <span aria-hidden="true">&lt;</span>
                     </button>
                   </li>
                   {
-                      pageNumbers.map((index) => (
+                      renderPagination().map((index) => (
                           <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
                               <button className="page-link" onClick={() => onPageChange(index)}>
                                   {index}
@@ -216,6 +245,15 @@ export default function AdminCat() {
                             onPageChange(page+1);
                         }
                     }}>
+                      <span aria-hidden="true">&gt;</span>
+                    </button>
+                  </li>
+                  <li className="page-item">
+                    <button className="page-link" aria-label="Next" onClick={() => {
+                        if (page != totalPage) {
+                            onPageChange(totalPage);
+                        }
+                    }}>
                       <span aria-hidden="true">&raquo;</span>
                     </button>
                   </li>
@@ -228,7 +266,7 @@ export default function AdminCat() {
       {/* <!-- Modal for Add Item --> */}
       <div className="modal fade" id="addItemModal" tabIndex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered" role="document">
-          <form className="modal-content">
+          <form className="modal-content" onSubmit={submitAddItemForm}>
             <div className="modal-header">
               <h5 className="modal-title" id="addItemModalLabel">Add Category</h5>
                           <button type="button" className="btn btn-danger btn-sm" data-dismiss="modal" aria-label="Close" onClick={() => cancelAddItemForm()}>
@@ -237,11 +275,12 @@ export default function AdminCat() {
             </div>
             <div className="modal-body">
               <label htmlFor="catName">Category name:</label>
-              <input type="text" id="catName" name="catName" className="form-control" required onChange = {(e) => setCatName(e.target.value)}/>
+              <input type="text" id="catName" name="catName" className="form-control" onChange={(e) => setCatName(e.target.value)} />
+              {errorInput && <span style={{'color':'red'}}>{errorInput}</span>}
             </div>
             <div className="modal-footer">
                           <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={() => cancelAddItemForm()}>Cancel</button>
-                          <button type="button" className="btn btn-primary" onClick={() => submitAddItemForm()}>Add</button>
+                          <button type="submit" className="btn btn-primary" >Add</button>
             </div>
           </form>
         </div>

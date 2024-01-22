@@ -11,10 +11,11 @@ export default function AdminEditProduct() {
     const proID = searchParams.get("proID")
     const navigate = useNavigate();
 
-    const [fileList, setFileList] = useState([])
+    const [fileList, setFileList] = useState(null)
     const { dataFetch, isLoading, isError } = useFetch(`/api/product/get-by-pro/${proID}`);
     const { allCategories, setAllCategories} = useContext(CatContext);
     const [proInfo, setProInfo] = useState({})
+    const [errorInput, setErrorInput] = useState({});
 
     useEffect(() => {
         console.log(dataFetch);
@@ -23,8 +24,34 @@ export default function AdminEditProduct() {
         }
     }, [dataFetch])
 
+    const validation = (value) => {
+        const errors = {}
+
+        const regexNumber = /^[0-9]\d*$/;
+        if (value.ProName === '') {
+            errors.proName = 'Name is required'
+        }
+
+        console.log(parseInt(value.Price));
+        if (!regexNumber.test(parseInt(value.Price))) {
+            errors.proPrice = 'Price is invalid'
+        }
+
+        console.log(parseInt(value.Quantity));
+        if (!regexNumber.test(parseInt(value.Quantity))) {
+            errors.proQuantity = 'Quantity is invalid'
+        }
+        return errors
+        
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const errors = validation(proInfo)
+        setErrorInput(errors)
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
         const entity = {
             proName: proInfo.ProName,
             proPrice: proInfo.Price,
@@ -43,8 +70,8 @@ export default function AdminEditProduct() {
             formData.append(key, entity[key]);
         }
 
-        if (fileList && fileList.length > 0) {
-            formData.append('proImage', fileList[0]);
+        if (fileList) {
+            formData.append('proImage', fileList);
         }
 
         const res = await fetch('/api/product/update', {
@@ -80,8 +107,8 @@ export default function AdminEditProduct() {
                             <p style={{'marginTop': '8px'}}>Current Image</p>
                         </div>
                         <FileInput
-                        fileList={fileList}
-                        setFileList={setFileList}/>
+                        file={fileList}
+                        setFile={setFileList}/>
                     </div>
                 </div>               
               </div>
@@ -98,6 +125,7 @@ export default function AdminEditProduct() {
                                 <div className="col">
                                     <label htmlFor="inputProductName" className="form-label">Name Product</label>
                                     <input type="text" className="form-control" id="productName" name="productName" onChange={(e) => setProInfo({...proInfo, ProName: e.target.value})} value={proInfo.ProName || '' } />
+                                    {errorInput.proName && <span style={{color:'red'}}>{errorInput.proName}</span>}
                                 </div>
                                 <div className="col">
                                     <label htmlFor="inputProductName" className="form-label">Category</label>
@@ -113,11 +141,13 @@ export default function AdminEditProduct() {
                             <div className="row mb-3">
                                 <div className="col">
                                     <label htmlFor="inputProductPrice" className="form-label">Price</label>
-                                            <input type="number" className="form-control" id="productPrice" name="productPrice" value={parseFloat(proInfo.Price) || '' } onChange={(e) => setProInfo({...proInfo, Price: e.target.value})}  />
+                                    <input type="number" className="form-control" id="productPrice" name="productPrice" value={parseFloat(proInfo.Price) || '0'} onChange={(e) => setProInfo({ ...proInfo, Price: e.target.value })} />
+                                    {errorInput.proPrice && <span style={{color:'red'}}>{errorInput.proPrice}</span>}
                                 </div>
                                 <div className="col">
                                     <label htmlFor="inputProductQuantity" className="form-label">Quantity</label>
-                                            <input type="text" className="form-control" id="productQuantity" name="productQuantity" value={proInfo.Quantity || '0' } onChange={(e) => setProInfo({...proInfo, Quantity: e.target.value})}  />
+                                    <input type="number" className="form-control" id="productQuantity" name="productQuantity" value={proInfo.Quantity || '0' } onChange={(e) => setProInfo({...proInfo, Quantity: e.target.value})}  />
+                                    {errorInput.proQuantity && <span style={{color:'red'}}>{errorInput.proQuantity}</span>}
                                 </div>
                             </div>
                             <div className="mb-3">

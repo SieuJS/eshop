@@ -2,8 +2,9 @@ import { useState, useEffect, useContext } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
 import {NavLink} from "react-router-dom";
-import {AuthContext} from "../context/AuthContext"
-import {Button} from "@mui/material"
+import Button from "react";
+import { AuthContext } from "../context/AuthContext";
+import { Button } from "@mui/material";
 
 export default function Navbar() {
     const auth = useContext(AuthContext)
@@ -48,9 +49,8 @@ export default function Navbar() {
                         <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div className="navbar-nav mr-auto py-0">
                                 <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
-                                <NavLink to="/shop" className="nav-item nav-link">Shop</NavLink>
+                                <NavLink to="/productlist" className="nav-item nav-link">All products</NavLink>
                                 <NavLink to="/detail" className="nav-item nav-link">Shop Detail</NavLink>
-
                                 <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                             <div className="navbar-nav ml-auto py-0">
