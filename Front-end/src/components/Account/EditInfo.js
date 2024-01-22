@@ -63,7 +63,7 @@ export default function EditInfo({ userId }) {
     async function updateUserInfo(newValues) {
         newValues.ID = 11; // newValues.ID = userID; which is gotten from context
         const response = await sendRequest(
-            "http://localhost:3000/api/account/update",
+            "/api/account/update",
             "POST",
             {
                 "Content-type": "application/json"
@@ -81,7 +81,7 @@ export default function EditInfo({ userId }) {
         let existedUserName = false;
 
         if (!usernameBtn) {
-            const dataResponse = await sendRequest(`http://localhost:3000/api/account/check/${newUN}`);
+            const dataResponse = await sendRequest(`/api/account/check/${newUN}`);
             existedUserName = dataResponse.valid;
             setValidNewUsername(!existedUserName);
         }

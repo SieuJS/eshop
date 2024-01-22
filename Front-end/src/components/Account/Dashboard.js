@@ -8,7 +8,7 @@ export default function Dashboard({ userId }) {
         async function fetchUser() {
             try {
                 const data = await sendRequest(
-                    "http://localhost:3000/api/account/11",
+                    "/api/account/11",
                     "GET");
                 
                 setUserInfo({...data});
