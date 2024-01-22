@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from "react";
 import useFetch from "../hooks/useFetch"
 import { Link } from "react-router-dom";
 import {NavLink} from "react-router-dom";
-import Button from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
 
