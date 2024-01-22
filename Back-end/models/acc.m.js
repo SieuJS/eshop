@@ -53,4 +53,26 @@ module.exports = class Account {
             throw error;
         }
     }
+
+    static async lockUser(uid) {
+        try {
+        const data = await db.func("lock_acc", [uid])
+        return data
+        }
+        catch (err){
+            throw err
+        }
+    }
+    static async getList (pageSize = 5, pageNum = 1)  {
+        try {
+            let totalPage , data , totalRecords ;
+            totalRecords = await db.one('SELECT Count(*) FROM "Users"');
+            totalPage =Math.ceil(totalRecords.count / pageSize);
+            data = await db.func('get_list_users', [pageSize, pageNum]);
+            return {totalPage , data}
+        }
+        catch (err){
+            throw err
+        }
+    }
 }
