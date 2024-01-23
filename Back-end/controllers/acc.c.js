@@ -6,6 +6,7 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
@@ -168,7 +169,6 @@ module.exports = {
   updateHandler: async (req, res) => {
     const userID = req.body.ID;
     const acc = await accM.getByUserID(userID);
-
     if (!acc) {
       res.json({ message: "Invalid user" });
     } else {
@@ -240,4 +240,56 @@ module.exports = {
       }
     }
   },
+  getList : async (req, res, next) => {
+    let data;
+    let {limit, start} = req.query;
+    [limit, start] = [limit ? parseInt(limit) : 5, start ? parseInt(start) : 1]
+    try { 
+      data = await accM.getList(limit, start);
+    }
+    catch (err) {
+      console.error(err);
+      return next(new HttpError ("Some errors occurs", 500));
+    }
+    const total = data.totalPage
+    res.json({
+      start,
+      limit,
+      ...data ,
+      next : start === total ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start+1}`,
+      prev : start === '1' ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start-1}`
+    })
+  },
+  lockAcc : async (req, res, next) => {
+    const  {userId} = req.params;
+    let identifierUser ;
+    try {
+      identifierUser = accM.getByUserID(userId);
+    }
+    catch (err)
+    {
+      console.error(err);
+      return next(new HttpError("Some error occurs when find user",500));
+    }
+    if (!identifierUser)
+    {
+      return next (new HttpError("Can not find use",404));
+    }
+    
+    if(identifierUser.Role === "admin")
+    {
+      return next (new HttpError("Can not lock Admin acc",420));
+    }
+    if(identifierUser.Role === "locked")
+    {
+      return next (new HttpError("This account has been locked",420));
+    }
+    try {
+    accM.lockUser(userId);
+    }
+    catch {
+      return next (new HttpError("Cannot lock", 420));
+    }
+    return res.json({message : "Lock success"})
+  }
 };

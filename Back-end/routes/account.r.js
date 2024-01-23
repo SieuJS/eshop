@@ -4,6 +4,7 @@ const accC = require("../controllers/acc.c.js");
 
 router.get("/:userId", accC.getUserById);
 router.get("/check/:username", accC.checkUsername);
+// router.post("/checkpassword", accC.checkPassword);
 router.post("/register", accC.signUpHandler);
 router.post("/login", accC.logInHandler);
 router.post("/update", accC.updateHandler);

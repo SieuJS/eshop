@@ -11,7 +11,21 @@ export default function AdminCatProduct() {
     const firstIndex = lastIndex - pageSize;
     const categories = allCategories.slice(firstIndex, lastIndex);
     const totalPage = Math.ceil(allCategories.length / pageSize);
-    const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+    // const pageNumbers = Array.from({ length: totalPage }, (_, index) => index + 1);
+    const renderPagination = () => {
+        const maxPagesToShow = 3; // Số trang tối đa được hiển thị
+        const middleIndex = Math.ceil(maxPagesToShow / 2);
+        let startPage = 1;
+        
+        if (totalPage > maxPagesToShow) {
+          startPage = Math.max(1, page - middleIndex + 1);
+          if (page + middleIndex > totalPage) {
+            startPage = totalPage - maxPagesToShow + 1;
+          }
+        }
+      
+        return Array.from({ length: Math.min(totalPage, maxPagesToShow) }, (_, index) => startPage + index);
+      };
 
     const onPageChange = (index) => {
         setPage(index)
@@ -55,7 +69,7 @@ export default function AdminCatProduct() {
                         </button>
                     </li>
                     {
-                        pageNumbers.map((index) => (
+                        renderPagination().map((index) => (
                             <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
                                 <button className="page-link" onClick={() => onPageChange(index)}>
                                     {index}

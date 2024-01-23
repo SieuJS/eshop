@@ -14,7 +14,7 @@ const productRoute = require("./routes/product.r")
 const port = process.env.PORT || 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
-
+const adminRoute = require('./routes/admin.js')
 
 
 app.use(express.static(__dirname + '/public'))
@@ -42,6 +42,7 @@ app.use ((req,res,next) => {
 app.use("/api/account", accountRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
+app.use('/api/admin' , adminRoute)
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search",searchC.search);

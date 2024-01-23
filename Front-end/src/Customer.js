@@ -18,7 +18,6 @@ function Customer() {
         <Route path='/product/:proid' exact element={<Detail />} />
         <Route path='/productlist' exact element={<ProductList />} />
         <Route path='/search' exact element={<ProductList />} />
-        <Route path='/account' exact element={< Account />} />
         <Route path='/cart' exact element={< Cart />} />
         <Route path='/checkout' exact element = {< Checkout />} />
       </Routes>
