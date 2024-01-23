@@ -47,8 +47,11 @@ module.exports = {
                 CatID: req.body.catID,
                 Quantity:req.body.proQuantity
             }
-            if (req.file) {
-                entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            // if (req.file) {
+            //     entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            // }
+            if (req.body.proImage) {
+                entity.Image = req.body.proImage
             }
             const data = await productM.add(entity);
             res.json({success: true, data:data})
@@ -93,8 +96,8 @@ module.exports = {
                 CatID: parseInt(req.body.catID),
                 Quantity:parseInt(req.body.proQuantity)
             }
-            if (req.file) {
-                entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            if (req.body.proImage) {
+                entity.Image = req.body.proImage
             }
             const data = await productM.updateProduct(entity)
             res.json({success: true, data:data})

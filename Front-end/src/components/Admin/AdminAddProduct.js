@@ -4,6 +4,9 @@ import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminAddProduct() {
+    const preset_key = "zjqlggti"
+    const cloud_name = "dscoavwex"
+    const folder = "eshopper"
     const { catID } = useParams()
     const [file, setFile] = useState(null)
     const navigate = useNavigate();
@@ -51,23 +54,35 @@ export default function AdminAddProduct() {
         const entity = proInfo
         entity.catID = catID
 
-        const formData = new FormData();
+        // const formData = new FormData();
 
-        for (const key in entity) {
-            formData.append(key, entity[key]);
-        }
+        // for (const key in entity) {
+        //     formData.append(key, entity[key]);
+        // }
 
         if (file) {
-            formData.append('proImage', file);
+            const formDataCloud = new FormData()
+            formDataCloud.append('file', file)
+            formDataCloud.append('upload_preset', preset_key);
+            formDataCloud.append('folder', folder)
+            const resCloud = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+                method: 'POST',
+                body: formDataCloud
+            })
+            const dataCloud = await resCloud.json();
+            console.log(dataCloud.secure_url);
+            if (dataCloud.secure_url) {
+                // formData.append('proImage', file);
+                entity.proImage = dataCloud.secure_url
+            }
         }
-
-        console.log(file);
-        console.log(entity);
         
-
         const res = await fetch('/api/product/add', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(entity),
         })
 
         const data = await res.json();

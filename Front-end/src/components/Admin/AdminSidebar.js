@@ -11,7 +11,8 @@ export default function AdminSidebar() {
             <div className="sidebar-brand">
                 <span className="material-icons-outlined">shopping_cart</span> STORE
             </div>
-            <span className="material-icons-outlined" onClick={() => closeSidebar()}>close</span>
+                <span className="material-icons-outlined" onClick={() => closeSidebar()}>close</span>
+                <i class="fa-solid fa-xmark" style={{fontSize: '30px', margin: '6px'}} onClick={() => closeSidebar()}></i>
             </div>
 
             <ul className="sidebar-list">

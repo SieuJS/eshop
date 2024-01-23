@@ -21,8 +21,7 @@ export default function FileInput(props) {
 
     const onFileDrop = (e) => {
         const newFile = e.target.files[0];
-        console.log(newFile);
-        if (newFile && (newFile.type === 'image/png' || newFile.type === 'image/jpeg')) {
+        if (newFile && (newFile.type === 'image/png' || newFile.type === 'image/jpeg' || newFile.type === 'image/jpg')) {
             // const updateList = [...fileList, newFile];
             setFile(newFile)
         }
