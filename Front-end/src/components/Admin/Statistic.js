@@ -1,5 +1,6 @@
 
-export default function AdminStatistic() {
+
+export default function AdminStatistic(props) {
 
   return (
       <>      
@@ -10,7 +11,7 @@ export default function AdminStatistic() {
                   <h3>PRODUCTS</h3>
                   <span class="material-icons-outlined">inventory_2</span>
               </div>
-              <h1>249</h1>
+              <h1>{props.data && props.data.prodStat || 0}</h1>
           </div>
 
           <div class="card ">
@@ -18,7 +19,7 @@ export default function AdminStatistic() {
                   <h3>CATEGORIES</h3>
                   <span class="material-icons-outlined">category</span>
               </div>
-              <h1>25</h1>
+              <h1>{ props.data && props.data.catStat || 0}</h1>
           </div>
 
           <div class="card ">
@@ -26,7 +27,7 @@ export default function AdminStatistic() {
                   <h3>CUSTOMERS</h3>
                   <span class="material-icons-outlined">groups</span>
               </div>
-              <h1>1500</h1>
+              <h1>{props.data &&props.data.accStat || 0}</h1>
           </div>
 
           <div class="card ">
@@ -34,7 +35,7 @@ export default function AdminStatistic() {
                   <h3>ALERTS</h3>
                   <span class="material-icons-outlined">notification_important</span>
               </div>
-              <h1>56</h1>
+              <h1>{props.data &&props.data.orderStat || 0}</h1>
           </div>
 
       </div>

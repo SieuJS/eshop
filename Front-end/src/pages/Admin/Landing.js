@@ -1,6 +1,8 @@
 import React from "react";
-import { useEffect ,useState } from "react";
+import { useEffect ,useState, useContext } from "react";
 import { useHttpClient } from '../../hooks/http-hook';
+
+import {AuthContext} from "../../context/AuthContext"
 
 import { GET_PAGE_USERS as getUsersUrl } from '../../keys/BackEndKeys';
 
@@ -10,12 +12,78 @@ import ShopChart from "../../components/Admin/components/Chart";
 import Statistic from "../../components/Admin/Statistic";
 import AdminTable from "../../components/Admin/AdminTable";
 
+import io from "socket.io-client"
+
 function Landing() {
+
+  const auth = useContext(AuthContext)
+
   const [usersData, setUsersData]= useState(undefined);
   const {isLoading, error, sendRequest, clearError} =  useHttpClient()
   const [reqUrl, setReqUrl] = useState(getUsersUrl);
   const [page ,setPage] = useState();
   const [totalPage, setTotalPage] = useState();
+
+  // for stat
+  const [socket, setSocket] = useState()
+  const [statData, setStatData] = useState();
+  
+  // useEffect(()=> {
+  //   function onConnect () {
+  //     setSocketConnected(true);
+  //   };
+
+  //   function onDisconnect() {
+  //     setSocketConnected(false);
+  //   }
+
+  //   function onGetStat(data) {
+  //     setStatData(prev => [...prev, data]);
+  //   }
+
+  //   socket.on('connect', onConnect);
+  //   socket.on('disconnect', onDisconnect);
+  //   socket.on('stat', onGetStat);
+
+  //   return () => {
+  //     socket.off('connect', onConnect);
+  //     socket.off('disconnect', onDisconnect);
+  //     socket.off('stat', onGetStat);
+  //   };
+    
+  // }, [])
+
+  useEffect (() => {
+    if(auth.isLoggedIn){
+      setSocket(io.connect('http://localhost:5000', {
+        query: {token : `Bearer ${auth.token}`}})
+  )}
+  }, [auth.isLoggedIn])
+
+  useEffect(() => {
+    // no-op if the socket is already connected
+    if(socket){
+    socket
+    .on('connect' , ()=> {
+      console.log('connect success');
+    })
+    .on('connect_error', (err)=> {
+      console.log('err')
+      console.log(err)
+    })
+    .on("statistic", (data)=> {
+      setStatData(data);
+    })
+  }
+    return () => {
+      if(socket)
+      {
+        socket.disconnect();
+      }
+    };
+  }, [socket]);
+
+// for pagination 
   const limit = 5;
   useEffect( () => {
     const fetchUsers = async () => {
@@ -29,10 +97,11 @@ function Landing() {
       catch(err) {
         console.log(err);
       }
-      
     }
     fetchUsers();
   },[sendRequest]);
+
+  
 
   const  onPageChange = async (nextPage) => {
     let data;
@@ -56,18 +125,20 @@ function Landing() {
     )
   }
 
+
+
   return (
     <div className="grid-container page-admin">
       <AdminHeader />
       <AdminSidebar />
       <main className="main-container">
-        <Statistic />
+        <Statistic data = {statData}/>
 
         <div class="row">
             <div className="col-xl-6 col-lg-12">
               <div class=" charts-card ">
-                <h2 class="chart-title text-light">Monthly Report</h2>
-                <ShopChart />
+                <h2 class="chart-title text-light">Real Time Report</h2>
+                <ShopChart data = {statData}/>
               </div>
             </div>
             <div className="col-xl-6 col-lg-12">

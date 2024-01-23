@@ -1,19 +1,23 @@
 import React from 'react'
 import Chart  from "react-apexcharts";
 function ShopChart(props) {
+    if(props.data)
+    {
+    console.log([props.data.accStat, props.data.prodStat, props.data.catStat, props.data.orderStat])
+    }
     const state = {
         options: {
           chart: {
             id: "basic-bar"
           },
           xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+            categories: ["Products" , "Users","Categories", "Orders" ]
           }
         },
         series: [
           {
             name: "series-1",
-            data: [30, 40, 45, 50, 49, 60, 70, 91]
+            data: props.data ? [props.data.accStat, props.data.prodStat, props.data.catStat, props.data.orderStat] : []
           }
         ]
       };
