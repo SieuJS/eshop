@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const accC = require("../controllers/acc.c.js");
+const checkAuth = require("../middlewares/check-auth.js");
 
 router.get("/:userId", accC.getUserById);
 router.get("/check/:username", accC.checkUsername);

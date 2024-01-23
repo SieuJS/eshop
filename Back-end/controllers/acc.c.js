@@ -90,7 +90,7 @@ module.exports = {
           username : newUser.Username,
           role
         },
-        process.env.JWT_KEY,
+        process.env.JWT_SECRET_KEY,
         { expiresIn : "1h" }
       );
     } catch(err) {
@@ -165,7 +165,9 @@ module.exports = {
   },
 
   updateHandler: async (req, res, next) => {
+    console.log("enter update user handler");
     const userID = req.body.ID;
+    console.log("update function userid from req: ", userID);
     const acc = await accM.getByUserID(userID);
 
     if (!acc) {

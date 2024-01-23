@@ -23,9 +23,11 @@ module.exports = (req, res, next ) => {
         req.userData  =  {
             userId : decodedToken.userId,
         }  
+        // req.useId = decodedToken.userId;
+        console.log("userid in middleware: ", decodedToken.userId);
         next();
 
     }catch (err) {
-        return next (new HttpError(err.message, 401));
+        return next (new HttpError(err.message, 402));
     }
 };
