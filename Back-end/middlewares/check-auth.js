@@ -19,11 +19,11 @@ module.exports = (req, res, next ) => {
             const error = new Error('Authentication failed');
             throw error;
         }
-        const decodedToken = jwt.verify(token , "supersecret_dont_share");
+        const decodedToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
         req.userData  =  {
             userId : decodedToken.userId,
         }  
-        // req.useId = decodedToken.userId;
+        //req.useId = decodedToken.userId;
         console.log("userid in middleware: ", decodedToken.userId);
         next();
 

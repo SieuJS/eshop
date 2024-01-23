@@ -6,7 +6,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 export default function EditInfo() {
     const navigate = useNavigate();
-    const { userId } = useContext(AuthContext);
+    const { userId, token } = useContext(AuthContext);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userFormData, setUserFormData] = useState({
         newName: "",
@@ -66,11 +66,13 @@ export default function EditInfo() {
 
     async function updateUserInfo(newValues) {
         newValues.ID = userId; // newValues.ID = userID; which is gotten from context
+        console.log("token from Context", token);
         const response = await sendRequest(
             "/api/account/update",
             "POST",
             {
-                "Content-type": "application/json"
+                "Content-type": "application/json",
+                "Authorization": `Bear ${token}`
             },
             JSON.stringify(newValues)
         );

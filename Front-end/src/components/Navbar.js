@@ -20,13 +20,13 @@ export default function Navbar() {
         <div className="bg-light container-fluid mb-5 sticky-top border-bottom">
             <div className="row border-top px-xl-5">
                 <div className="col-lg-3 d-none d-lg-block">
-                    <div className="shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
+                    <button className="btn shadow-none d-flex align-items-center justify-content-between bg-primary text-white w-100"
                         style={{ height: "65px", marginTop: "-1px", padding: "0 30px" }}
                         onClick={toggleCat}
                     >
                         <h6 className="m-0">Categories</h6>
                         <i className="fa fa-angle-down text-dark"></i>
-                    </div>
+                    </button>
                     {showCatNav &&
                         <nav className="bg-primary collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical" >
                             <div className="bg-secondary navbar-nav w-100 overflow-hidden position-absolute" >
@@ -88,7 +88,7 @@ export default function Navbar() {
                                                         viewBox="0 0 24 24"
                                                         height="24px" width="24px"
                                                         className="w-6 h-6">
-                                                        <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd" />
+                                                        <path fillRule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clipRule="evenodd" />
                                                     </svg>
                                                 </span>
                                                 <Link to="/account">
