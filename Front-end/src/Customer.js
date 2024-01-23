@@ -6,6 +6,7 @@ import Detail from "./pages/Detail.js";
 import Cart from "./pages/Cart.js";
 import ProductList from "./pages/ProductList.js"
 import Account from './pages/AccountLayout.js';
+import Checkout from './pages/Checkout.js'
 
 function Customer() {
   
@@ -19,6 +20,7 @@ function Customer() {
         <Route path='/search' exact element={<ProductList />} />
         <Route path='/account' exact element={< Account />} />
         <Route path='/cart' exact element={< Cart />} />
+        <Route path='/checkout' exact element = {< Checkout />} />
       </Routes>
     </>
   );

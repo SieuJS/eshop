@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {useSelector, useDispatch} from 'react-redux'
 import cartSlice from "../redux/cartSlice";
+import { NavLink } from "react-router-dom";
 
 export default function CartPage(props) {
     const disPatch = useDispatch();
@@ -92,9 +93,9 @@ export default function CartPage(props) {
                                 <h5 className="font-weight-bold">Total</h5>
                                 <h5 className="font-weight-bold">{total}</h5>
                             </div>
-                            <button className="btn btn-block btn-primary my-3 py-3">
-                                Proceed To Checkout
-                            </button>
+                            <NavLink to="/checkout" className="btn btn-block btn-primary my-3 py-3">
+                                    Proceed To Checkout
+                            </NavLink>
                         </div>
                     </div>
                 </div>

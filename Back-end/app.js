@@ -56,13 +56,13 @@ app.use((error, req, res, next) => {
     res.json({ message: error.message || "There some errors occured " });
 });
 
-app.listen(port, () => {
-    console.log(`Listening on port ${port}`);
-})
+// app.listen(port, () => {
+//     console.log(`Listening on port ${port}`);
+// })
 
-// const server = https.createServer({
-//     key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
-//     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
-// }, app);
+const server = https.createServer({
+    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+}, app);
 
-// server.listen(port, () => console.log(`Secure server on port ${port}`));
+server.listen(port, () => console.log(`Secure server on port ${port}`));

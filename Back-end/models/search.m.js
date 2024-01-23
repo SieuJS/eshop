@@ -2,10 +2,10 @@ const db = require("../utils/db");
 
 module.exports = {
     async getProductbySearch(name, catid, min, max) {
-        
         var queryString = `SELECT * FROM "Products" WHERE "ProName" ILIKE '%${name}%'`;
         if (catid != null) {
-            queryString += ` AND "CatID" = ${catid}`
+            let catidArr = catid.split(',');
+            queryString += ` AND "CatID" IN (${catid})`
         }
         if (min != null && max != null) {
             queryString += ` AND "Price" BETWEEN ${min} AND ${max}`
