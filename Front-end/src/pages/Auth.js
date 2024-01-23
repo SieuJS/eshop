@@ -135,8 +135,8 @@ function Auth() {
       }
     }
     if (data) {
-        console.log(data)
-      auth.login(data.user.userId,data.user.role.trim(), data.user.token);
+      console.log("data in auth login/signin", data);
+      auth.login(data.user.id,data.user.role.trim(), data.user.token);
       navigate("/");
     } else {
     }

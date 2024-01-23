@@ -1,10 +1,12 @@
-import { useState, useEffect, useImperativeHandle, useInsertionEffect } from "react";
+import { useState, useEffect, useImperativeHandle, useInsertionEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "../../context/AuthContext";
 
-export default function EditInfo({ userId }) {
+export default function EditInfo() {
     const navigate = useNavigate();
+    const { userId } = useContext(AuthContext);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userFormData, setUserFormData] = useState({
         newName: "",
@@ -27,26 +29,28 @@ export default function EditInfo({ userId }) {
 
     useEffect(() => {
         async function fetchUser() {
-            try {
-                const info = await sendRequest(
-                    "http://localhost:3000/api/account/11",
-                    "GET",
-                    {
-                        'Content-Type': 'application/json'
+            if (userId) {
+                try {
+                    const info = await sendRequest(
+                        `/api/account/${userId}`,
+                        "GET",
+                        {
+                            'Content-Type': 'application/json'
+                        });
+                    setUserFormData({
+                        newName: info.Name ? info.Name : null,
+                        newUsername: info.Username ? info.Username : null,
+                        newEmail: info.Email ? info.Email : null,
+                        newDOB: info.DOB ? info.DOB.substring(0, 10) : null
                     });
-                setUserFormData({
-                    newName: info.Name,
-                    newUsername: info.Username,
-                    newEmail: info.Email,
-                    newDOB: info.DOB.substring(0, 10)
-                });
-            }
-            catch (err) {
-                throw err;
+                }
+                catch (err) {
+                    throw err;
+                }
             }
         }
         fetchUser();
-    }, []);
+    }, [userId]);
 
     function handleChange(event) {
         const targetName = event.target.name;
@@ -61,7 +65,7 @@ export default function EditInfo({ userId }) {
     }
 
     async function updateUserInfo(newValues) {
-        newValues.ID = 11; // newValues.ID = userID; which is gotten from context
+        newValues.ID = userId; // newValues.ID = userID; which is gotten from context
         const response = await sendRequest(
             "/api/account/update",
             "POST",
@@ -108,7 +112,7 @@ export default function EditInfo({ userId }) {
                 newDOB: dobBtn ? null : userFormData.newDOB
             };
 
-            if(!usernameBtn || !nameBtn || !emailBtn || !dobBtn) {
+            if (!usernameBtn || !nameBtn || !emailBtn || !dobBtn) {
                 const result = updateUserInfo(newValues);
                 console.log("send request result", result);
             }
