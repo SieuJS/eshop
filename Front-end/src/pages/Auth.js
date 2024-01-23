@@ -1,12 +1,14 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 import Input from "../components/Auth/Input";
 import { useForm } from "../hooks/form-hook";
 import { useHttpClient } from "../hooks/http-hook";
 import { AuthContext } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
-import {Button} from "@mui/material"
+import { Button } from "@mui/material"
 
 import {
   VALIDATOR_EMAIL,
@@ -25,6 +27,11 @@ function Auth() {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const [isRegisterWithGoogle, setIsRegisterWithGoogle] = useState(false);
+  const [googleFormData, setGoogleFormData] = useState({
+    sub: 0,
+    email: ""
+  });
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -88,6 +95,33 @@ function Auth() {
 
   const authSubmitHandler = async (event) => {
     event.preventDefault();
+    // Continue with Google
+    if (isRegisterWithGoogle) {
+      console.log("Register btn submitted, google; formData", googleFormData);
+      let data;
+      try {
+        data = await sendRequest(
+          `/api/account/google/register`,
+          "POST",
+          {
+            "Content-Type": "application/json",
+          },
+          JSON.stringify({
+            sub: googleFormData.sub,
+            name: formState.inputs.name.value,
+            email: googleFormData.email,
+            dob: formState.inputs.dob.value,
+            role: "usergoogle"
+          }));
+      } catch (err) {
+        console.log("error in register with Google", err);
+      }
+      console.log("data in auth signin wG", data);
+      auth.login(data.user.id, data.user.role.trim(), data.user.token);
+      navigate("/");
+      return;
+    }
+
     let data;
     if (isLoginMode) {
       try {
@@ -110,25 +144,25 @@ function Auth() {
       try {
         console.log(apiSignin);
         console.log(JSON.stringify({
-            // username: formState.inputs.name.value,
-            username: formState.inputs.username.value,
-            password: formState.inputs.password.value,
-            name : formState.inputs.name.value,
-            email : formState.inputs.email.value,
-            dob : formState.inputs.dob.value,
-            role : 0
-          }))
-        data = await sendRequest(apiSignup,"POST", {
-            "Content-Type": "application/json",
-          },
+          // username: formState.inputs.name.value,
+          username: formState.inputs.username.value,
+          password: formState.inputs.password.value,
+          name: formState.inputs.name.value,
+          email: formState.inputs.email.value,
+          dob: formState.inputs.dob.value,
+          role: 0
+        }))
+        data = await sendRequest(apiSignup, "POST", {
+          "Content-Type": "application/json",
+        },
           JSON.stringify({
             // username: formState.inputs.name.value,
             username: formState.inputs.username.value,
             password: formState.inputs.password.value,
-            name : formState.inputs.name.value,
-            email : formState.inputs.email.value,
-            dob : formState.inputs.dob.value,
-            role : "user"
+            name: formState.inputs.name.value,
+            email: formState.inputs.email.value,
+            dob: formState.inputs.dob.value,
+            role: "user"
           }));
       } catch (err) {
         console.log(err)
@@ -136,11 +170,46 @@ function Auth() {
     }
     if (data) {
       console.log("data in auth login/signin", data);
-      auth.login(data.user.id,data.user.role.trim(), data.user.token);
+      auth.login(data.user.id, data.user.role.trim(), data.user.token);
       navigate("/");
     } else {
     }
   };
+
+  async function handleGoogleOAuthBtn(credentialResponse) {
+    const credentialDecoded = jwtDecode(credentialResponse.credential);
+    //console.log("from GG login", credentialDecoded);
+    // get the sub to check whether this account has been register with our application
+    const subjectIdentifier = credentialDecoded.sub;
+    const email = credentialDecoded.email;
+    setGoogleFormData({
+      sub: subjectIdentifier,
+      email: email
+    });
+    let data;
+    // fetch user to start register or navigate to home page
+    try {
+      data = await sendRequest(
+        `/api/account/google/check/${subjectIdentifier}`,
+        "GET",
+        {
+          "Content-Type": "application/json",
+        }
+      );
+    } catch (err) {
+      console.log(err)
+    }
+    console.log("data of checking existed Google OAuth", data);
+    console.log("data in auth login/signin", data);
+    if (data?.existed) {
+      auth.login(data.user.id, data.user.role.trim(), data.user.token);
+      navigate("/");
+    } else {
+      console.log("Fill out info to start using Login with Google")
+      setIsLoginMode(false);
+      setIsRegisterWithGoogle(true);
+    }
+  }
 
   return (
     <section className="vh-100" style={{ backgroundColor: " #9A616D" }}>
@@ -175,7 +244,7 @@ function Auth() {
                         Sign into your account
                       </h5>
 
-                      {!isLoginMode && (
+                      {(!isLoginMode || isRegisterWithGoogle) && (
                         <>
                           <Input
                             element="input"
@@ -192,17 +261,7 @@ function Auth() {
                             }}
                             onInput={inputHandler}
                           />
-                          <Input
-                            element="input"
-                            id="email"
-                            type="text"
-                            lable="Email"
-                            validators={[VALIDATOR_REQUIRE()]}
-                            errorText={{
-                              REQUIRE: "Ô này không được để trống",
-                            }}
-                            onInput={inputHandler}
-                          />
+
                           <Input
                             element="input"
                             id="dob"
@@ -214,41 +273,58 @@ function Auth() {
                             }}
                             onInput={inputHandler}
                           />
+
+                          {!isRegisterWithGoogle && (
+                            <Input
+                              element="input"
+                              id="email"
+                              type="text"
+                              lable="Email"
+                              validators={[VALIDATOR_REQUIRE()]}
+                              errorText={{
+                                REQUIRE: "Ô này không được để trống",
+                              }}
+                              onInput={inputHandler}
+                            />
+                          )}
                         </>
                       )}
-                      <Input
-                        element="input"
-                        id="username"
-                        type="text"
-                        lable="Tên đăng nhập"
-                        validators={[
-                          VALIDATOR_REQUIRE(),
-                          VALIDATOR_MINLENGTH(6),
-                        ]}
-                        errorText={{
-                          MINLENGTH: "Chiều dài lớn hơn 5",
-                          REQUIRE: "Ô này không được để trống",
-                        }}
-                        onInput={inputHandler}
-                      />
+                      {(!isRegisterWithGoogle || isLoginMode) && (
+                        <>
+                          <Input
+                            element="input"
+                            id="username"
+                            type="text"
+                            lable="Tên đăng nhập"
+                            validators={[
+                              VALIDATOR_REQUIRE(),
+                              VALIDATOR_MINLENGTH(6),
+                            ]}
+                            errorText={{
+                              MINLENGTH: "Chiều dài lớn hơn 5",
+                              REQUIRE: "Ô này không được để trống",
+                            }}
+                            onInput={inputHandler}
+                          />
 
-                      <Input
-                        element="input"
-                        id="password"
-                        type="password"
-                        lable="Mật khẩu"
-                        validators={[
-                          VALIDATOR_REQUIRE(),
-                          VALIDATOR_MINLENGTH(6),
-                        ]}
-                        onInput={inputHandler}
-                        errorText={{
-                          REQUIRE: "Ô này không được để trống",
-                          MINLENGTH: `Mật khẩu phải có độ dài lớn hơn ${6}`,
-                        }}
-                      />
-
-                      {!isLoginMode && (
+                          <Input
+                            element="input"
+                            id="password"
+                            type="password"
+                            lable="Mật khẩu"
+                            validators={[
+                              VALIDATOR_REQUIRE(),
+                              VALIDATOR_MINLENGTH(6),
+                            ]}
+                            onInput={inputHandler}
+                            errorText={{
+                              REQUIRE: "Ô này không được để trống",
+                              MINLENGTH: `Mật khẩu phải có độ dài lớn hơn ${6}`,
+                            }}
+                          />
+                        </>
+                      )}
+                      {!isLoginMode && !isRegisterWithGoogle && (
                         <>
                           <Input
                             element="input"
@@ -282,23 +358,35 @@ function Auth() {
 
                       <div className="pt-1 mb-4">
                         <Button
-                        className="btn btn-dark btn-lg btn-block"
-                        onClick={authSubmitHandler}
-                        variant="contained"
+                          className="btn btn-dark btn-lg btn-block"
+                          onClick={authSubmitHandler}
+                          variant="contained"
                         >
-                          Login
+                          {isLoginMode ? "Login" : "Register"}
                         </Button>
                       </div>
                     </form>
+                    {!isRegisterWithGoogle && (
+                      <div className="d-flex">
+                        <span className="py-2 mr-2">Or continue with: </span>
+                        <GoogleLogin
+                          onSuccess={handleGoogleOAuthBtn}
+                          onError={() => {
+                            console.log('Login Failed with GG OAuth');
+                          }}
+                        />
+                      </div>
+                    )}
                     <a className="small text-muted" href="#!">
                       Forgot password?
                     </a>
+
                     <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                    {isLoginMode ? "Don't have an account ?" : "Already have an account ?"}{" "}
+                      {isLoginMode ? "Don't have an account ?" : "Already have an account ?"}{" "}
                       <Button
-                      onClick={switchModeHandler}
-                      style={{ color: "#393f81" }}
-                      variant="text"> {isLoginMode ? "Register here" : "Login here"}</Button>
+                        onClick={switchModeHandler}
+                        style={{ color: "#393f81" }}
+                        variant="text"> {isLoginMode ? "Register here" : "Login here"}</Button>
                     </p>
                     <a href="#!" className="small text-muted">
                       Terms of use.

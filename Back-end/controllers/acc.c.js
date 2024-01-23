@@ -11,7 +11,7 @@ module.exports = {
     const {userId} = req.params;
     let identifierUser ;
     try {
-      identifierUser = accM.getByUserID(userId);
+      identifierUser = await accM.getByUserID(userId);
     }
     catch(err) {
       console.error(err)
