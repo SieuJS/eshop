@@ -1,6 +1,9 @@
 import {useRef, useState, useEffect, useCallback} from 'react'
+import cartSlice from "../redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function AuthHook() {
+    const disPatch = useDispatch();
     const [token, setToken] = useState(null);
     const [userId, setUserId] = useState();
     const [deadlineToken, setDeadlineToken] = useState();
@@ -43,6 +46,7 @@ export default function AuthHook() {
       setUserId(null);
       setRole(null);
       localStorage.removeItem('userData');
+      disPatch(cartSlice.actions.remove());
     },[]);
   
     useEffect(() => {
