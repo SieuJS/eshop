@@ -6,6 +6,7 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+
 const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
@@ -314,6 +315,5 @@ module.exports = {
 
     const match = await bcrypt.compare(password, acc.Password);
     res.json({match: match});
-  },
-
+  }
 };

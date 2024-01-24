@@ -1,22 +1,78 @@
 import { Link } from "react-router-dom";
-import {useSelector, useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import cartSlice from "../redux/cartSlice"
-import { useRef } from "react";
+import { useEffect, useState } from "react";
+import useFetch from "../hooks/useFetch";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductList(props) {
-    const cart = useSelector((state) => state.cart)
+    const navigate = useNavigate();
+    const params = new URLSearchParams(window.location.search);
     const disPatch = useDispatch();
     const products = props.products;
     const pages = props.pages;
     const page = props.page;
     const pageNumbers = Array.from({ length: pages }, (_, index) => index + 1);
     const onPageChange = props.onPageChange;
-    const handleFilterPrice = props.handleFilterPrice;
-    
-    const min = props.min;
-    const max = props.max;
-    const minRef = useRef(null);
-    const maxRef = useRef(null);
+    const { data: categories, isPending, error } = useFetch('/api/categories');
+
+    //price filter
+    const [min, setMin] = useState(params.get('min'));
+    const [max, setMax] = useState(params.get('max'));
+    const handleFilterPrice = () => {
+        if (min && max) {
+            params.set('min', min);
+            params.set('max', max);
+
+            params.set('page',1);
+            const newURL = `${window.location.pathname}?${params.toString()}`;
+            navigate(newURL);
+        }
+    }
+
+    //name filter
+    const [name, setName] = useState('');
+    const onNameSubmit = (e) => {
+        e.preventDefault();
+        params.set('keyword', name);
+
+        params.set('page',1);
+        const newURL = `${window.location.pathname}?${params.toString()}`;
+        navigate(newURL);
+    }
+
+    //category filter
+    const [currentCatIds,setCurrentCatIds] = useState(); // các tham số dưới dạng chuỗi
+    useEffect(() => {
+        setCurrentCatIds(params.get('catid'))
+    },[params])
+    const handleCategoryChange = (id, isCheck) => {
+        params.delete('catid');
+        if (isCheck) {
+            if (currentCatIds === null) {
+                params.set('catid',id)
+            }
+            else {
+                const temp = currentCatIds.split(',');
+                temp.push(id.toString());
+                let result = temp.join(',')
+                params.set('catid',result);
+            }
+        }
+        else {
+            // Loại bỏ giá trị cần xóa
+            let result = currentCatIds.split(",").filter(n => n != id).join(",");
+            if (result== "") {
+                params.delete('catid');
+            }
+            else {
+                params.set('catid',result);
+            }
+        }
+        params.set('page',1);
+        const newURL = `${window.location.pathname}?${params.toString()}`;
+        navigate(newURL);
+    }
 
     return (
         <div className="container-fluid pt-5">
@@ -26,105 +82,57 @@ export default function ProductList(props) {
                     {/* Price Start */}
                     <div className="border-bottom mb-4 pb-4">
                         <h5 className="font-weight-semi-bold mb-4">Filter by price</h5>
-                        
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="number"
-                                    className="w-100 m-3"
-                                    placeholder="MIN"
-                                    id="price-min"
-                                    defaultValue={min}
-                                    ref={minRef}
-                                />
-                                <input
-                                    type="number"
-                                    className="w-100 m-3"
-                                    placeholder="MAX"
-                                    id="price-max"
-                                    defaultValue={max}
-                                    ref={maxRef}
-                                />
-                            </div>
-                            <div className="d-flex align-items-center justify-content-between mb-3">
-                                <button className="w-100" onClick={()=>handleFilterPrice(minRef.current.value,maxRef.current.value)}>Filter</button>
-                            </div>
-                        
+
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                            <input
+                                type="number"
+                                className="w-100 m-3"
+                                placeholder="MIN"
+                                id="price-min"
+                                value={min}
+                                onChange={(e) => { setMin(e.target.value) }}
+                            />
+                            <input
+                                type="number"
+                                className="w-100 m-3"
+                                placeholder="MAX"
+                                id="price-max"
+                                value={max}
+                                onChange={(e) => { setMax(e.target.value) }}
+                            />
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                            <button className="w-100" onClick={handleFilterPrice}>Filter</button>
+                        </div>
+
                     </div>
                     {/* Price End */}
-                    {/* Color Start */}
+                    {/* Category Start */}
                     <div className="border-bottom mb-4 pb-4">
-                        <h5 className="font-weight-semi-bold mb-4">Filter by color</h5>
+                        <h5 className="font-weight-semi-bold mb-4">Filter by category</h5>
                         <form>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    defaultChecked=""
-                                    id="color-all"
-                                />
-                                <label className="custom-control-label" htmlFor="price-all">
-                                    All Color
-                                </label>
-                                <span className="badge border font-weight-normal">1000</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="color-1"
-                                />
-                                <label className="custom-control-label" htmlFor="color-1">
-                                    Black
-                                </label>
-                                <span className="badge border font-weight-normal">150</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="color-2"
-                                />
-                                <label className="custom-control-label" htmlFor="color-2">
-                                    White
-                                </label>
-                                <span className="badge border font-weight-normal">295</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="color-3"
-                                />
-                                <label className="custom-control-label" htmlFor="color-3">
-                                    Red
-                                </label>
-                                <span className="badge border font-weight-normal">246</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="color-4"
-                                />
-                                <label className="custom-control-label" htmlFor="color-4">
-                                    Blue
-                                </label>
-                                <span className="badge border font-weight-normal">145</span>
-                            </div>
-                            <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between">
-                                <input
-                                    type="checkbox"
-                                    className="custom-control-input"
-                                    id="color-5"
-                                />
-                                <label className="custom-control-label" htmlFor="color-5">
-                                    Green
-                                </label>
-                                <span className="badge border font-weight-normal">168</span>
-                            </div>
+                            {
+                                categories && categories.map(item => (
+                                    <div key={item.CatID} className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                                        <input
+                                            type="checkbox"
+                                            className="custom-control-input"
+                                            id={`cat${item.CatID}`}
+                                            onChange={(e) => {
+                                                handleCategoryChange(item.CatID, e.target.checked)
+                                            }}
+                                            checked = {currentCatIds && currentCatIds.includes(item.CatID) ? 'true' : ''}
+                                        />
+                                        <label className="custom-control-label" htmlFor={`cat${item.CatID}`}>
+                                            {item.CatName}
+                                        </label>
+                                        <span className="badge border font-weight-normal">150</span>
+                                    </div>
+                                ))
+                            }
                         </form>
                     </div>
-                    {/* Color End */}
+                    {/* Category End */}
                 </div>
                 {/* Shop Sidebar End */}
                 {/* Shop Product Start */}
@@ -132,12 +140,14 @@ export default function ProductList(props) {
                     <div className="row pb-3">
                         <div className="col-12 pb-1">
                             <div className="d-flex align-items-center justify-content-between mb-4">
-                                <form action="">
+                                <form onSubmit={onNameSubmit}>
                                     <div className="input-group">
                                         <input
                                             type="text"
                                             className="form-control"
                                             placeholder="Search by name"
+                                            value={name}
+                                            onChange={(e) => { setName(e.target.value) }}
                                         />
                                         <div className="input-group-append">
                                             <span className="input-group-text bg-transparent text-primary">
@@ -167,7 +177,7 @@ export default function ProductList(props) {
                                                 <i className="fas fa-eye text-primary mr-1" />
                                                 View Detail
                                             </Link>
-                                            <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({ProID: product.ProID,ProName: product.ProName, Price: product.Price,Quantity: 1}))}>
+                                            <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({...product, orderQuantity: 1}))}>
                                                 <i className="fas fa-shopping-cart text-primary mr-1" />
                                                 Add To Cart
                                             </button>
@@ -184,7 +194,7 @@ export default function ProductList(props) {
                                     <li className="page-item">
                                         <button className="page-link" aria-label="Previous" onClick={() => {
                                             if (page != 1) {
-                                                onPageChange(page-1);
+                                                onPageChange(page - 1);
                                             }
                                         }}>
                                             <span aria-hidden="true">«</span>
@@ -204,7 +214,7 @@ export default function ProductList(props) {
                                     <li className="page-item">
                                         <button className="page-link" aria-label="Next" onClick={() => {
                                             if (page != pages) {
-                                                onPageChange(page+1);
+                                                onPageChange(page + 1);
                                             }
                                         }}>
                                             <span aria-hidden="true">»</span>

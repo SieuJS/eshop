@@ -123,6 +123,7 @@ function Auth() {
     }
 
     let data;
+    console.log('clicked')
     if (isLoginMode) {
       try {
         data = await sendRequest(
