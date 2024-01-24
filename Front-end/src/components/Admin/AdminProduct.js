@@ -106,7 +106,7 @@ export default function AdminProduct() {
     }
   }
     return (
-          <div className="table-cards">
+
             <div className="cat-card card">
               <div className="card-header">
                 Product
@@ -233,6 +233,5 @@ export default function AdminProduct() {
                   </nav>
               </div>
             </div>
-          </div>
     )
 }

@@ -14,6 +14,8 @@ import AdminTable from "../../components/Admin/AdminTable";
 
 import io from "socket.io-client";
 
+import './Landing.css'
+
 function Landing() {
   const auth = useContext(AuthContext);
 
@@ -129,14 +131,12 @@ function Landing() {
   return (
     <>
       <Statistic data={statData} />
-      <div class="row">
-        <div className="col-xl-6 col-lg-12">
+      <div class="stat-container">
+
           <div class=" charts-card ">
             <h2 class="chart-title text-light">Real Time Report</h2>
             <ShopChart data={statData} />
           </div>
-        </div>
-        <div className="col-xl-6 col-lg-12">
           <div class="charts-card overflow-x-scroll">
             <h2 class="chart-title text-light">Users Board</h2>
             <AdminTable usersData={usersData} />
@@ -174,7 +174,6 @@ function Landing() {
               </nav>
             </div>
           </div>
-        </div>
       </div>
     </>
   );

@@ -45,6 +45,7 @@ function App() {
           <Routes>
             <Route path='/*' element={<Shop />} />
             <Route path="/login" element={<Auth />} />
+            <Route path='/admin/*' exact element={<Admin />} />
             {role == "admin" && (<Route path='/admin/*' exact element={<Admin />} />)}
             {role && role != "admin" && (
               <Route path="account" element={<AccountLayout />}>

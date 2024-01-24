@@ -91,6 +91,7 @@ const Input = (props) => {
       onBlur={ touchHandler}
       value={inputState.value}
       className={props.className}
+      disabled = {props.disabled || false}
     />
     }
     else {
@@ -101,6 +102,7 @@ const Input = (props) => {
       onBlur={touchHandler}
       value={inputState.value}
       className={props.className}
+      disabled = {props.disabled || false}
     />
     }
   return (
