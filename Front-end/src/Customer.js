@@ -8,7 +8,6 @@ import ProductList from "./pages/ProductList.js"
 import Account from './pages/AccountLayout.js';
 
 function Customer() {
-  
   return (
     <>
       <Routes>

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 
@@ -30,7 +30,7 @@ function Auth() {
   const [isRegisterWithGoogle, setIsRegisterWithGoogle] = useState(false);
   const [googleFormData, setGoogleFormData] = useState({
     id: 0,
-    email: ""
+    email: "",
   });
 
   const [formState, inputHandler, setFormData] = useForm(
@@ -171,7 +171,13 @@ function Auth() {
     if (data) {
       console.log("data in auth login/signin", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
-      navigate("/");
+      
+      if (data.user.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+      // navigate("/");
     } else {
     }
   };
@@ -182,10 +188,15 @@ function Auth() {
     // get the sub to check whether this account has been register with our application
     const subjectIdentifier = credentialDecoded.sub;
     const email = credentialDecoded.email;
+
+    ///const nameFromGoogle = credentialDecoded.name;
+    //console.log("name from Google ", nameFromGoogle);
+    //console.log("credential decoded: ", credentialDecoded);
     setGoogleFormData({
       id: subjectIdentifier,
-      email: email
+      email: email,
     });
+
     let data;
     // fetch user to start register or navigate to home page
     try {
@@ -247,6 +258,7 @@ function Auth() {
                           <Input
                             element="input"
                             id="name"
+                            value={googleFormData.name}
                             type="text"
                             lable="Tên người dùng"
                             validators={[

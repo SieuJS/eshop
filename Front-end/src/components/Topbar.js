@@ -1,10 +1,12 @@
 import react from "react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom'
 import { Button, ButtonGroupButtonContext } from "@mui/material";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Topbar() {
+    const auth = useContext(AuthContext);
     const [keyword, setKeyword] = useState();
     const navigate = useNavigate();
     const submitHandler = (e) => {
@@ -66,11 +68,13 @@ export default function Topbar() {
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <button className="btn btn-secondary">
-                        <NavLink to="/cart" className="px-2">
-                            <i className="fas fa-shopping-cart text-primary"></i>
-                        </NavLink>
-                    </button>
+                    {auth.role !== "admin" && (
+                        <button className="btn btn-secondary">
+                            <NavLink to="/cart" className="px-2">
+                                <i className="fas fa-shopping-cart text-primary"></i>
+                            </NavLink>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

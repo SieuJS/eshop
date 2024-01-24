@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { AuthContext } from "../../context/AuthContext";
-import Auth from "../../pages/Auth";
+import LoadingSpinner from "../UIElements/LoadingSpinner";
 
 export default function Dashboard() {
     const { userId, role } = useContext(AuthContext);
@@ -27,11 +27,12 @@ export default function Dashboard() {
     }, [userId]);
     return (
         <>
+            {isLoading && (<LoadingSpinner asOverlay />)}
             <div className="info-title mb-4">
                 <h3>Your personal information</h3>
                 <p></p>
             </div>
-            <div className="info-content">
+            <div className="info-content p-4">
                 {role === "user" && (
                     <div className="container">
                         <div className="row">
