@@ -1,28 +1,25 @@
+import { useState } from 'react';
 import './AdminSidebar.css'
 import { NavLink } from "react-router-dom";
-export default function AdminSidebar() {
-    const closeSidebar = () => {
-        console.log('close');
-    }
+export default function AdminSidebar(props) {
 
-    return (
-        <aside id="sidebar">
+
+    return (  
+    <aside id="sidebar " className={ + props.show ? "" : "hide"} >
             <div className="sidebar-title">
             <div className="sidebar-brand">
                 <span className="material-icons-outlined">shopping_cart</span> STORE
             </div>
-                <span className="material-icons-outlined" onClick={() => closeSidebar()}>close</span>
-                <i class="fa-solid fa-xmark" style={{fontSize: '30px', margin: '6px'}} onClick={() => closeSidebar()}></i>
             </div>
 
             <ul className="sidebar-list">
             <li className="sidebar-list-item">
-                <NavLink to="/admin" target="_blank" className={"sidebar-navlink"} >
+                <NavLink to="/admin/dashboard" className={"sidebar-navlink"} >
                 <span className="material-icons-outlined">dashboard</span> Dashboard
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/admin/product" className={"sidebar-navlink"}>
+                <NavLink to="/admin/product/" className={"sidebar-navlink"}>
                 <span className="material-icons-outlined">inventory_2</span> Products
                 </NavLink>
             </li>
@@ -37,21 +34,22 @@ export default function AdminSidebar() {
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/" target="_blank" className={"sidebar-navlink"}>
+                <NavLink to="/"  className={"sidebar-navlink"}>
                 <span className="material-icons-outlined">fact_check</span> Inventory
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/" target="_blank" className={"sidebar-navlink"}>
+                <NavLink to="/"className={"sidebar-navlink"}>
                 <span className="material-icons-outlined">poll</span> Reports
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/" target="_blank" className={"sidebar-navlink"}>
+                <NavLink to="/"  className={"sidebar-navlink"}>
                 <span className="material-icons-outlined">settings</span> Settings
                 </NavLink>
             </li>
             </ul>
         </aside> 
+
     );
 };

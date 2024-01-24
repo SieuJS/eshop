@@ -18,6 +18,8 @@ const adminRoute = require("./routes/admin.js");
 
 const {ProdStats, AccStats, OrderStats, CatStats} = require('./utils/statistic');
 
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
 // create socket server
 const http = require("http");
 const { Server } = require("socket.io");
@@ -70,7 +72,11 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "There some errors occured " });
 });
 
-const server = http.createServer(app);
+const server = http.createServer(app,  {
+  cors : {
+    origin : "http://localhost:3000"
+  }
+});
 
 const io = new Server(server, {
   cors: {
