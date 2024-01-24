@@ -6,6 +6,7 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
@@ -90,8 +91,8 @@ module.exports = {
           username : newUser.Username,
           role
         },
-        process.env.JWT_KEY,
-        { expiresIn : "1h" }
+        jwtKey,
+        {expiresIn : "1h"}
       );
     } catch(err) {
       console.error(err)
@@ -145,12 +146,13 @@ module.exports = {
         {expiresIn : "1h"}
       );
     } catch(err) {
+      console.err(err)
       const error = new HttpError (
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
-
+    
     res.status(201).json({
       message: "Login success",
       user: {
@@ -164,13 +166,11 @@ module.exports = {
     });
   },
 
-  updateHandler: async (req, res, next) => {
+  updateHandler: async (req, res) => {
     const userID = req.body.ID;
     const acc = await accM.getByUserID(userID);
-
     if (!acc) {
-      next(new HttpError("Invalid user id"));
-      return;
+      res.json({ message: "Invalid user" });
     } else {
       const newUsername = req.body.newUsername ? req.body.newUsername : null;
       const newPw = req.body.newPassword ? req.body.newPassword : null;
@@ -178,8 +178,9 @@ module.exports = {
       const newEmail = req.body.newEmail ? req.body.newEmail : null;
       const newDOB = req.body.newDOB ? req.body.newDOB : null;
       if (!newUsername && !newPw && !newName && !newEmail && !newDOB) {
-        next(new HttpError("You have to provided at least a new field to update"));
-        return;
+        return res.json({
+          message: "You have to provide at least one new information to update",
+        });
       }
 
       const newValues = {
@@ -200,7 +201,9 @@ module.exports = {
           user: result[0],
         });
       } else {
-        next(new HttpError("Fail to update user"));
+        res.json({
+          message: "Fail to update user",
+        });
       }
     }
   },
@@ -237,41 +240,56 @@ module.exports = {
       }
     }
   },
-  checkUsername: async (req, res, next) => {
-    const username = req.params.username;
-    const user = await accM.getByUsername(username);
-    if (!user) {
-      res.json({ valid: false });
-    } else {
-      res.json({
-        valid: true,
-        user: {
-          id: user.ID,
-          username: user.Username,
-          email: user.Email
-        }
-      })
+  getList : async (req, res, next) => {
+    let data;
+    let {limit, start} = req.query;
+    [limit, start] = [limit ? parseInt(limit) : 5, start ? parseInt(start) : 1]
+    try { 
+      data = await accM.getList(limit, start);
     }
+    catch (err) {
+      console.error(err);
+      return next(new HttpError ("Some errors occurs", 500));
+    }
+    const total = data.totalPage
+    res.json({
+      start,
+      limit,
+      ...data ,
+      next : start === total ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start+1}`,
+      prev : start === '1' ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start-1}`
+    })
   },
-  getUserById: async (req, res, next) => {
-    const userId = req.params.userId;
-    const user = await accM.getByUserID(userId);
-    if (!user) {
-      next(new HttpError("Invalid user id. Cannot get by id"));
-      return;
-    } else {
-      res.json(user)
+  lockAcc : async (req, res, next) => {
+    const  {userId} = req.params;
+    let identifierUser ;
+    try {
+      identifierUser = accM.getByUserID(userId);
     }
-  },
-  checkPassword: async (req, res, next) => {
-    const {userId, password} = req.body;
-    console.log("checkPassword function", password);
-    const user = await accM.getByUserID(userId);
-    if(!user) {
-      next(new HttpError("Invalid user id. Cannot get by id"));
-      return;
+    catch (err)
+    {
+      console.error(err);
+      return next(new HttpError("Some error occurs when find user",500));
     }
-    const match = await bcrypt.compare(password, user.Password);
-    res.json({match: match});
+    if (!identifierUser)
+    {
+      return next (new HttpError("Can not find use",404));
+    }
+    
+    if(identifierUser.Role === "admin")
+    {
+      return next (new HttpError("Can not lock Admin acc",420));
+    }
+    if(identifierUser.Role === "locked")
+    {
+      return next (new HttpError("This account has been locked",420));
+    }
+    try {
+    accM.lockUser(userId);
+    }
+    catch {
+      return next (new HttpError("Cannot lock", 420));
+    }
+    return res.json({message : "Lock success"})
   }
 };
