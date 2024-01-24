@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Password() {
     const { sendRequest } = useHttpClient();
+    const { userId, token } = useContext(AuthContext);
     const navigate = useNavigate();
     const [passwordForm, setPasswordForm] = useState({
         oldPw: "",
@@ -25,7 +27,7 @@ export default function Password() {
         })
     }
 
-    console.log("password form", passwordForm);
+    //console.log("password form", passwordForm);
     async function handleSubmit(e) {
         e.preventDefault();
         // firstly, check the old password be correct
@@ -34,15 +36,15 @@ export default function Password() {
                 "http://localhost:3000/api/account/checkpassword",
                 "POST",
                 {
-                    "Content-type": "application/json"
+                    "Content-type": "application/json",
+                    "Authorization": `Bear ${token}`
                 },
                 JSON.stringify({
-                    userId: 11, // user id get from context
                     password: passwordForm.oldPw
                 })
             );
             console.log("checkpw in handleSubmit function", data);
-            const match = data?.match  ? data.match: false;
+            const match = data?.match ? data.match : false;
             setMatchOldPw(match);
             if (match && matchNewPw) {
                 // try to send request to update
@@ -50,17 +52,17 @@ export default function Password() {
                     "http://localhost:3000/api/account/update",
                     "POST",
                     {
-                        "Content-type": "application/json"
+                        "Content-type": "application/json",
+                        "Authorization": `Bear ${token}`
                     },
                     JSON.stringify({
-                        ID: 11, // user id get from context
                         newPassword: passwordForm.newPw
                     })
                 )
                 console.log("result after update password", result);
                 navigate("/account");
             }
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -87,7 +89,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="oldPw"
                                 value={passwordForm.oldPw}
@@ -107,7 +109,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="newPw"
                                 value={passwordForm.newPw}
@@ -124,7 +126,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="newPwAgain"
                                 value={passwordForm.newPwAgain}

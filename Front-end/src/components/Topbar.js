@@ -1,9 +1,12 @@
 import react from "react";
 import { NavLink } from "react-router-dom";
-import { useState } from "react";
-import {useNavigate} from 'react-router-dom'
+import { useState, useContext } from "react";
+import { useNavigate } from 'react-router-dom'
+import { Button, ButtonGroupButtonContext } from "@mui/material";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Topbar() {
+    const auth = useContext(AuthContext);
     const [keyword, setKeyword] = useState();
     const navigate = useNavigate();
     const submitHandler = (e) => {
@@ -55,9 +58,9 @@ export default function Topbar() {
                 <div className="col-lg-6 col-6 text-left">
                     <form onSubmit={submitHandler}>
                         <div className="input-group">
-                            <input type="text" name="keyword" className="form-control" placeholder="Search for products" onChange={(e)=>{setKeyword(e.target.value)}}/>
-                            <button className="input-group-append">
-                                <span className="input-group-text bg-transparent text-primary">
+                            <input type="text" name="keyword" className="form-control" placeholder="Search for products" onChange={(e) => { setKeyword(e.target.value) }} />
+                            <button className="btn btn-primary mx-2 p-0">
+                                <span className="px-3 bg-transparent text-white">
                                     <i className="fa fa-search"></i>
                                 </span>
                             </button>
@@ -65,14 +68,13 @@ export default function Topbar() {
                     </form>
                 </div>
                 <div className="col-lg-3 col-6 text-right">
-                    <NavLink to="/favorite" className="btn border">
-                        <i className="fas fa-heart text-primary"></i>
-                        <span className="p-1">0</span>
-                    </NavLink>
-                    <NavLink to="/cart" className="btn border">
-                        <i className="fas fa-shopping-cart text-primary"></i>
-                        {/* <span className="p-1">0</span> */}
-                    </NavLink>
+                    {auth.role !== "admin" && (
+                        <button className="btn btn-secondary">
+                            <NavLink to="/cart" className="px-2">
+                                <i className="fas fa-shopping-cart text-primary"></i>
+                            </NavLink>
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

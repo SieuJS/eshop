@@ -6,6 +6,9 @@ import useFetch from "../../customize/useFetch";
 import { CatContext } from "../../context/CatContext";
 
 export default function AdminEditProduct() {
+    const preset_key = "zjqlggti"
+    const cloud_name = "dscoavwex"
+    const folder = "eshopper"
     const [searchParams] = useSearchParams()
     const catID = searchParams.get("catID")
     const proID = searchParams.get("proID")
@@ -64,19 +67,36 @@ export default function AdminEditProduct() {
 
         console.log(entity);
 
-        const formData = new FormData();
+        // const formData = new FormData();
 
-        for (const key in entity) {
-            formData.append(key, entity[key]);
-        }
+        // for (const key in entity) {
+        //     formData.append(key, entity[key]);
+        // }
 
         if (fileList) {
-            formData.append('proImage', fileList);
+            const formDataCloud = new FormData()
+            formDataCloud.append('file', fileList)
+            formDataCloud.append('upload_preset', preset_key);
+            formDataCloud.append('folder', folder)
+            const resCloud = await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, {
+                method: 'POST',
+                body: formDataCloud
+            })
+            const dataCloud = await resCloud.json();
+            console.log(dataCloud.secure_url);
+            if (dataCloud.secure_url) {
+                // formData.append('proImage', file);
+                entity.proImage = dataCloud.secure_url
+            }
+            // formData.append('proImage', fileList);
         }
 
         const res = await fetch('/api/product/update', {
             method: 'POST',
-            body: formData,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(entity),
         })
 
         const data = await res.json();

@@ -9,7 +9,6 @@ import Account from './pages/AccountLayout.js';
 import Checkout from './pages/Checkout.js'
 
 function Customer() {
-  
   return (
     <>
       <Routes>
