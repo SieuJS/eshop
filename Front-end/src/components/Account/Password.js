@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import {ACCOUNT_API as accountApi} from "../../keys/BackEndKeys.js"
 
 export default function Password() {
     const { sendRequest } = useHttpClient();
@@ -31,9 +32,11 @@ export default function Password() {
     async function handleSubmit(e) {
         e.preventDefault();
         // firstly, check the old password be correct
+        const apiPost = `${accountApi}/checkpassword`;
+        console.log("Api post in password component", apiPost)
         try {
             const data = await sendRequest(
-                "http://localhost:3000/api/account/checkpassword",
+                apiPost,
                 "POST",
                 {
                     "Content-type": "application/json",
@@ -49,7 +52,7 @@ export default function Password() {
             if (match && matchNewPw) {
                 // try to send request to update
                 const result = await sendRequest(
-                    "http://localhost:3000/api/account/update",
+                    `${accountApi}/update`,
                     "POST",
                     {
                         "Content-type": "application/json",

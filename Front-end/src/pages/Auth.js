@@ -170,10 +170,10 @@ function Auth() {
       }
     }
     if (data) {
-      console.log("data in auth login/signin", data);
+      //console.log("data in auth login/signin", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
       
-      if (data.user.role === "admin") {
+      if (data.user.role.trim() === "admin") {
         navigate("/admin");
       } else {
         navigate("/");

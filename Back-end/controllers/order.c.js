@@ -42,15 +42,15 @@ module.exports = {
         return res.status(checkPayment.status || 401).json({ isSuccess: false });
       }
       try {
-        const orderid = await orderM.insert(date,userId,total,address,phone);
+        const orderid = await orderM.insert(date, userId, total, address, phone);
         for (const product of products) {
-          let item = new orderDetailM(orderid,product);
+          let item = new orderDetailM(orderid, product);
           await orderDetailM.insert(item);
         }
       }
-      catch(e) {
+      catch (e) {
         console.log(e);
-        return res.status(402).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
+        return res.status(402).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
       }
 
       res.status(200).json({ isSuccess: true });
@@ -58,5 +58,22 @@ module.exports = {
     catch (e) {
       console.log(e);
     }
+  },
+  getAllOrders: async (req, res, next) => {
+    const userId = req.userData.userId;
+    //console.log("userid in getAllOrders func", userId);
+    const orders = await orderM.getByUserId(userId);
+    ///console.log("orders in controller get all func", orders);
+    res.json({
+      orders: orders
+    });
+  },
+  getDetail: async (req, res, next) => {
+    const orderId = req.params.orderId;
+    console.log("orderID in get detail func", orderId);
+    const details = await orderDetailM.getAllDetails(orderId);
+    res.json({
+      detail: details
+    })
   }
 }
