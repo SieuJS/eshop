@@ -4,19 +4,19 @@ import { AuthContext } from "../../context/AuthContext";
 import Auth from "../../pages/Auth";
 
 export default function Dashboard() {
-    const { userId } = useContext(AuthContext);
-    console.log("userID dashboard", userId);
+    const { userId, role } = useContext(AuthContext);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
         async function fetchUser() {
+            const pathToUser = role === "user" ? "" : "/google";
+            const apiGetAccount = `/api/account${pathToUser}/${userId}`;
             if (userId) {
                 try {
                     const data = await sendRequest(
-                        `/api/account/${userId}`,
+                        apiGetAccount,
                         "GET");
-    
-                    setUserInfo({ ...data });
+                    setUserInfo({ ...data.user });
                 }
                 catch (err) {
                     throw err;
@@ -24,7 +24,7 @@ export default function Dashboard() {
             }
         }
         fetchUser();
-    }, []);
+    }, [userId]);
     return (
         <>
             <div className="info-title mb-4">
@@ -32,16 +32,18 @@ export default function Dashboard() {
                 <p></p>
             </div>
             <div className="info-content">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-4 text-end">
-                            <p>Username:</p>
-                        </div>
-                        <div className="col-8">
-                            <p>{userInfo.Username}</p>
+                {role === "user" && (
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-4 text-end">
+                                <p>Username:</p>
+                            </div>
+                            <div className="col-8">
+                                <p>{userInfo.Username}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">

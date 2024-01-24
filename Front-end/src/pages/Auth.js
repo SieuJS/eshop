@@ -29,7 +29,7 @@ function Auth() {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [isRegisterWithGoogle, setIsRegisterWithGoogle] = useState(false);
   const [googleFormData, setGoogleFormData] = useState({
-    sub: 0,
+    id: 0,
     email: ""
   });
 
@@ -107,7 +107,7 @@ function Auth() {
             "Content-Type": "application/json",
           },
           JSON.stringify({
-            sub: googleFormData.sub,
+            id: googleFormData.id,
             name: formState.inputs.name.value,
             email: googleFormData.email,
             dob: formState.inputs.dob.value,
@@ -116,7 +116,7 @@ function Auth() {
       } catch (err) {
         console.log("error in register with Google", err);
       }
-      console.log("data in auth signin wG", data);
+      console.log("data in auth register wG", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
       navigate("/");
       return;
@@ -183,7 +183,7 @@ function Auth() {
     const subjectIdentifier = credentialDecoded.sub;
     const email = credentialDecoded.email;
     setGoogleFormData({
-      sub: subjectIdentifier,
+      id: subjectIdentifier,
       email: email
     });
     let data;
@@ -230,11 +230,9 @@ function Auth() {
                   <div className="card-body p-4 p-lg-5 text-black">
                     <form>
                       <div className="d-flex align-items-center mb-3 pb-1">
-                        <i
-                          className="fas fa-cubes fa-2x me-3"
-                          style={{ color: " #ff6219" }}
-                        ></i>
-                        <span className="h1 fw-bold mb-0">Logo</span>
+                        <h1 className="m-0 display-5 font-weight-semi-bold">
+                          <span className="text-primary font-weight-bold border px-3 mr-1">E</span>Shopper
+                        </h1>
                       </div>
 
                       <h5
@@ -381,13 +379,17 @@ function Auth() {
                       Forgot password?
                     </a>
 
-                    <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
-                      {isLoginMode ? "Don't have an account ?" : "Already have an account ?"}{" "}
-                      <Button
-                        onClick={switchModeHandler}
-                        style={{ color: "#393f81" }}
-                        variant="text"> {isLoginMode ? "Register here" : "Login here"}</Button>
-                    </p>
+                    {!isRegisterWithGoogle && (
+                      <p className="mb-5 pb-lg-2" style={{ color: "#393f81" }}>
+                        {isLoginMode ? "Don't have an account ?" : "Already have an account ?"}{" "}
+                        <Button
+                          onClick={switchModeHandler}
+                          style={{ color: "#393f81" }}
+                          variant="text">
+                          {isLoginMode ? "Register here" : "Login here"}
+                        </Button>
+                      </p>
+                    )}
                     <a href="#!" className="small text-muted">
                       Terms of use.
                     </a>

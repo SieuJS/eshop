@@ -1,11 +1,39 @@
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import { useHttpClient } from "../../hooks/http-hook";
+
 export default function Account() {
+    const { userId, role } = useContext(AuthContext);
+    const [userInfo, setUserInfo] = useState({});
+    const { sendRequest, isLoading, error, clearError } = useHttpClient();
+
+    useEffect(() => {
+        async function fetchUser() {
+            const pathToUser = role === "user" ? "" : "/google";
+            const apiGetAccount = `/api/account${pathToUser}/${userId}`;
+            if (userId) {
+                try {
+                    const data = await sendRequest(
+                        apiGetAccount,
+                        "GET");
+                    setUserInfo({ ...data.user });
+                }
+                catch (err) {
+                    throw err;
+                }
+            }
+        }
+        fetchUser();
+    }, [role]);
+
     return (
-        <>
-            <div>
-                <span><b>Username</b></span>
+        <div className="bg-secondary">
+            <div className="m-0 bg-primary border border-bottom">
+                <p className="m-3">You are logging as {role}</p>
+                <p className="m-3"><b>{userInfo.Name}</b></p>
             </div>
-            <nav className="d-flex flex-column py-4">
+            <nav className="d-flex flex-column py-4 mx-2 gap-2">
                 <NavLink
                     to="/account"
                     className="text-decoration-none"
@@ -26,16 +54,18 @@ export default function Account() {
                     <span className="ml-2">Orders</span>
 
                 </NavLink>
-                <NavLink
-                    to="/account/password"
-                    className="text-decoration-none"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="40px" width="40px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
-                    </svg>
+                {role === "user" && (
+                    <NavLink
+                        to="/account/password"
+                        className="text-decoration-none"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="40px" width="40px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+                        </svg>
 
-                    <span className="ml-2">Password</span>
-                </NavLink>
+                        <span className="ml-2">Password</span>
+                    </NavLink>
+                )}
                 <NavLink
                     to="/account/editinfo"
                     className="text-decoration-none"
@@ -45,8 +75,8 @@ export default function Account() {
                     </svg>
                     <span className="ml-2">Edit profile</span>
                 </NavLink>
-                
+
             </nav>
-        </>
+        </div>
     );
 }
