@@ -4,5 +4,6 @@ CREATE TABLE "UsersGoogle" (
   "Name" varchar(50) NOT NULL,
   "Email" varchar(50) NOT NULL,
   "DOB" timestamp NOT NULL,
-  "Role" varchar(10) NOT NULL
+  "Role" varchar(10) NOT NULL,
+  "Permission" int4 NOT NULL
 );

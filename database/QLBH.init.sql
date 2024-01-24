@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS "Orders";
 CREATE TABLE "Orders" (
   "OrderID" serial NOT NULL,
   "OrderDate" timestamp NOT NULL,
-  "UserID" int4 NOT NULL,
+  "UserID" varchar(50) NOT NULL,
   "Total" numeric(19,4) NOT NULL
 )
 ;
@@ -365,7 +365,8 @@ CREATE TABLE "Users" (
   "Name" varchar(50) NOT NULL,
   "Email" varchar(50) NOT NULL,
   "DOB" timestamp NOT NULL,
-  "Role" char(50) NOT NULL
+  "Role" char(50) NOT NULL,
+  "Permission" int4 NOT NULL
 );
 
 DROP Table If Exists "Carts" ;
@@ -381,6 +382,16 @@ Create Table "ProductsInCart" (
 	"ProID" int4,
 	"Quan" int4 ,
 	Primary Key ("CartID", "ProID")
+);
+
+DROP TABLE IF EXISTS "UsersGoogle";
+CREATE TABLE "UsersGoogle" (
+  "ID" varchar(50) NOT NULL PRIMARY KEY,
+  "Name" varchar(50) NOT NULL,
+  "Email" varchar(50) NOT NULL,
+  "DOB" timestamp NOT NULL,
+  "Role" varchar(10) NOT NULL,
+  "Permission" int4 NOT NULL
 );
 
 -- ----------------------------
