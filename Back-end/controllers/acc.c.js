@@ -10,7 +10,8 @@ const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
-    let identifierUser ;
+    console.log("userId in func getUserById", userId);
+    let identifierUser;
     try {
       identifierUser = await accM.getByUserID(userId);
     }

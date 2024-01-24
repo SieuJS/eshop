@@ -4,32 +4,32 @@ const jwt = require("jsonwebtoken");
 const jwtKey = process.env.JWT_SECRET_KEY;
 
 module.exports = {
-    getUserBySub: async (req, res, next) => {
-        const sub = req.params.sub;
-        console.log("sub in acc Google controller ", sub);
+    getUserById: async (req, res, next) => {
+        const id = req.params.id;
         let identifierUser;
         try {
-            identifierUser = accGoogleModel.getBySub(sub);
+            identifierUser =  await accGoogleModel.getById(id);
         }
         catch (err) {
             console.error(err)
-            return next(new HttpError("Some error when find user google by sub"), 500)
+            return next(new HttpError("Some error when find user google by id"), 500)
         }
         if (!identifierUser)
-            return next(new HttpError("Can not find use with provide sub: " + sub, 404));
+            return next(new HttpError("Can not find use with provide id: " + id, 404));
+        //console.log("identifierUser in  getUserById gg acc", identifierUser);
         return res.status(200).json({ user: identifierUser });
     },
 
     loginWithGoogle: async (req, res, next) => {
-        const sub = req.params.sub;
-        console.log("sub in acc Google controller login wG function", sub);
+        const id = req.params.id;
+        console.log("id in acc Google controller login wG function", id);
         let identifierUser;
         try {
-            identifierUser = await accGoogleModel.getBySub(sub);
+            identifierUser = await accGoogleModel.getById(id);
         }
         catch (err) {
             console.error(err)
-            return next(new HttpError("Some error when find user google by sub"), 500)
+            return next(new HttpError("Some error when find user google by id"), 500)
         }
 
         if (!identifierUser)
@@ -37,7 +37,7 @@ module.exports = {
         try {
             token = jwt.sign(
                 {
-                    userId: identifierUser.Sub,
+                    userId: identifierUser.ID,
                     username: identifierUser.Name,
                     role: identifierUser.Role
                 },
@@ -55,7 +55,7 @@ module.exports = {
             existed: true,
             message: "Login success",
             user: {
-                id: identifierUser.Sub,
+                id: identifierUser.ID,
                 name: identifierUser.Name,
                 email: identifierUser.Email,
                 role: identifierUser.Role,
@@ -66,16 +66,16 @@ module.exports = {
     ,
 
     register: async (req, res, next) => {
-        const sub = req.body.sub;
-        console.log("sub in register func, accG controller", sub);
-        const acc = await accGoogleModel.getBySub(sub);
+        const id = req.body.id;
+        console.log("sub in register func, accG controller", id);
+        const acc = await accGoogleModel.getById(id);
         const { name, email, dob, role } = req.body;
 
         if (acc) {
-            console.log(`This user login with Google sub:'${sub}' has been existed`);
+            console.log(`This user login with Google sub:'${id}' has been existed`);
             console.log('exit')
             const error = new HttpError(
-                `This user login with Google sub:'${sub}' has been existed`,
+                `This user login with Google sub:'${id}' has been existed`,
                 450
             );
             return next(error);
@@ -91,7 +91,7 @@ module.exports = {
         try {
             newUser = await accGoogleModel.add(
                 new accGoogleModel({
-                    Sub: sub,
+                    ID: id,
                     Name: name,
                     Email: email,
                     DOB: dob,
@@ -108,7 +108,7 @@ module.exports = {
         try {
             token = jwt.sign(
                 {
-                    userId: newUser.Sub,
+                    userId: newUser.ID,
                     name: newUser.Name,
                     role
                 },
@@ -125,7 +125,7 @@ module.exports = {
         res.status(201).json({
             message: "Register new account with Google successfully",
             user: {
-                id: newUser.Sub,
+                id: newUser.ID,
                 name: newUser.Name,
                 email: newUser.Email,
                 token: token,
@@ -133,4 +133,42 @@ module.exports = {
             },
         });
     },
+    update: async (req, res, next) => {
+        console.log("enter update user google handler");
+        console.log("userID token",  req.userData.userId);
+        const userID = req.userData.userId;
+        console.log("update function userid from req: ", userID);
+        const acc = await accGoogleModel.getById(userID);
+        if (!acc) {
+          res.json({ message: "Invalid user" });
+        } else {
+          const newName = req.body.newName ? req.body.newName : null;
+          const newEmail = req.body.newEmail ? req.body.newEmail : null;
+          const newDOB = req.body.newDOB ? req.body.newDOB : null;
+          if (!newName && !newEmail && !newDOB) {
+            next (new HttpError("You have to provide at least one new information to update"));
+          }
+    
+          const newValues = {
+            user_id: userID,
+            newName,
+            newEmail,
+            newDOB,
+          };
+          //console.log(newValues);
+          const result = await accGoogleModel.update(newValues);
+          //console.log("result", result);
+    
+          if (result) {
+            res.json({
+              message: "Update user succesfully",
+              user: result[0],
+            });
+          } else {
+            res.json({
+              message: "Fail to update user",
+            });
+          }
+        }
+      },
 }

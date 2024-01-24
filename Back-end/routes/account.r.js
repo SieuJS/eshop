@@ -5,6 +5,7 @@ const accC = require("../controllers/acc.c.js");
 
 const checkAuth = require("../middlewares/check-auth.js");
 //router.use(checkAuth);
+
 router.use("/google", googlePath);
 router.get("/:userId", accC.getUserById);
 router.get("/check/:username", accC.checkUsername);

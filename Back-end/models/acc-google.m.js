@@ -2,17 +2,17 @@ const db = require("../utils/db");
 const pgp = require("pg-promise")({capSQL: true});
 
 module.exports = class AccountGoogle {
-    constructor({Sub, Name, Email, DOB, Role}) {
-        this.Sub = Sub;
+    constructor({ID, Name, Email, DOB, Role}) {
+        this.ID = ID;
         this.Name = Name;
         this.Email = Email;
         this.DOB = DOB;
         this.Role = Role
     }
 
-    static async getBySub(sub) {
+    static async getById(id) {
         try {
-            const data = await db.oneOrNone(`SELECT * FROM "UsersGoogle" WHERE "Sub" = $1`, [sub]);
+            const data = await db.oneOrNone(`SELECT * FROM "UsersGoogle" WHERE "ID" = $1`, [id]);
             return data;
         } catch (error) {
             throw error;
@@ -27,6 +27,11 @@ module.exports = class AccountGoogle {
         } catch (err) {
             throw err;
         }
+    }
+
+    static async update(newValues) {
+        const data = await db.func("update_usergoogle", newValues);
+        return data;
     }
 
     /* static async updateUser(newValues) {
