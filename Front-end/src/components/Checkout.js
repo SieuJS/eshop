@@ -4,57 +4,102 @@ import cartSlice from "../redux/cartSlice"
 import { useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+import $ from 'jquery'
 
 export default function Checkout() {
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
     var total = 0;
     products.forEach(element => {
-        total += element.Price * element.Quantity;
+        total += element.Price * element.orderQuantity;
     });
-    console.log(products);
+    const handlePlaceOrder = (products, total) => {  //Lưu ý: Trong mỗi product có thêm thuộc tính orderQuantity: số lượng sản phẩm này được mua
+        //Kiểm tra xem còn đủ hàng không
+        products.forEach(product => {
+            if (product.Quantity < product.orderQuantity) {
+                return alert(`Số lượng sản phẩm ${product.ProName} còn lại trong kho là ${product.Quantity}. Mong bạn đặt lại`)
+            }
+        })
+
+        const data = {};
+        data.info = {
+            fullname: $('#fullname').val(),
+            address: $('#address').val(),
+            email: $('#email').val(),
+            phone: $('#phonenumber').val()
+        }
+        data.products = products;
+        data.total = total;
+        console.log(data);
+
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
+        fetch('/api/order/placeorder', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(res => {
+            return res.json()
+        })
+        .then((data) => {
+            if (data.isSuccess) {
+                alert("DAT HANG THANH CONG",data.message)
+            }
+            else {
+                alert("DAT HANG KHONG THANH CONG",data.message);
+            }
+        })
+    }
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
                 <div className="col-lg-8">
                     <div className="mb-4">
                         <h4 className="font-weight-semi-bold mb-4">Billing Address</h4>
-                        <div className="row">
-                            <div className="col-md-6 form-group">
-                                <label>First Name</label>
-                                <input className="form-control" type="text" placeholder="John" />
+                        <form id="infoForm">
+                            <div className="row">
+                                <div className="col-md-12 form-group">
+                                    <label>Full Name</label>
+                                    <input className="form-control" type="text" placeholder="John" name="fullname" id="fullname" />
+                                </div>
+                                <div className="col-md-12 form-group">
+                                    <label>Address Line</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="123 Street"
+                                        name="address"
+                                        id="address"
+                                    />
+                                </div>
+                                <div className="col-md-6 form-group">
+                                    <label>E-mail</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="example@email.com"
+                                        name="email"
+                                        id="email"
+                                    />
+                                </div>
+                                <div className="col-md-6 form-group">
+                                    <label>Mobile No</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        placeholder="+123 456 789"
+                                        name="phonenumber"
+                                        id="phonenumber"
+                                    />
+                                </div>
                             </div>
-                            <div className="col-md-6 form-group">
-                                <label>Last Name</label>
-                                <input className="form-control" type="text" placeholder="Doe" />
-                            </div>
-                            <div className="col-md-6 form-group">
-                                <label>E-mail</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="example@email.com"
-                                />
-                            </div>
-                            <div className="col-md-6 form-group">
-                                <label>Mobile No</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="+123 456 789"
-                                />
-                            </div>
-                            <div className="col-md-12 form-group">
-                                <label>Address Line</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    placeholder="123 Street"
-                                />
-                            </div>
-                        </div>
+                        </form>
                     </div>
-                    <div className="collapse mb-4" id="shipping-address">
+                    {/* <div className="collapse mb-4" id="shipping-address">
                         <h4 className="font-weight-semi-bold mb-4">Shipping Address</h4>
                         <div className="row">
                             <div className="col-md-6 form-group">
@@ -127,7 +172,7 @@ export default function Checkout() {
                                 <input className="form-control" type="text" placeholder={123} />
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="col-lg-4">
                     <div className="card border-secondary mb-5">
@@ -139,8 +184,8 @@ export default function Checkout() {
                             {
                                 products && products.map((item) => (
                                     <div className="d-flex justify-content-between">
-                                        <p>{item.ProName} x{item.Quantity} </p>
-                                        <p>{item.Quantity * item.Price}đ</p>
+                                        <p>{item.ProName} x{item.orderQuantity} </p>
+                                        <p>{item.orderQuantity * item.Price}đ</p>
                                     </div>
                                 ))
                             }
@@ -161,7 +206,7 @@ export default function Checkout() {
                             </div>
                         </div>
                         <div className="card-footer border-secondary bg-transparent">
-                            <button className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">
+                            <button className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" onClick={() => handlePlaceOrder(products,total)}>
                                 Place Order
                             </button>
                         </div>

@@ -4,6 +4,7 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors')
+app.use(cors());
 const https = require('https');
 const bodyParser = require('body-parser');
 const session = require("express-session");
@@ -11,6 +12,7 @@ const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const categoryRoute = require("./routes/category.r")
 const productRoute = require("./routes/product.r")
+const orderRoute = require('./routes/order.r.js')
 const port = process.env.PORT || 3000;
 const secret = "My secret";
 const searchC = require('./controllers/search.c.js')
@@ -43,6 +45,7 @@ app.use("/api/account", accountRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 app.use('/api/admin' , adminRoute)
+app.use('/api/order',orderRoute)
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search",searchC.search);

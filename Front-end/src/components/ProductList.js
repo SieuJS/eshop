@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import cartSlice from "../redux/cartSlice"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 
@@ -42,11 +42,14 @@ export default function ProductList(props) {
     }
 
     //category filter
+    const [currentCatIds,setCurrentCatIds] = useState(); // các tham số dưới dạng chuỗi
+    useEffect(() => {
+        setCurrentCatIds(params.get('catid'))
+    },[params])
     const handleCategoryChange = (id, isCheck) => {
-        const currentCatIds = params.get('catid'); // các tham số dưới dạng chuỗi
         params.delete('catid');
         if (isCheck) {
-            if (currentCatIds == null) {
+            if (currentCatIds === null) {
                 params.set('catid',id)
             }
             else {
@@ -104,7 +107,7 @@ export default function ProductList(props) {
 
                     </div>
                     {/* Price End */}
-                    {/* Color Start */}
+                    {/* Category Start */}
                     <div className="border-bottom mb-4 pb-4">
                         <h5 className="font-weight-semi-bold mb-4">Filter by category</h5>
                         <form>
@@ -118,6 +121,7 @@ export default function ProductList(props) {
                                             onChange={(e) => {
                                                 handleCategoryChange(item.CatID, e.target.checked)
                                             }}
+                                            checked = {currentCatIds && currentCatIds.includes(item.CatID) ? 'true' : ''}
                                         />
                                         <label className="custom-control-label" htmlFor={`cat${item.CatID}`}>
                                             {item.CatName}
@@ -128,7 +132,7 @@ export default function ProductList(props) {
                             }
                         </form>
                     </div>
-                    {/* Color End */}
+                    {/* Category End */}
                 </div>
                 {/* Shop Sidebar End */}
                 {/* Shop Product Start */}
@@ -173,7 +177,7 @@ export default function ProductList(props) {
                                                 <i className="fas fa-eye text-primary mr-1" />
                                                 View Detail
                                             </Link>
-                                            <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({ ProID: product.ProID, ProName: product.ProName, Price: product.Price, Quantity: 1 }))}>
+                                            <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({...product, orderQuantity: 1}))}>
                                                 <i className="fas fa-shopping-cart text-primary mr-1" />
                                                 Add To Cart
                                             </button>

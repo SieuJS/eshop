@@ -33,7 +33,6 @@ module.exports = {
         else {
             result = productsWithIntPrice;
         }
-        console.log(result);
         res.json(result);
     }
 }

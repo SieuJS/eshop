@@ -12,7 +12,7 @@ export default function CartPage(props) {
         setCart(cartItems);
         let total =0;
         cartItems.forEach(element => {
-            total +=element.Price * element.Quantity;
+            total +=element.Price * element.orderQuantity;
         });
         setTotal(total);
     },[cartItems])
@@ -45,17 +45,17 @@ export default function CartPage(props) {
                                                 style={{ width: 100 }}
                                             >
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-minus" onClick={() => disPatch(cartSlice.actions.add({ProID:item.ProID,ProName: item.ProName,Price: item.Price, Quantity: -1}))}>
+                                                    <button className="btn btn-sm btn-primary btn-minus" onClick={() => disPatch(cartSlice.actions.add({...item, orderQuantity: -1}))}>
                                                         <i className="fa fa-minus" />
                                                     </button>
                                                 </div>
                                                 <input
                                                     type="text"
                                                     className="form-control form-control-sm bg-secondary text-center"
-                                                    value={item.Quantity}
+                                                    value={item.orderQuantity}
                                                 />
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => disPatch(cartSlice.actions.add({ProID:item.ProID,ProName: item.ProName,Price: item.Price, Quantity: 1}))}>
+                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => disPatch(cartSlice.actions.add({...item, orderQuantity: 1}))}>
                                                         <i className="fa fa-plus" />
                                                     </button>
                                                 </div>
@@ -63,7 +63,7 @@ export default function CartPage(props) {
                                         </td>
                                         <td className="align-middle">{item.Price * item.Quantity}</td>
                                         <td className="align-middle">
-                                            <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({ProID:item.ProID,ProName: item.ProName,Price: item.Price, Quantity: item.Quantity*-1})))}>
+                                            <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({...item, orderQuantity: item.orderQuantity*-1})))}>
                                                 <i className="fa fa-times" />
                                             </button>
                                         </td>
