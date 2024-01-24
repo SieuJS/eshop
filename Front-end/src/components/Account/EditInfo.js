@@ -73,7 +73,7 @@ export default function EditInfo() {
         //console.log("token from Context", token);
         const pathToUser = role === "user" ? "" : "/google";
         const apiPostAccount = `/api/account${pathToUser}/update`;
-        console.log("apiPost in Edit component ", apiPostAccount);
+        //console.log("apiPost in Edit component ", apiPostAccount);
         const response = await sendRequest(
             apiPostAccount,
             "POST",
@@ -106,11 +106,12 @@ export default function EditInfo() {
             if (!usernameBtn) {
                 const dataResponse = await sendRequest(`/api/account/check/${newUN}`);
                 existedUserName = dataResponse.valid;
+                console.log("update account check username", dataResponse);
                 setValidNewUsername(!existedUserName);
             }
 
             //console.log("before send request", validNewUsername, validNewName, validNewEmail);
-            console.log("state of disabled edit buttons", usernameBtn, nameBtn, emailBtn, dobBtn);
+            //console.log("state of disabled edit buttons", usernameBtn, nameBtn, emailBtn, dobBtn);
             if ((!existedUserName && checkName && checkEmail) || !dobBtn) {
                 // Prepare data:
                 // Only update the data of the field which is enabling the editor button

@@ -5,7 +5,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 export default function Password() {
     const { sendRequest } = useHttpClient();
-    const { userId } = useContext(AuthContext);
+    const { userId, token } = useContext(AuthContext);
     const navigate = useNavigate();
     const [passwordForm, setPasswordForm] = useState({
         oldPw: "",
@@ -27,7 +27,7 @@ export default function Password() {
         })
     }
 
-    console.log("password form", passwordForm);
+    //console.log("password form", passwordForm);
     async function handleSubmit(e) {
         e.preventDefault();
         // firstly, check the old password be correct
@@ -36,10 +36,10 @@ export default function Password() {
                 "http://localhost:3000/api/account/checkpassword",
                 "POST",
                 {
-                    "Content-type": "application/json"
+                    "Content-type": "application/json",
+                    "Authorization": `Bear ${token}`
                 },
                 JSON.stringify({
-                    userId: userId, // user id get from context
                     password: passwordForm.oldPw
                 })
             );
@@ -52,10 +52,10 @@ export default function Password() {
                     "http://localhost:3000/api/account/update",
                     "POST",
                     {
-                        "Content-type": "application/json"
+                        "Content-type": "application/json",
+                        "Authorization": `Bear ${token}`
                     },
                     JSON.stringify({
-                        ID: userId, // user id get from context
                         newPassword: passwordForm.newPw
                     })
                 )
@@ -89,7 +89,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="oldPw"
                                 value={passwordForm.oldPw}
@@ -109,7 +109,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="newPw"
                                 value={passwordForm.newPw}
@@ -126,7 +126,7 @@ export default function Password() {
                         </div>
                         <div className="col-8">
                             <input
-                                type="text"
+                                type="password"
                                 onChange={handleChange}
                                 name="newPwAgain"
                                 value={passwordForm.newPwAgain}

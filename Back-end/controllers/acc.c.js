@@ -28,15 +28,15 @@ module.exports = {
     const {username} = req.params;
     let identifierUser ;
     try {
-      identifierUser= accM.getByUsername(username);
+      identifierUser = await accM.getByUsername(username);
     }
     catch(err) {
       console.error(err)
       return next (new HttpError("Some error when find user") , 500)
     }
     if(!identifierUser) 
-      return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
-    return res.status(200).json({user : identifierUser});
+      return res.json({valid: false});
+    return res.status(200).json({user : identifierUser, valid: true});
   },
 
 
@@ -296,5 +296,18 @@ module.exports = {
       return next (new HttpError("Cannot lock", 420));
     }
     return res.json({message : "Lock success"})
+  },
+  checkPassword: async (req, res, next) => {
+    const userId = req.userData.userId;
+    const password = req.body.password;
+    console.log("user id in check password func", userId);
+    const acc = await accM.getByUserID(userId);
+    if (!acc) {
+      next (new HttpError("Invalid user ID. Cannot check password"));
+      return;
+    }
+
+    const match = await bcrypt.compare(password, acc.Password);
+    res.json({match: match});
   }
 };
