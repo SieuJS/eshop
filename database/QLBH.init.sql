@@ -35,7 +35,7 @@ DROP TABLE IF EXISTS "OrderDetails";
 CREATE TABLE "OrderDetails" (
   "ID" serial NOT NULL,
   "OrderID" int4 NOT NULL,
-  "ProductName" varchar(40) NOT NULL,
+  "ProductName" varchar(255) NOT NULL,
   "ProID" int4,
   "Quantity" int4 NOT NULL,
   "Price" numeric(19,4) NOT NULL,
@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS "Orders";
 CREATE TABLE "Orders" (
   "OrderID" serial NOT NULL,
   "OrderDate" timestamp NOT NULL,
-  "UserID" varchar(50) NOT NULL,
+  "UserID" int4 NOT NULL,
   "Total" numeric(19,4) NOT NULL
 )
 ;
@@ -79,7 +79,7 @@ COMMIT;
 DROP TABLE IF EXISTS "Products";
 CREATE TABLE "Products" (
   "ProID" serial NOT NULL,
-  "ProName" varchar(40) NOT NULL,
+  "ProName" varchar(255) NOT NULL,
   "TinyDes" varchar(80) NOT NULL,
   "FullDes" text NOT NULL,
   "Price" numeric(19,4) NOT NULL,
@@ -104,255 +104,18 @@ CREATE TABLE "Products" (
 -- ----------------------------
 -- Records of Products
 -- ----------------------------
-BEGIN;
-INSERT INTO "Products" VALUES (DEFAULT, 'Freshwater Cultured Pearl', 'Freshwater Cultured Pearl, Citrine, Peridot & Amethyst Bracelet, 7.5"', '<UL>
-    <LI>Metal stamp: 14k </LI>
-    <LI>Metal: yellow-gold</LI>
-    <LI>Material Type: amethyst, citrine, gold, pearl, peridot</LI>
-    <LI>Gem Type: citrine, peridot, amethyst</LI>
-    <LI>Length: 7.5 inches</LI>
-    <LI>Clasp Type: filigree-box</LI>
-    <LI>Total metal weight: 0.6 Grams</LI>
-</UL>
-<STRONG>Pearl Information</STRONG><BR>
-<UL>
-    <LI>Pearl type: freshwater-cultured</LI>
-</UL>
-<STRONG>Packaging Information</STRONG><BR>
-<UL>
-    <LI>Package: Regal Blue Sueded-Cloth Pouch</LI>
-</UL>', 1500000.0000, 6, 83);
-INSERT INTO "Products" VALUES (DEFAULT, 'Pink Sapphire Sterling Silver', '14 1/2 Carat Created Pink Sapphire Sterling Silver Bracelet w/ Diamond Accents', '<P><STRONG>Jewelry Information</STRONG></P>
-<UL>
-    <LI>Loại hàng: Hàng trong nước</LI>
-</UL>
-', 300000.0000, 6, 64);
-INSERT INTO "Products" VALUES (DEFAULT, 'Torrini KC241', 'Nhẫn kim cương - vẻ đẹp kiêu sa', '<P>Không chỉ có kiểu dáng truyền thống chỉ có một hạt kim cương ở giữa, các nhà thiết kế đã tạo những những chiếc nhẫn vô cùng độc đáo và tinh tế. Tuy nhiên, giá của đồ trang sức này thì chỉ có dân chơi mới có thể kham được.</P>
-<UL>
-    <LI>Kiểu sản phẩm: Nhẫn nữ</LI>
-    <LI>Loại đá: To paz</LI>
-    <LI>Chất liệu: kim cương, nguyên liệu và công nghệ Italy...</LI>
-    <LI>Đơn giá: 2,110,250 VND / Chiếc</LI>
-</UL>
-', 1600000000.0000, 6, 86);
-INSERT INTO "Products" VALUES (DEFAULT, 'Torrini KC242', 'tinh xảo và sang trọng', '<P>Để sở hữu một chiếc nhẫn kim cương lấp lánh trên tay, bạn phải là người chịu chi và sành điệu.<BR>
-Với sự kết hợp khéo léo và độc đáo giữa kim cương và Saphia, Ruby... những chiếc nhẫn càng trở nên giá trị.</P>
-<UL>
-    <LI>Kiểu sản phẩm: Nhẫn nam</LI>
-    <LI>Loại đá: To paz</LI>
-    <LI>Chất liệu: Vàng tây 24K, nguyên liệu và công nghệ Italy...</LI>
-</UL>
-', 42000000.0000, 6, 63);
-INSERT INTO "Products" VALUES (DEFAULT, 'Nokia 7610', 'Độ phân giải cao, màn hình màu, chụp ảnh xuất sắc.', '<UL>
-    <LI>Máy ảnh có độ phân giải 1 megapixel</LI>
-    <LI>Màn hình 65.536 màu, rộng 2,1 inch, 176 X 208 pixel với đồ họa sắc nét, độ phân giải cao</LI>
-    <LI>Quay phim video lên đến 10 phút với hình ảnh sắc nét hơn</LI>
-    <LI>Kinh nghiệm đa phương tiện được tăng cường</LI>
-    <LI>Streaming video &amp; âm thanh với RealOne Player (hỗ trợ các dạng thức MP3/AAC).</LI>
-    <LI>Nâng cấp cho những đoạn phim cá nhân của bạn bằng các tính năng chỉnh sửa tự động thông minh</LI>
-    <LI>In ảnh chất lượng cao từ nhà, văn phòng, kios và qua mạng</LI>
-    <LI>Dễ dàng kết nối vớI máy PC để lưu trữ và chia sẻ (bằng cáp USB, PopPort, công nghệ Bluetooth)</LI>
-    <LI>48 nhạc chuông đa âm sắc, True tones. Mạng GSM 900 / GSM 1800 / GSM 1900</LI>
-    <LI>Kích thước 109 x 53 x 19 mm, 93 cc</LI>
-    <LI>Trọng lượng 118 g</LI>
-    <LI>Hiển thị: Loại TFT, 65.536 màu</LI>
-    <LI>Kích cở: 176 x 208 pixels </LI>
-</UL>
-', 2900000.0000, 2, 0);
-INSERT INTO "Products" VALUES (DEFAULT, 'Áo thun nữ', 'Màu sắc tươi tắn, kiểu dáng trẻ trung', '<UL>
-    <LI>Loại hàng: Hàng trong nước</LI>
-    <LI>Xuất xứ: Tp Hồ Chí Minh</LI>
-</UL>
-', 180000.0000, 4, 62);
-INSERT INTO "Products" VALUES (DEFAULT, 'Simen AP75', 'Thiết kế tinh xảo, hiện đại', '<UL>
-    <LI>Hình ảnh hoàn hảo, rõ nét ở mọi góc màn hình</LI>
-    <LI>Giảm thiểu sự phản chiếu ánh sáng</LI>
-    <LI>Menu hiển thị tiếng Việt</LI>
-    <LI>Hệ thống hình ảnh thông minh</LI>
-    <LI>Âm thanh Hifi Stereo mạnh mẽ</LI>
-    <LI>Hệ thống âm lượng thông minh</LI>
-    <LI>Bộ nhớ 100 chương trình</LI>
-    <LI>Chọn kênh ưa thích</LI>
-    <LI>Các kiểu sắp đặt sẵn hình ảnh / âm thanh</LI>
-    <LI>Kích thước (rộng x cao x dày): 497 x 458 x 487mm</LI>
-    <LI>Trọng lượng: 25kg</LI>
-    <LI>Màu: vàng, xanh, bạc </LI>
-</UL>
-', 2800000.0000, 2, 15);
-INSERT INTO "Products" VALUES (DEFAULT, 'Áo bé trai', 'Hóm hỉnh dễ thương', '<UL>
-    <LI>Quần áo bé trai</LI>
-    <LI>Loại hàng: Hàng trong nước</LI>
-    <LI>Xuất xứ: Tp Hồ Chí Minh</LI>
-</UL>
-', 270000.0000, 4, 74);
-INSERT INTO "Products" VALUES (DEFAULT, 'Bông tai nạm hạt rubby', 'Trẻ trung và quý phái', '<UL>
-    <LI>Tên sản phẩm: Bông tai nạm hạt rubby</LI>
-    <LI>Đóng nhãn hiệu: Torrini</LI>
-    <LI>Nguồn gốc, xuất xứ: Italy</LI>
-    <LI>Hình thức thanh toán: L/C T/T M/T CASH</LI>
-    <LI>Thời gian giao hàng: trong vòng 3 ngày kể từ ngày mua</LI>
-    <LI>Chất lượng/chứng chỉ: good</LI>
-</UL>
-', 2400000.0000, 6, 43);
-INSERT INTO "Products" VALUES (DEFAULT, 'Đầm dạ hội ánh kim', 'Đủ màu sắc - kiểu dáng', '<UL>
-    <LI>Màu sắc: Khuynh hướng ánh kim có thể thể hiện trên vàng, bạc, đỏ tía, xanh biển, vàng tím, trắng và đen.</LI>
-    <LI>Một số biến tấu mang tính vui nhộn là vàng chanh, màu hoa vân anh và ngọc lam; trong đó hoàng kim và nhũ bạc khá phổ biến.</LI>
-    <LI>Phong cách: Diềm đăng ten, rủ xuống theo chiều thẳng đứng, nhiều lớp, cổ chẻ sâu, eo chít cao tới ngực... được biến tấu tùy theo mỗi nhà thiết kế.</LI>
-</UL>
-', 2800000.0000, 4, 80);
-INSERT INTO "Products" VALUES (DEFAULT, 'Dây chuyền ánh bạc', 'Kiểu dáng mới lạ', '<UL>
-    <LI>Chất liệu chính: Bạc</LI>
-    <LI>Màu sắc: Bạc</LI>
-    <LI>Chất lượng: Mới</LI>
-    <LI>Phí vận chuyển: Liên hệ</LI>
-    <LI>Giá bán có thể thay đổi tùy theo trọng lượng và giá vàng của từng thời điểm.</LI>
-</UL>
-', 250000.0000, 6, 88);
-INSERT INTO "Products" VALUES (DEFAULT, 'Đồ bộ bé gái', 'Đủ màu sắc - kiểu dáng', '<UL>
-    <LI>Màu sắc: đỏ tía, xanh biển, vàng tím, trắng và đen.</LI>
-    <LI>Xuất xứ: Tp. Hồ Chí Minh</LI>
-    <LI>Chất liệu: cotton</LI>
-    <LI>Loại hàng: hàng trong nước</LI>
-</UL>
-', 120000.0000, 4, 61);
-INSERT INTO "Products" VALUES (DEFAULT, 'Đầm dạ hội Xinh Xinh', 'Đơn giản nhưng quý phái', '<P>Những đường cong tuyệt đẹp sẽ càng được phô bày khi diện các thiết kế này.</P>
-<UL>
-    <LI>Nét cắt táo bạo ở ngực giúp bạn gái thêm phần quyến rũ, ngay cả khi không có trang&nbsp; sức nào trên người.</LI>
-    <LI>Đầm hai dây thật điệu đà với nơ xinh trước ngực nhưng trông bạn vẫn toát lên vẻ tinh nghịch và bụi bặm nhờ thiết kế đầm bí độc đáo cùng sắc màu sẫm.</LI>
-    <LI>Hãng sản xuất: NEM</LI>
-    <LI>Kích cỡ : Tất cả các kích cỡ</LI>
-    <LI>Kiểu dáng : Quây/Ống</LI>
-    <LI>Chất liệu : Satin</LI>
-    <LI>Màu : đen, đỏ</LI>
-    <LI>Xuất xứ : Việt Nam</LI>
-</UL>
-', 2600000.0000, 4, 92);
-INSERT INTO "Products" VALUES (DEFAULT, 'Đầm dạ hội NEM', 'Táo bạo và quyến rũ', '<P>Những đường cong tuyệt đẹp sẽ càng được phô bày khi diện các thiết kế này.</P>
-<UL>
-    <LI>Nét cắt táo bạo ở ngực giúp bạn gái thêm phần quyến rũ, ngay cả khi không có trang&nbsp; sức nào trên người.</LI>
-    <LI>Đầm hai dây thật điệu đà với nơ xinh trước ngực nhưng trông bạn vẫn toát lên vẻ tinh nghịch và bụi bặm nhờ thiết kế đầm bí độc đáo cùng sắc màu sẫm.</LI>
-    <LI>Hãng sản xuất: NEM</LI>
-    <LI>Kích cỡ : Tất cả các kích cỡ</LI>
-    <LI>Kiểu dáng : Quây/Ống</LI>
-    <LI>Chất liệu : Satin</LI>
-    <LI>Màu : đen, đỏ</LI>
-    <LI>Xuất xứ : Việt Nam</LI>
-</UL>
-', 1200000.0000, 4, 0);
-INSERT INTO "Products" VALUES (DEFAULT, 'Dây chuyền đá quý', 'Kết hợp vàng trắng và đá quý', '<UL>
-    <LI>Kiểu sản phẩm: Dây chuyền</LI>
-    <LI>Chất liệu: Vàng trắng 14K và đá quý, nguyên liệu và công nghệ Italy...</LI>
-    <LI>Trọng lượng chất liệu: 1.1 Chỉ </LI>
-</UL>
-', 1925000.0000, 6, 22);
-INSERT INTO "Products" VALUES (DEFAULT, 'Nokia N72', 'Sành điệu cùng N72', '<UL>
-    <LI>Camera mega pixel : 2 mega pixel</LI>
-    <LI>Bộ nhớ trong : 16 - 31 mb</LI>
-    <LI>Chức năng : quay phim, ghi âm, nghe đài FM</LI>
-    <LI>Hỗ trợ: Bluetooth, thẻ nhớ ngoài, nhạc MP3 &lt;br/&gt;</LI>
-    <LI>Trọng lượng (g) : 124g</LI>
-    <LI>Kích thước (mm) : 109 x 53 x 21.8 mm</LI>
-    <LI>Ngôn ngữ : Có tiếng việt</LI>
-    <LI>Hệ điều hành: Symbian OS 8.1</LI>
-</UL>
-', 3200000.0000, 2, 81);
-INSERT INTO "Products" VALUES (DEFAULT, 'Mặt dây chuyền Ruby', 'Toả sáng cùng Ruby', '<UL>
-    <LI>Kiểu sản phẩm:&nbsp; Mặt dây</LI>
-    <LI>Chất liệu: Vàng trắng 14K, nguyên liệu và công nghệ Italy...</LI>
-    <LI>Trọng lượng chất liệu: 0.32 Chỉ</LI>
-</UL>
-', 1820000.0000, 6, 33);
-INSERT INTO "Products" VALUES (DEFAULT, '1/2 Carat Pink Sapphire Silver', 'Created Pink Sapphire', '<UL>
-    <LI>Brand Name: Ice.com</LI>
-    <LI>Material Type: sterling-silver, created-sapphire, diamond</LI>
-    <LI>Gem Type: created-sapphire, Diamond</LI>
-    <LI>Minimum total gem weight: 14.47 carats</LI>
-    <LI>Total metal weight: 15 Grams</LI>
-    <LI>Number of stones: 28</LI>
-    <LI>Created-sapphire Information</LI>
-    <LI>Minimum color: Not Available</LI>
-</UL>
-', 3400000.0000, 6, 10);
-INSERT INTO "Products" VALUES (DEFAULT, 'Netaya', 'Dây chuyền vàng trắng', '<UL>
-    <LI>Kiểu sản phẩm:&nbsp; Dây chuyền</LI>
-    <LI>Chất liệu: Vàng tây 18K, nguyên liệu và công nghệ Italy...</LI>
-    <LI>Trọng lượng chất liệu: 1 Chỉ</LI>
-</UL>
-', 1820000.0000, 6, 17);
-INSERT INTO "Products" VALUES (DEFAULT, 'Giày nam GN16', 'Êm - đẹp - bền', '<UL>
-    <LI>Loại hàng: Hàng trong nước</LI>
-    <LI>Xuất xứ: Tp Hồ Chí Minh</LI>
-    <LI>Giá: 300 000 VNĐ</LI>
-</UL>
-', 540000.0000, 4, 0);
-INSERT INTO "Products" VALUES (DEFAULT, 'G3.370A', 'Đen bóng, sang trọng', '<UL>
-    <LI>Loại hàng: Hàng trong nước</LI>
-    <LI>Xuất xứ: Tp Hồ Chí Minh</LI>
-</UL>
-', 300000.0000, 4, 74);
-INSERT INTO "Products" VALUES (DEFAULT, 'Giày nữ GN1', 'Kiểu dáng thanh thoát', '<UL>
-    <LI>Loại hàng: Hàng trong nước</LI>
-    <LI>Xuất xứ: Tp Hồ Chí Minh</LI>
-</UL>
-', 290000.0000, 4, 30);
-INSERT INTO "Products" VALUES (DEFAULT, 'NV002', 'Kiểu dáng độc đáo', '<P><STRONG>Thông tin sản phẩm</STRONG></P>
-<UL>
-    <LI>Mã sản phẩm: NV002</LI>
-    <LI>Trọng lượng: 2 chỉ</LI>
-    <LI>Vật liệu chính: Vàng 24K</LI>
-</UL>
-', 3600000.0000, 6, 5);
-INSERT INTO "Products" VALUES (DEFAULT, 'NV009', 'Sáng chói - mới lạ', '<P><STRONG>Thông tin sản phẩm</STRONG></P>
-<UL>
-    <LI>Mã sản phẩm: NV005</LI>
-    <LI>Trọng lượng: 1 cây</LI>
-    <LI>Vật liệu chính: Vàng 24K</LI>
-</UL>
-', 14900000.0000, 6, 22);
-INSERT INTO "Products" VALUES (DEFAULT, 'CK010', 'Độc đáo, sang trọng', '<UL>
-    <LI>Kiểu dáng nam tính và độc đáo, những thiết kế dưới đây đáp ứng được mọi yêu cần khó tính nhất của người sở hữu.</LI>
-    <LI>Những hạt kim cương sẽ giúp người đeo nó tăng thêm phần sành điệu</LI>
-    <LI>Không chỉ có kiểu dáng truyền thống chỉ có một hạt kim cương ở giữa, các nhà thiết kế đã tạo những những chiếc nhẫn vô cùng độc đáo và tinh tế.</LI>
-    <LI>Tuy nhiên, giá của đồ trang sức này thì chỉ có dân chơi mới có thể kham được</LI>
-</UL>
-', 2400000000.0000, 6, 52);
-INSERT INTO "Products" VALUES (DEFAULT, 'CK009', 'Nữ tính - đầy quí phái', '<UL>
-    <LI>Để sở hữu một chiếc nhẫn kim cương lấp lánh trên tay, bạn phải là người chịu chi và sành điệu.</LI>
-    <LI>Với sự kết hợp khéo léo và độc đáo giữa kim cương và Saphia, Ruby... những chiếc nhẫn càng trở nên giá trị</LI>
-    <LI>Nhà sản xuất: Torrini</LI>
-</UL>
-<P>Cái này rất phù hợp cho bạn khi tặng nàng</P>
-', 1850000000.0000, 6, 11);
-INSERT INTO "Products" VALUES (DEFAULT, 'CK007', 'Sự kết hợp khéo léo, độc đáo', '<UL>
-    <LI>Để sở hữu một chiếc nhẫn kim cương lấp lánh trên tay, bạn phải là người chịu chi và sành điệu.</LI>
-    <LI>Với sự kết hợp khéo léo và độc đáo giữa kim cương và Saphia, Ruby... những chiếc nhẫn càng trở nên giá trị</LI>
-    <LI>Nhà sản xuất: Torrini</LI>
-</UL>
-<P>Cái này rất phù hợp cho bạn khi tặng nàng</P>
-', 3100000000.0000, 6, 28);
-INSERT INTO "Products" VALUES (DEFAULT, 'CK005', 'Tinh xảo - sang trọng', '<UL>
-    <LI>Kim cương luôn là đồ trang sức thể hiện đẳng cấp của người sử dụng.</LI>
-    <LI>Không phải nói nhiều về những kiểu nhẫn dưới đây, chỉ có thể gói gọn trong cụm từ: tinh xảo và sang trọng</LI>
-    <LI>Thông tin nhà sản xuất: Torrini</LI>
-    <LI>Thông tin chi tiết: Cái này rất phù hợp cho bạn khi tặng nàng</LI>
-</UL>
-', 1800000000.0000, 6, 29);
-INSERT INTO "Products" VALUES (DEFAULT, 'NV01TT', 'Tinh tế đến không ngờ', '<UL>
-    <LI>Tinh xảo và sang trọng</LI>
-    <LI>Thông tin nhà sản xuất: Torrini</LI>
-    <LI>Không chỉ có kiểu dáng truyền thống chỉ có một hạt kim cương ở giữa, các nhà thiết kế đã tạo những những chiếc nhẫn vô cùng độc đáo và tinh tế.</LI>
-    <LI>Tuy nhiên, giá của đồ trang sức này thì chỉ có dân chơi mới có thể kham được</LI>
-</UL>
-', 500000000.0000, 6, 49);
-INSERT INTO "Products" VALUES (DEFAULT, 'Motorola W377', 'Nữ tính - trẻ trung', '<UL>
-    <LI>General: 2G Network, GSM 900 / 1800 / 1900</LI>
-    <LI>Size:&nbsp; 99 x 45 x 18.6 mm, 73 cc</LI>
-    <LI>Weight: 95 g</LI>
-    <LI>Display: type TFT, 65K colors</LI>
-    <LI>Size: 128 x 160 pixels, 28 x 35 mm</LI>
-</UL>
-', 2400000.0000, 2, 0);
-COMMIT;
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ quần áo thể thao nam FASVIN AT22511.HN chất vải mềm nhẹ co giãn thoải mái', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 419000.0000, 4, 2, 'https://salt.tikicdn.com/cache/280x280/ts/product/aa/7b/0e/c8c5e3e7411464a4a545af34e0b54817.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ quần áo thể thao nam Fasvin AB22494.HN mềm mại co giãn thoải mái', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 299000.0000, 4, 1, 'https://salt.tikicdn.com/cache/280x280/ts/product/07/f5/57/89dc4e45a4ed0775f827a54fd82d23ac.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ Quần Áo Nam Thể Thao Viền Tay Cao Cấp thời Trang ZERO', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 209000.0000, 4, 89, 'https://salt.tikicdn.com/cache/280x280/ts/product/ec/55/2c/b61717e898d62e12c8140946c48d3b59.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, ' QUẦN ÁO THỂ THAO NAM    BỘ HÈ CHO NAM NỮ IN CHỮ FULUA ĐỒ CẶP ĐÔI 2020', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 96000.0000, 4, 247, 'https://salt.tikicdn.com/cache/280x280/ts/product/e5/3e/08/58819ea7d03d498089bb8f0d79ad41fb.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ Quần Áo Thể Thao Nam Kẻ Sọc Thời Trang Cao Cấp VICERO', 'Đồ mặc nhà nam - Bộ dài', 'Đồ mặc nhà nam - Bộ dài', 209000.0000, 4, 334, 'https://salt.tikicdn.com/cache/280x280/ts/product/20/38/99/0e217708fc72d56becccf08fdac0a0d8.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'BỘ QUẦN ÁO THỂ THAO , bộ quần áo nam ,BỘ ĐỒ NAM CHẤT THUN LẠNH MÀU ĐEN , ĐỎ , TRẮNG', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 97000.0000, 4, 48, 'https://salt.tikicdn.com/cache/280x280/ts/product/f1/2d/32/989dc86ee7309836d2f894b49e184d64.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ quần áo nam mùa hè chất vải nỉ polyster co giãn, mềm mịn, thoải mái phong cách trẻ trung B767', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 349000.0000, 4, 4, 'https://salt.tikicdn.com/cache/280x280/ts/product/c2/a4/df/f1aac6bb20e5b10f72c3ddeeef43f9ec.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ Quần Áo Nam SE60', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 282000.0000, 4, 27, 'https://salt.tikicdn.com/cache/280x280/ts/product/98/99/6c/4199a493e675cd32a6959a21059d6a11.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ Quần Áo Nam Thể Thao Cộc Tay Hoa Văn', 'Đồ ngủ, đồ mặc nhà nam', 'Đồ ngủ, đồ mặc nhà nam', 109000.0000, 4, 268, 'https://salt.tikicdn.com/cache/280x280/ts/product/f1/f6/15/2aee870b81c410dc3f17be70787caead.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ quần áo nam, set đồ nam Houston thời trang, chất thun cotton cao cấp - FORMEN SHOP- FMPS222', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 259000.0000, 4, 20, 'https://salt.tikicdn.com/cache/280x280/ts/product/22/2a/c0/8481b417efc46ed9e9405d36c78338ae.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Áo lót nam cao cấp GOKING, áo thun ba lỗ nam 100% cotton thoáng mát, thấm hút mồ hôi, khử mùi, kháng khuẩn', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 139000.0000, 4, 178, 'https://salt.tikicdn.com/cache/280x280/ts/product/ad/af/b1/a72891d2ac7504fa740a785bb0a19e22.jpg');
+INSERT INTO "Products" VALUES (DEFAULT, 'Bộ quần áo thể thao nam FASVIN AB22501.HN chất vải mềm nhẹ co giãn thoải mái', 'Đồ mặc nhà nam - Bộ ngắn', 'Đồ mặc nhà nam - Bộ ngắn', 419000.0000, 4, 2, 'https://salt.tikicdn.com/cache/280x280/ts/product/02/49/62/e29417170f181f175445857e192e4e80.jpg');
 
 -- ----------------------------
 -- Table structure for Users
@@ -361,7 +124,7 @@ DROP TABLE IF EXISTS "Users";
 CREATE TABLE "Users" (
   "ID" serial NOT NULL,
   "Username" varchar(50) NOT NULL,
-  "Password" varchar(255) NOT NULL,
+  "Password" varchar(255),
   "Name" varchar(50) NOT NULL,
   "Email" varchar(50) NOT NULL,
   "DOB" timestamp NOT NULL,
@@ -383,17 +146,6 @@ Create Table "ProductsInCart" (
 	"Quan" int4 ,
 	Primary Key ("CartID", "ProID")
 );
-
-DROP TABLE IF EXISTS "UsersGoogle";
-CREATE TABLE "UsersGoogle" (
-  "ID" varchar(50) NOT NULL PRIMARY KEY,
-  "Name" varchar(50) NOT NULL,
-  "Email" varchar(50) NOT NULL,
-  "DOB" timestamp NOT NULL,
-  "Role" varchar(10) NOT NULL,
-  "Permission" int4 NOT NULL
-);
-
 -- ----------------------------
 -- Primary Key structure for table Categories
 -- ----------------------------
