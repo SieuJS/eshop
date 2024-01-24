@@ -56,7 +56,6 @@
     grid-area: sidebar;
     height: 100%;
     background-color: #263043;
-    overflow-y: auto;
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
   }
@@ -120,9 +119,10 @@
   
   .main-container {
     grid-area: main;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     padding: 20px 20px;
     color: rgba(255, 255, 255, 0.95);
+    height: 96vh;
   }
   
   .main-title {
