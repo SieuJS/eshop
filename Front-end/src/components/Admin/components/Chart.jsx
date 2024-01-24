@@ -11,19 +11,27 @@ function ShopChart(props) {
             id: "basic-bar"
           },
           xaxis: {
-            categories: ["Products" , "Users","Categories", "Orders" ]
+            categories: ["Products" , "Users","Categories", "Orders" ],
+            labels : {
+              style: {
+                fontSize: "14px",
+                colors: "white",
+                backgroundColor: "#ffff",
+                cssClass: "chart-label-x",
+              },
+            }
           }
         },
         series: [
           {
             name: "series-1",
-            data: props.data ? [props.data.accStat, props.data.prodStat, props.data.catStat, props.data.orderStat] : []
+            data: props.data ? [ props.data.prodStat,props.data.accStat, props.data.catStat, props.data.orderStat] : []
           }
         ]
       };
   return (
     <div className= {`${props.className} d-flex justify-content-center`}>
-          <div className="mixed-chart">
+          <div className="mixed-chart ">
             <Chart
               options={state.options}
               series={state.series}

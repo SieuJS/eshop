@@ -26,7 +26,7 @@ export default function DataTable(props) {
                   <td>{user.Name}</td>
                   <td>{user.Email}</td>
                   <td>{user.DOB}</td>
-                  <td>{user.Role}</td>
+                  <td>{user.Role.trim().toLowerCase()}</td>
                   <td>
                     {user.Role !== "Locked" ? (
                       <i class="fa-solid fa-lock"></i>
