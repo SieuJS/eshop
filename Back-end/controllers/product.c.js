@@ -16,8 +16,9 @@ module.exports = {
             const page = req.query.page || 1;
             const catID = req.query.catID;
             const name = req.query.keyword || ''
-            const pageSize = 4; // số dòng trên 1 trang  
-            const result = await productM.getByPage(catID, name, page, pageSize);
+            const sort = req.query.sort || ''
+            const pageSize = 2; // số dòng trên 1 trang  
+            const result = await productM.getByPage(catID, name, page, pageSize, sort);
             res.json(result);
         } catch (error) {
             next(error);
@@ -46,8 +47,11 @@ module.exports = {
                 CatID: req.body.catID,
                 Quantity:req.body.proQuantity
             }
-            if (req.file) {
-                entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            // if (req.file) {
+            //     entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            // }
+            if (req.body.proImage) {
+                entity.Image = req.body.proImage
             }
             const data = await productM.add(entity);
             res.json({success: true, data:data})
@@ -82,7 +86,7 @@ module.exports = {
     },
 
     updateProduct: async (req, res, next) => {
-        try{
+        try {
             const entity = {
                 ProID: parseInt(req.body.proID),
                 ProName: req.body.proName,
@@ -92,8 +96,8 @@ module.exports = {
                 CatID: parseInt(req.body.catID),
                 Quantity:parseInt(req.body.proQuantity)
             }
-            if (req.file) {
-                entity.Image = `http://localhost:3000/images/${req.file.filename}`
+            if (req.body.proImage) {
+                entity.Image = req.body.proImage
             }
             const data = await productM.updateProduct(entity)
             res.json({success: true, data:data})

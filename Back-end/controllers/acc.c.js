@@ -7,12 +7,14 @@ const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
 const urlServer = process.env.SERVER_URL
+const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
-    let identifierUser ;
+    console.log("userId in func getUserById", userId);
+    let identifierUser;
     try {
-      identifierUser = accM.getByUserID(userId);
+      identifierUser = await accM.getByUserID(userId);
     }
     catch(err) {
       console.error(err)
@@ -27,15 +29,15 @@ module.exports = {
     const {username} = req.params;
     let identifierUser ;
     try {
-      identifierUser= accM.getByUsername(username);
+      identifierUser = await accM.getByUsername(username);
     }
     catch(err) {
       console.error(err)
       return next (new HttpError("Some error when find user") , 500)
     }
     if(!identifierUser) 
-      return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
-    return res.status(200).json({user : identifierUser});
+      return res.json({valid: false});
+    return res.status(200).json({user : identifierUser, valid: true});
   },
 
 
@@ -166,8 +168,12 @@ module.exports = {
     });
   },
 
-  updateHandler: async (req, res) => {
-    const userID = req.body.ID;
+
+  updateHandler: async (req, res, next) => {
+    console.log("enter update user handler");
+    console.log("userID token",  req.userData.userId);
+    const userID = req.userData.userId;
+    console.log("update function userid from req: ", userID);
     const acc = await accM.getByUserID(userID);
     if (!acc) {
       res.json({ message: "Invalid user" });

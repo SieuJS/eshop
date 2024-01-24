@@ -239,6 +239,7 @@
 
   .page-admin .table th, .page-admin .table td {
     border-top: none;
+    vertical-align: middle;
   }
 
   .page-admin .page-link:hover{
@@ -258,6 +259,14 @@
 
   .page-admin a:hover {
     text-decoration: none;
+  }
+
+  .page-admin h2{
+    color: white;
+  }
+
+  .page-admin .pagination{
+    justify-content: center;
   }
   
   .charts {

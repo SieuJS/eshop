@@ -7,6 +7,10 @@ CREATE TABLE "Account" (
 ;
 ALTER TABLE "Account" ADD PRIMARY KEY ("AccID");
 
+BEGIN;
+INSERT INTO "Account" VALUES (DEFAULT, NULL, 0);
+COMMIT;
+
 DROP TABLE IF EXISTS "Transaction";
 CREATE TABLE "Transaction" (
   	"TransID" serial NOT NULL,

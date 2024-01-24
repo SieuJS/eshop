@@ -1,36 +1,53 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect, useContext } from "react";
+import { useHttpClient } from "../../hooks/http-hook";
+import { AuthContext } from "../../context/AuthContext";
+import Auth from "../../pages/Auth";
 
-export default function Dashboard({userId}) {
+export default function Dashboard() {
+    const { userId, role } = useContext(AuthContext);
+    const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
-        async function fettUserInfo() {
-            const response = await fetch(`http://localhost:3000/api/account/11`);
-            const info = await response.json();
-            setUserInfo(info);
+        async function fetchUser() {
+            const pathToUser = role === "user" ? "" : "/google";
+            const apiGetAccount = `/api/account${pathToUser}/${userId}`;
+            if (userId) {
+                try {
+                    const data = await sendRequest(
+                        apiGetAccount,
+                        "GET");
+                    setUserInfo({ ...data.user });
+                }
+                catch (err) {
+                    throw err;
+                }
+            }
         }
-        fettUserInfo();
-    }, []);
+        fetchUser();
+    }, [userId]);
     return (
         <>
             <div className="info-title mb-4">
-                <h3>Thông tin tài khoản</h3>
+                <h3>Your personal information</h3>
                 <p></p>
             </div>
             <div className="info-content">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-4 text-end">
-                            <p>Tên tài khoản:</p>
-                        </div>
-                        <div className="col-8">
-                            <p>{userInfo.Username}</p>
+                {role === "user" && (
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-4 text-end">
+                                <p>Username:</p>
+                            </div>
+                            <div className="col-8">
+                                <p>{userInfo.Username}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
-                            <p>Tên người dùng:</p>
+                            <p>Your fullname:</p>
                         </div>
                         <div className="col-8">
                             <p>{userInfo.Name}</p>
@@ -50,7 +67,7 @@ export default function Dashboard({userId}) {
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
-                            <p>Ngày sinh:</p>
+                            <p>Date of birth:</p>
                         </div>
                         <div className="col-8">
                             <p>{userInfo.DOB}</p>

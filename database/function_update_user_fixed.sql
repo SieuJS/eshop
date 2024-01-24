@@ -23,7 +23,7 @@ BEGIN
         "Password" = COALESCE(newPassword, "Password"),
         "Name" = COALESCE(newName, "Name"),
         "Email" = COALESCE(newEmail, "Email"),
-		"DOB" = COALESCE(TO_DATE(newDOB,'DD-MM-YYYY'), "DOB")
+		"DOB" = COALESCE(TO_DATE(newDOB,'YYYY-MM-DD'), "DOB")
     WHERE "ID" = user_id;
 	RETURN QUERY SELECT "ID", "Username" FROM "Users" WHERE "ID" = user_id;
 END;

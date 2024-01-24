@@ -16,4 +16,13 @@ module.exports = class Account {
             throw err;
         }
     }
+
+    static async getBalanceByID(id) {
+        try {
+            const data = await db.oneOrNone(`SELECT "Balance" FROM "Account" WHERE "AccID" = $1`, [id]);
+            return data;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

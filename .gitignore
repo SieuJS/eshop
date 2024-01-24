@@ -1,5 +1,4 @@
 template
 Back-end/node_modules
-.env
 node_modules
-Back-end/.env
+Payment-server/node_modules

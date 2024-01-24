@@ -3,24 +3,25 @@ const router = express.Router();
 const multer = require('multer');
 const productC = require("../controllers/product.c");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './public/images');
-    },
-    filename(req, file, cb){
-        cb(null, file.originalname)
-    }
-});
+// const storage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './public/images');
+//     },
+//     filename(req, file, cb){
+//         cb(null, file.originalname)
+//     }
+// });
 
-const upload = multer({storage})
+// const upload = multer({storage})
 
 router.get("/delete" , productC.delete);
 router.get("/get-by-cat/:catID", productC.getProductByCat);
 router.get("/get-by-page", productC.getProductByPage);
 router.get("/:proid", productC.getById);
 router.get("/get-by-pro/:proID", productC.getProductByProID);
-router.post("/add", upload.single('proImage'), productC.addProduct);
-
-router.post("/update", upload.single('proImage'), productC.updateProduct);
+// router.post("/add", upload.single('proImage'), productC.addProduct);
+// router.post("/update", upload.single('proImage'), productC.updateProduct);
+router.post("/add", productC.addProduct);
+router.post("/update", productC.updateProduct);
 
 module.exports = router;
