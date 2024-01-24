@@ -90,6 +90,7 @@ const Input = (props) => {
       onChange={changeHandler}
       onBlur={ touchHandler}
       value={inputState.value}
+      className={props.className}
     />
     }
     else {
@@ -99,6 +100,7 @@ const Input = (props) => {
       onChange={changeHandler}
       onBlur={touchHandler}
       value={inputState.value}
+      className={props.className}
     />
     }
   return (

@@ -106,7 +106,6 @@ export default function AdminProduct() {
     }
   }
     return (
-      <div className="side-title prod-side flex-grow-1">
           <div className="table-cards">
             <div className="cat-card card">
               <div className="card-header">
@@ -235,6 +234,5 @@ export default function AdminProduct() {
               </div>
             </div>
           </div>
-      </div>
     )
 }

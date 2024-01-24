@@ -29,8 +29,8 @@ export default function AdminSidebar(props) {
                 </NavLink>
             </li>
             <li className="sidebar-list-item" >
-                <NavLink to="/admin/customers" target="_blank" className={"sidebar-navlink"}>
-                <span className="material-icons-outlined">groups</span> Customers
+                <NavLink to="/admin/accounts" className={"sidebar-navlink"}>
+                <span className="material-icons-outlined">groups</span> Accounts
                 </NavLink>
             </li>
             <li className="sidebar-list-item">

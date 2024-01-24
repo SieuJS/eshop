@@ -6,6 +6,7 @@ import CatContextProvider from './context/CatContext';
 import Landing from './pages/Admin/Landing';
 import { useState } from 'react';
 
+import CrudAccount from './pages/Admin/CrudAccount';
 import AdminSidebar from './components/Admin/AdminSidebar';
 import AdminHeader from './components/Admin/AdminHeader';
 function Admin() {
@@ -20,7 +21,6 @@ function Admin() {
     setOpenSideBar(prev => !prev)
   }
 
-  console.log(openSideBar)
 
   return (
     <div className='admin-container page-admin d-flex'>
@@ -32,6 +32,7 @@ function Admin() {
         <Routes>
           <Route path='/product/*' exect element={<Products />} />
           <Route path='/category' exect element={<Categories />} />
+          <Route path = "/accounts" exact element = {<CrudAccount/>}/>
           <Route path='/dashboard' exect element={< Landing />} />
           {/* <Route path='/dashboard' exect element={<Dashboard />} /> */}
         </Routes>
