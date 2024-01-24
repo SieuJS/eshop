@@ -1,14 +1,14 @@
 // import './AdminHeader.css'
 
-export default function AdminHeader() {
+export default function AdminHeader(props) {
 
     const openSidebar = () => {
-        console.log('open');
+        props.onToggle()
     }
 
     return (
         <header className="header">
-            <div className="menu-icon" onClick={(e) => openSidebar()}>
+            <div className="menu-icon" onClick={() => openSidebar()}>
                 <span className="material-icons-outlined">menu</span>
             </div>
             <div className="header-left">

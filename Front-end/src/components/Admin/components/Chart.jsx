@@ -1,26 +1,37 @@
 import React from 'react'
 import Chart  from "react-apexcharts";
-function ShopChart() {
+function ShopChart(props) {
+    if(props.data)
+    {
+    console.log([props.data.accStat, props.data.prodStat, props.data.catStat, props.data.orderStat])
+    }
     const state = {
         options: {
           chart: {
             id: "basic-bar"
           },
           xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+            categories: ["Products" , "Users","Categories", "Orders" ],
+            labels : {
+              style: {
+                fontSize: "14px",
+                colors: "white",
+                backgroundColor: "#ffff",
+                cssClass: "chart-label-x",
+              },
+            }
           }
         },
         series: [
           {
             name: "series-1",
-            data: [30, 40, 45, 50, 49, 60, 70, 91]
+            data: props.data ? [ props.data.prodStat,props.data.accStat, props.data.catStat, props.data.orderStat] : []
           }
         ]
       };
   return (
-    <div className="app">
-        <div className="row">
-          <div className="mixed-chart">
+    <div className= {`${props.className} d-flex justify-content-center`}>
+          <div className="mixed-chart ">
             <Chart
               options={state.options}
               series={state.series}
@@ -28,7 +39,6 @@ function ShopChart() {
               width="500"
             />
           </div>
-        </div>
       </div>
   )
   }

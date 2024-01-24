@@ -1,6 +1,11 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
 const app = express();
+const path = require("path");
+const fs = require("fs");
+const cors = require("cors");
+const https = require("https");
+const bodyParser = require("body-parser");
 const path = require('path');
 const fs = require('fs');
 const cors = require('cors')
@@ -15,14 +20,27 @@ const productRoute = require("./routes/product.r")
 const orderRoute = require('./routes/order.r.js')
 const port = process.env.PORT || 3000;
 const secret = "My secret";
-const searchC = require('./controllers/search.c.js')
-const adminRoute = require('./routes/admin.js')
+const searchC = require("./controllers/search.c.js");
+const adminRoute = require("./routes/admin.js");
 
+const {ProdStats, AccStats, OrderStats, CatStats} = require('./utils/statistic');
 
-app.use(express.static(__dirname + '/public'))
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+// create socket server
+const http = require("http");
+const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
+const { proc } = require("./utils/db.js");
+
+app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// environment vairable
+
+const jwtPrimary = process.env.JWT_SECRET_KEY;
 
 // app.use(session({
 //     secret: secret,
@@ -33,40 +51,110 @@ app.use(express.urlencoded({ extended: true }));
 // require('./config/passport-setup.js')(app);
 // require("./config/passport-login.js")(app);
 
-app.use ((req,res,next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
-    next();
-})
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  next();
+});
 
 app.use("/api/account", accountRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
-app.use('/api/admin' , adminRoute)
+app.use("/api/admin", adminRoute);
 app.use('/api/order',orderRoute)
 //app.use("/auth", authGoogleRoute);
 
-app.use("/api/search",searchC.search);
+app.use("/api/search", searchC.search);
 app.use((error, req, res, next) => {
-    // Check that Have the res been sent ?
-    if (req.headerSent) {
-        return next(error);
-    }
-    // Check the status and set it 
-    res.status(error.code || 500);
-    // Leave the message 
-    res.json({ message: error.message || "There some errors occured " });
+  // Check that Have the res been sent ?
+  if (req.headerSent) {
+    return next(error);
+  }
+  // Check the status and set it
+  res.status(error.code || 500);
+  // Leave the message
+  res.json({ message: error.message || "There some errors occured " });
 });
 
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+  },
+});
+
+io.use((socket, next) => {
+  if (socket.handshake.query && socket.handshake.query.token) {
+    const clientToken = socket.handshake.query.token.split(" ")[1];
+    let decodedToken;
+    try {
+    decodedToken = jwt.verify
+    (clientToken , process.env.JWT_SECRET_KEY);
+    }
+    catch (err) {
+      return next(new Error("Authorization failed"))
+    }
+    if(!decodedToken.userId 
+      && !decodedToken.role 
+      && decodedToken.role.trim() !== "admin" ){
+        return next(new Error("Authorization failed"))
+      }
+    socket.userData = {
+      userId : decodedToken.userId,
+      role : decodedToken.role
+    }
+  }next();
+}).on("connection", ( socket) => {
+    console.log("Some one connected", socket.userData)
+  socket.on("join", ({ name }) => {
+    console.log("Someone connected");
+  });
+
+
+  const getAllStats = async () => {
+    let prodStat , accStat, catStat, orderStat;
+    try {
+      prodStat = await ProdStats();
+      accStat = await AccStats();
+      catStat = await CatStats();
+      orderStat = await OrderStats();
+      socket.emit("statistic" , {
+        accStat, 
+        prodStat,
+        catStat,
+        orderStat
+      })
+    }
+    catch(err) {
+      return next (new Error("could not get stat"))
+    }
+  }
+
+  getAllStats();
+
+  setInterval(async ()=> {
+    await getAllStats()
+  }, 10*1000)
+
+});
+
+server.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
 // app.listen(port, () => {
 //     console.log(`Listening on port ${port}`);
 // })
 
-const server = https.createServer({
-    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
-    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
-}, app);
+// const server = https.createServer({
+//     key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+//     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+// }, app);
 
-server.listen(port, () => console.log(`Secure server on port ${port}`));
+// server.listen(port, () => console.log(`Secure server on port ${port}`));
+
+// server.listen(port, () => console.log(`Secure server on port ${port}`));

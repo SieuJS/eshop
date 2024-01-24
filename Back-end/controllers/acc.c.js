@@ -6,6 +6,7 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+
 const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
@@ -296,18 +297,5 @@ module.exports = {
       return next (new HttpError("Cannot lock", 420));
     }
     return res.json({message : "Lock success"})
-  },
-  checkPassword: async (req, res, next) => {
-    const userId = req.userData.userId;
-    const password = req.body.password;
-    console.log("user id in check password func", userId);
-    const acc = await accM.getByUserID(userId);
-    if (!acc) {
-      next (new HttpError("Invalid user ID. Cannot check password"));
-      return;
-    }
-
-    const match = await bcrypt.compare(password, acc.Password);
-    res.json({match: match});
   }
 };

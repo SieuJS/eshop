@@ -18,6 +18,7 @@ router.get("/token", (req, res) => {
         token = jwt.sign(
         {
             message : "Main server"
+            
         }, 
         paymentKey, 
         {expiresIn : "1h"}
