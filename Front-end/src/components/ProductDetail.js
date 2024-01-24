@@ -123,7 +123,7 @@ export default function ProductDetail(props) {
                                 </button>
                             </div>
                         </div>
-                        <button className="btn btn-primary px-3" onClick={() => disPatch(cartSlice.actions.add({ProID: product.ProID,ProName: product.ProName,Price: product.Price ,Quantity: quantity}))}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        <button className="btn btn-primary px-3" onClick={() => disPatch(cartSlice.actions.add({...product ,orderQuantity: quantity}))}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
                     </div>
                     <div className="d-flex pt-2">
                         <p className="text-dark font-weight-medium mb-0 mr-2">Share on:</p>

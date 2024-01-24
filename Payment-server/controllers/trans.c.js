@@ -1,10 +1,17 @@
 const transM = require('../models/trans.m')
+const accM = require('../models/acc.m')
 const HttpError = require("../models/http-error")
 
 module.exports = {
     async transaction(req, res, next) {
         try {
-            const { id, orderID, amount } = req.body
+            console.log(req.userData);
+            const userId = req.userData.userId;
+            const orderID = null;
+            const amount = req.userData.amount;
+
+            const id = await accM.getIdByUserID(userId);
+            // const { id, orderID, amount } = req.body
             const curSendBalance = await transM.getBalanceByID(id);
             const curReceiveBalance = await transM.getBalanceByID(1);
             const curSendBalanceVal = parseFloat(curSendBalance.Balance);

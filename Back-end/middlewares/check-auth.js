@@ -1,6 +1,7 @@
 const HttpError = require('../models/http-error')
 
 const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWT_SECRET_KEY;
 
 module.exports = (req, res, next ) => {
 

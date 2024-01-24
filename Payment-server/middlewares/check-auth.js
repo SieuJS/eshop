@@ -21,12 +21,9 @@ module.exports = (req, res, next ) => {
             throw error;
         }
         const decodedToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
-        if(decodedToken.message.trim() !== "Main server")
-            return next (new HttpError("Authentication failed"));
-        // req.userData  =  {
-        //     userId : decodedToken.userId,
-        //     role : decodedToken.role
-        // }  
+        // if(decodedToken.message.trim() !== "Main server")
+        //     return next (new HttpError("Authentication failed"));
+        req.userData = decodedToken;
         next();
 
     }catch (err) {
