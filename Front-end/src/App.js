@@ -23,6 +23,8 @@ import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
 function App() {
   const {login, logout, token, userId, role} = AuthHook();
+  console.log("app userid", userId);
+  console.log("role in app", role);
   return (
     <>
       <BrowserRouter>
@@ -31,7 +33,7 @@ function App() {
             isLoggedIn : !!token,
             login , 
             logout, 
-            userId ,
+            userId,
             role,
             token
           }

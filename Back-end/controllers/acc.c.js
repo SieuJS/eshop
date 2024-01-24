@@ -12,7 +12,7 @@ module.exports = {
     const {userId} = req.params;
     let identifierUser ;
     try {
-      identifierUser = accM.getByUserID(userId);
+      identifierUser = await accM.getByUserID(userId);
     }
     catch(err) {
       console.error(err)
@@ -166,8 +166,12 @@ module.exports = {
     });
   },
 
-  updateHandler: async (req, res) => {
-    const userID = req.body.ID;
+
+  updateHandler: async (req, res, next) => {
+    console.log("enter update user handler");
+    console.log("userID token",  req.userData.userId);
+    const userID = req.userData.userId;
+    console.log("update function userid from req: ", userID);
     const acc = await accM.getByUserID(userID);
     if (!acc) {
       res.json({ message: "Invalid user" });

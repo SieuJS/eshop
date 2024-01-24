@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Password() {
     const { sendRequest } = useHttpClient();
+    const { userId } = useContext(AuthContext);
     const navigate = useNavigate();
     const [passwordForm, setPasswordForm] = useState({
         oldPw: "",
@@ -37,12 +39,12 @@ export default function Password() {
                     "Content-type": "application/json"
                 },
                 JSON.stringify({
-                    userId: 11, // user id get from context
+                    userId: userId, // user id get from context
                     password: passwordForm.oldPw
                 })
             );
             console.log("checkpw in handleSubmit function", data);
-            const match = data?.match  ? data.match: false;
+            const match = data?.match ? data.match : false;
             setMatchOldPw(match);
             if (match && matchNewPw) {
                 // try to send request to update
@@ -53,14 +55,14 @@ export default function Password() {
                         "Content-type": "application/json"
                     },
                     JSON.stringify({
-                        ID: 11, // user id get from context
+                        ID: userId, // user id get from context
                         newPassword: passwordForm.newPw
                     })
                 )
                 console.log("result after update password", result);
                 navigate("/account");
             }
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }

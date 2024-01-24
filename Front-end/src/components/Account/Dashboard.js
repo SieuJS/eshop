@@ -1,20 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
+import { AuthContext } from "../../context/AuthContext";
+import Auth from "../../pages/Auth";
 
-export default function Dashboard({ userId }) {
+export default function Dashboard() {
+    const { userId } = useContext(AuthContext);
+    console.log("userID dashboard", userId);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
         async function fetchUser() {
-            try {
-                const data = await sendRequest(
-                    "/api/account/11",
-                    "GET");
-                
-                setUserInfo({...data});
-            }
-            catch (err) {
-                throw err;
+            if (userId) {
+                try {
+                    const data = await sendRequest(
+                        `/api/account/${userId}`,
+                        "GET");
+    
+                    setUserInfo({ ...data });
+                }
+                catch (err) {
+                    throw err;
+                }
             }
         }
         fetchUser();
