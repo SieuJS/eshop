@@ -59,7 +59,8 @@ module.exports = {
                 name: identifierUser.Name,
                 email: identifierUser.Email,
                 role: identifierUser.Role,
-                token: token
+                token: token,
+                permission: identifierUser.permission
             },
         });
     }
@@ -96,6 +97,7 @@ module.exports = {
                     Email: email,
                     DOB: dob,
                     Role: role,
+                    Permission: 1
                 })
             );
         } catch (err) {
@@ -129,7 +131,8 @@ module.exports = {
                 name: newUser.Name,
                 email: newUser.Email,
                 token: token,
-                role: newUser.Role
+                role: newUser.Role,
+                permission: newUser.Permission
             },
         });
     },

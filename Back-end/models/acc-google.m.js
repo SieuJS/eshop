@@ -2,12 +2,13 @@ const db = require("../utils/db");
 const pgp = require("pg-promise")({capSQL: true});
 
 module.exports = class AccountGoogle {
-    constructor({ID, Name, Email, DOB, Role}) {
+    constructor({ID, Name, Email, DOB, Role, Permission}) {
         this.ID = ID;
         this.Name = Name;
         this.Email = Email;
         this.DOB = DOB;
         this.Role = Role
+        this.Permission = Permission
     }
 
     static async getById(id) {
