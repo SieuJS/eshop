@@ -6,12 +6,7 @@ const fs = require("fs");
 const cors = require("cors");
 const https = require("https");
 const bodyParser = require("body-parser");
-const path = require('path');
-const fs = require('fs');
-const cors = require('cors')
 app.use(cors());
-const https = require('https');
-const bodyParser = require('body-parser');
 const session = require("express-session");
 const accountRoute = require("./routes/account.r.js");
 const authGoogleRoute = require("./routes/auth/auth-google.r.js");
