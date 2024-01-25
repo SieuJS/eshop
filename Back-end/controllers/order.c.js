@@ -50,11 +50,7 @@ module.exports = {
       }
       catch (e) {
         console.log(e);
-<<<<<<< HEAD
         return res.status(402).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
-=======
-        return res.status(502).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
->>>>>>> 6280ae30be8f56b2bfbcd68a6c59590e8f54862b
       }
 
       res.status(200).json({ isSuccess: true });
