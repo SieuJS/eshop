@@ -24,16 +24,7 @@ export default function ProductDetail(props) {
                     <div id="product-carousel" className="carousel slide" data-ride="carousel">
                         <div className="carousel-inner border">
                             <div className="carousel-item active">
-                                <img className="w-100 h-100" src="img/product-1.jpg" alt="Image" />
-                            </div>
-                            <div className="carousel-item">
-                                <img className="w-100 h-100" src="img/product-2.jpg" alt="Image" />
-                            </div>
-                            <div className="carousel-item">
-                                <img className="w-100 h-100" src="img/product-3.jpg" alt="Image" />
-                            </div>
-                            <div className="carousel-item">
-                                <img className="w-100 h-100" src="img/product-4.jpg" alt="Image" />
+                                <img className="w-100 h-100" src={product.Image} alt="Image" />
                             </div>
                         </div>
                         <a className="carousel-control-prev" href="#product-carousel" data-slide="prev">

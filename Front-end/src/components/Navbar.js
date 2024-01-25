@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Button } from "@mui/material";
+import { BACK_END_SERVER } from "../keys/BackEndKeys";
 
 export default function Navbar() {
     const auth = useContext(AuthContext)
     const navigate = useNavigate();
     const [showCatNav, setShowCatNav] = useState(false);
     const [showAccountOptions, setShowAccountOptions] = useState(false);
-    const { data: categories, isPending, error } = useFetch('/api/categories');
+    const { data: categories, isPending, error } = useFetch(BACK_END_SERVER + '/api/categories');
     function toggleCat() {
         setShowCatNav(prev => !prev);
     }

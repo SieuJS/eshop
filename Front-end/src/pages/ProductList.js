@@ -6,6 +6,7 @@ import usePaginationFetch from "../hooks/usePaginationFetch.js";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import {useNavigate} from 'react-router-dom'
+import {BACK_END_SERVER} from '../keys/BackEndKeys.js'
 
 export default function (props) {
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function (props) {
         params.set('page',page);
     }
     page = parseInt(page);
-    var urlFetch = `/api/search?${params.toString()}`;
+    var urlFetch = BACK_END_SERVER + `/api/search?${params.toString()}`;
 
 
     const {data: products, pages, isPending, Error} = usePaginationFetch(urlFetch);

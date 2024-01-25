@@ -5,13 +5,16 @@ import Dashboard from './pages/Admin/Dashboard'
 import CatContextProvider from './context/CatContext';
 import Landing from './pages/Admin/Landing';
 import { useState } from 'react';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
+import { Navigate } from 'react-router-dom';
 
 import AdminSidebar from './components/Admin/AdminSidebar';
 import AdminHeader from './components/Admin/AdminHeader';
 function Admin() {
 
   const [openSideBar, setOpenSideBar] = useState(true)
-
+  const auth = useContext(AuthContext);
   const closeHandler = () => {
     setOpenSideBar(false)
   } 
