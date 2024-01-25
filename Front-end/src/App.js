@@ -43,7 +43,7 @@ function App() {
           }
         >
           <Routes>
-            <Route path='/*' element={<Shop />} />
+            <Route path="/home" element={<Shop/>} />
             <Route path="/login" element={<Auth />} />
             {role == "admin" && (<Route path='/admin/*' exact element={<Admin />} />)}
             {role && role != "admin" && (
@@ -54,6 +54,7 @@ function App() {
                 <Route path="password" element={<Password />} />
               </Route>
             )}
+            <Route path='/*' element={<Shop />} />
           </Routes>
         </AuthContext.Provider>
       </BrowserRouter>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {useSelector, useDispatch} from 'react-redux'
 import cartSlice from "../redux/cartSlice";
 import { NavLink } from "react-router-dom";
@@ -61,7 +61,7 @@ export default function CartPage(props) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="align-middle">{item.Price * item.Quantity}</td>
+                                        <td className="align-middle">{item.Price * item.orderQuantity}</td>
                                         <td className="align-middle">
                                             <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({...item, orderQuantity: item.orderQuantity*-1})))}>
                                                 <i className="fa fa-times" />

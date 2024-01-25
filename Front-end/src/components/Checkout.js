@@ -5,6 +5,7 @@ import { useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery'
+import { BACK_END_SERVER } from "../keys/BackEndKeys";
 
 export default function Checkout() {
     const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function Checkout() {
 
         const userData = JSON.parse(localStorage.getItem('userData'));
         const token = userData.token;
-        fetch('/api/order/placeorder', {
+        fetch(BACK_END_SERVER + '/api/order/placeorder', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
