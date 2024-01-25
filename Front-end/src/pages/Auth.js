@@ -171,8 +171,8 @@ function Auth() {
     if (data) {
       console.log("data in auth login/signin", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
-      
-      if (data.user.role === "admin") {
+      const userRole = data.user.role.trim();
+      if (userRole == "admin") {
         navigate("/admin");
       } else {
         navigate("/");
