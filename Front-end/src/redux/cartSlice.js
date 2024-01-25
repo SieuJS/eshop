@@ -16,6 +16,9 @@ export default createSlice({
             } else {
                 state.push(action.payload);
             }
+        },
+        remove: (state,action) => {
+            state.splice(0,state.length);
         }
     }
     // switch (action.type) {
