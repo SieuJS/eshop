@@ -123,6 +123,7 @@ function Auth() {
     }
 
     let data;
+    console.log('clicked')
     if (isLoginMode) {
       try {
         data = await sendRequest(
@@ -169,10 +170,10 @@ function Auth() {
       }
     }
     if (data) {
-      console.log("data in auth login/signin", data);
+      //console.log("data in auth login/signin", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
       const userRole = data.user.role.trim();
-      if (userRole == "admin") {
+      if (userRole === "admin") {
         navigate("/admin");
       } else {
         navigate("/");

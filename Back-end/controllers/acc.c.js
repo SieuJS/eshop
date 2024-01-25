@@ -6,11 +6,11 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+
 const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
-    //console.log("userId in func getUserById", userId);
     let identifierUser;
     try {
       identifierUser = await accM.getByUserID(userId);
@@ -19,6 +19,7 @@ module.exports = {
       console.error(err)
       return next (new HttpError("Some error when find user") , 500)
     }
+    //console.log("identifier get By Id", identifierUser);
     if(!identifierUser) 
       return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
     return res.status(200).json({user : identifierUser});
@@ -119,7 +120,6 @@ module.exports = {
 
   logInHandler: async (req, res, next) => {
     const { username, password } = req.body;
-
     let identifierUser
     try {
       identifierUser = await accM.getByUsername(username);
@@ -315,5 +315,9 @@ module.exports = {
     const match = await bcrypt.compare(password, acc.Password);
     res.json({match: match});
   },
-
+  getOrders: async (req, res, next) => {
+    const userId = req.userData.userId;
+    console.log("user id in get orders func", userId);
+    
+  }
 };

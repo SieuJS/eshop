@@ -1,6 +1,8 @@
 const HttpError = require('../models/http-error')
-
+require("dotenv").config();
 const jwt = require('jsonwebtoken')
+const jwtKey = process.env.JWT_SECRET_KEY;
+
 
 module.exports = (req, res, next ) => {
 
@@ -22,6 +24,7 @@ module.exports = (req, res, next ) => {
         const decodedToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
         req.userData  =  {
             userId : decodedToken.userId,
+            role : decodedToken.role
         }  
         //req.useId = decodedToken.userId;
         console.log("userid in middleware: ", decodedToken.userId);

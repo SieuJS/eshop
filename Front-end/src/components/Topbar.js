@@ -14,7 +14,7 @@ export default function Topbar() {
             navigate(`/search?keyword=${keyword}`);
         }
         else {
-            navigate('/');
+            navigate('/search?keyword=');
         }
     }
     return (

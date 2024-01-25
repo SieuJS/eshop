@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext, useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
+import {ACCOUNT_API as accountApi} from "../../keys/BackEndKeys.js"
 
 export default function Account() {
     const { userId, role } = useContext(AuthContext);
@@ -10,8 +11,8 @@ export default function Account() {
 
     useEffect(() => {
         async function fetchUser() {
-            const pathToUser = role === "user" ? "" : "/google";
-            const apiGetAccount = `/api/account${pathToUser}/${userId}`;
+            const pathToUser = role == "user" ? "" : "/google";
+            const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
             if (userId) {
                 try {
                     const data = await sendRequest(

@@ -13,38 +13,28 @@ export default function (props) {
     const params = new URLSearchParams(curUrl);
     const _keyword = params.get('keyword') || "";
     const _catid = params.get('catid');
-    const min = params.get('min');
-    const max = params.get('max');
-    var _page = params.get('page') || 1;
-    var urlFetch = `/api/search?keyword=${_keyword}&page=${_page}`;
-    if (_catid!=null) {
-        urlFetch += `&catid=${_catid}`
+    var page = params.get('page');
+    if (page == null) {
+        page = 1;
+        params.set('page',page);
     }
-    if ( min && max) {
-        urlFetch += `&min=${min}&max=${max}`
-    }
-    const {data: products,page, pages, isPending, Error} = usePaginationFetch(urlFetch);
+    page = parseInt(page);
+    var urlFetch = `/api/search?${params.toString()}`;
+
+
+    const {data: products, pages, isPending, Error} = usePaginationFetch(urlFetch);
     
     const onPageChange = (index) => {
         params.set('page',index);
         const newURL = `${window.location.pathname}?${params.toString()}`;
         navigate(newURL);
     }
-    const handleFilterPrice = (min,max) => {
-        if (min && max) {
-            params.set('min',min);
-            params.set('max',max);
-            const newURL = `${window.location.pathname}?${params.toString()}`;
-            console.log(newURL);
-            navigate(newURL);
-        }
-    }
     const addToCart = props.addToCart;
     return (
         <>
             <Topbar />
             <Navbar />
-            {<ProductList products={products} page={page} pages={pages} min={min} max={max} onPageChange={onPageChange} handleFilterPrice={handleFilterPrice}/>}
+            {<ProductList products={products} page={page} pages={pages} onPageChange={onPageChange}/>}
         </>
     )
 }
