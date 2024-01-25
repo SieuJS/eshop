@@ -18,6 +18,7 @@ CREATE TABLE "Transaction" (
   	"Amount" int4,
 	"OrderID" int4,
 	"Status" varchar(50),
+	"Balance" int8,
 	"Date" timestamp without time zone,
 	CONSTRAINT FK_Account
 		FOREIGN KEY ("AccID")

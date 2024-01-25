@@ -46,6 +46,11 @@ module.exports = class Account {
         return data;
     }
 
+    static async updatePermission(userId, permission) {
+        const data = await db.oneOrNone(`Update "Users" Set "Permission" = $1 Where "ID" = $2`, [permission, userId]);
+        return data;
+    }
+
     static async deleteUser(username) {
         try {
             // update_user is a custome procedure of Postgresql database

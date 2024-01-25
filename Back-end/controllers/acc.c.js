@@ -318,5 +318,20 @@ module.exports = {
     const userId = req.userData.userId;
     console.log("user id in get orders func", userId);
     
-  }
+  },
+
+  banAcc: async (req, res, next) => {
+    try {
+      const userId = req.body.userId;
+      const permission = req.body.permission
+      const result = await accM.updatePermission(userId, permission);
+      res.json({
+        isSuccess: true,
+      });
+    } catch (error) {
+      console.error(err);
+      return next(new HttpError ("Some errors occurs", 500));
+    }    
+    
+  },
 };
