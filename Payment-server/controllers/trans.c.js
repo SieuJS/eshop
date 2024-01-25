@@ -26,5 +26,21 @@ module.exports = {
             console.error(error);
             return next (new HttpError("Error transaction", 500));
         }
-    }
+    },
+
+    async getTransByPage (req, res, next){
+        try {
+            const page = req.query.page || 1;
+            const userID = parseInt(req.query.userID);
+            let accID = null;
+            if (userID) {
+                accID = await accM.getIdByUserID(userID);
+            }
+            const pageSize = 7; // số dòng trên 1 trang  
+            const result = await transM.getByPage(accID, page, pageSize);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
 }
