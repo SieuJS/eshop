@@ -11,6 +11,9 @@ module.exports = class Category{
     static async getAll() {
         try {
             const data = await db.any(`SELECT * FROM "${tbName}"`);
+            console.log(
+                'ha'
+            )
             return data;
         } catch (error) {
             throw error

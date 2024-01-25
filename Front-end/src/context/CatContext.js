@@ -1,11 +1,11 @@
 import React, { createContext } from "react";
 import { useEffect, useState } from "react";
 import useFetch from "../customize/useFetch";
-
+import { BACK_END_SERVER as beUrl } from "../keys/BackEndKeys";
 export const CatContext = createContext(null);
 
 const CatContextProvider = (props) => {    
-    const { dataFetch, isLoading, isError} = useFetch(`/api/categories`);
+    const { dataFetch, isLoading, isError} = useFetch(`${beUrl}/api/categories`);
     const [allCategories, setAllCategories] = useState([]);
     useEffect(() => {
         console.log('useEffect context');

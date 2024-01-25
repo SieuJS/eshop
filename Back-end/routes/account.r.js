@@ -9,10 +9,11 @@ const checkAuth = require("../middlewares/check-auth.js");
 router.use("/google", googlePath);
 router.get("/:userId", accC.getUserById);
 router.get("/check/:username", accC.checkUsername);
-router.post("/checkpassword", checkAuth, accC.checkPassword);
+// router.post("/checkpassword", checkAuth, accC.checkPassword);
 router.post("/register", accC.signUpHandler);
 router.post("/login", accC.logInHandler);
 router.post("/update", checkAuth, accC.updateHandler);
 router.post("/delete", accC.deleteHandler);
+router.get("/:userId", accC.getUserById);
 
 module.exports = router;

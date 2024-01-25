@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom";
 import useFetch from '../../customize/useFetch';
 import usePaginationFetch from "../../hooks/usePaginationFetch";
-
+import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function AdminProduct() {
   // const navigate = useNavigate();
@@ -66,7 +66,7 @@ export default function AdminProduct() {
   const fetchData = async (page, name, sort) => {
     try {
       setIsLoading(true)
-      let proData = await fetch(`/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}&sort=${sort}`);
+      let proData = await fetch(`${beUrl}/api/product/get-by-page?catID=${catID}&page=${page}&keyword=${name}&sort=${sort}`);
       let proRes = await proData.json();
       setAllProducts(proRes.data);
       setIsLoading(false)
@@ -95,7 +95,7 @@ export default function AdminProduct() {
 
     if (confirmDelete) {
       try {
-        const result = await fetch(`/api/product/delete?proID=${proID}`);
+        const result = await fetch(`${beUrl}/api/product/delete?proID=${proID}`);
         const data = await result.json();
         if (data.success) {
           setAllProducts(allProducts.filter((item) => item.ProID !== proID));
@@ -105,9 +105,8 @@ export default function AdminProduct() {
       }
     }
   }
-
     return (
-      <div className="side-title col-sm-9">
+      <div className="side-title prod-side flex-grow-1">
           <div className="table-cards">
             <div className="cat-card card">
               <div className="card-header">
@@ -157,7 +156,7 @@ export default function AdminProduct() {
                               <td>{parseFloat(pro.Price).toLocaleString()}</td>
                               <td>{pro.Quantity}</td>
                               <td>
-                                <Link to={`/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm m-1">
+                                <Link to={`${beUrl}/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm m-1">
                                   <i className="fa fa-pencil"></i>
                                 </Link>
                                 <button href="" className="btn btn-danger btn-sm m-1" onClick={(e) => deleteRow(pro.ProID)}>

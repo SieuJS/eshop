@@ -6,11 +6,12 @@ const saltRound = 10;
 const HttpError = require("../models/http-error");
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
+
 const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
-    console.log("userId in func getUserById", userId);
+    //console.log("userId in func getUserById", userId);
     let identifierUser;
     try {
       identifierUser = await accM.getByUserID(userId);
@@ -76,6 +77,7 @@ module.exports = {
           Password: hashedPw,
           DOB: dob,
           Role: role,
+          Permission: 1 // default when create a new user
         })
       );
     } catch (err) {
@@ -110,7 +112,8 @@ module.exports = {
         username: newUser.Username,
         email: newUser.Email,
         token : token,
-        role : newUser.Role
+        role : newUser.Role,
+        permission: newUser.Permission
       },
     });
   },
@@ -162,12 +165,15 @@ module.exports = {
         username: identifierUser.Username,
         email: identifierUser.Email,
         role : identifierUser.Role,
+        permission: identifierUser.Permission,
         token : token
       },
     });
   },
 
-
+  // this function is used for updating the basic info of users by their own
+  // not by admin
+  // update permisson will use another function
   updateHandler: async (req, res, next) => {
     console.log("enter update user handler");
     console.log("userID token",  req.userData.userId);
