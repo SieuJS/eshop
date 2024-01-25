@@ -1,4 +1,5 @@
 const accGoogleModel = require("../../models/acc-google.m");
+const accM = require("../../models/acc.m");
 const HttpError = require("../../models/http-error");
 const jwt = require("jsonwebtoken");
 const jwtKey = process.env.JWT_SECRET_KEY;
@@ -8,7 +9,7 @@ module.exports = {
         const id = req.params.id;
         let identifierUser;
         try {
-            identifierUser =  await accGoogleModel.getById(id);
+            identifierUser =  await accM.getByUserID(id);
         }
         catch (err) {
             console.error(err)
@@ -21,11 +22,12 @@ module.exports = {
     },
 
     loginWithGoogle: async (req, res, next) => {
+        // check the sub == username column
         const id = req.params.id;
-        console.log("id in acc Google controller login wG function", id);
+        console.log("sub in acc Google controller login wG function", id);
         let identifierUser;
         try {
-            identifierUser = await accGoogleModel.getById(id);
+            identifierUser = await accM.getByUsername(id);
         }
         catch (err) {
             console.error(err)
@@ -38,7 +40,7 @@ module.exports = {
             token = jwt.sign(
                 {
                     userId: identifierUser.ID,
-                    username: identifierUser.Name,
+                    username: identifierUser.Username,
                     role: identifierUser.Role
                 },
                 jwtKey,
@@ -56,24 +58,24 @@ module.exports = {
             message: "Login success",
             user: {
                 id: identifierUser.ID,
-                name: identifierUser.Name,
+                username: identifierUser.username,
                 email: identifierUser.Email,
                 role: identifierUser.Role,
-                token: token,
-                permission: identifierUser.permission
+                permission: identifierUser.permission,
+                token: token
             },
         });
     }
     ,
 
     register: async (req, res, next) => {
-        const id = req.body.id;
-        console.log("sub in register func, accG controller", id);
-        const acc = await accGoogleModel.getById(id);
+        const username = req.body.username;
+        console.log("enter google register", username);
+        const acc = await accM.getByUsername(username);
         const { name, email, dob, role } = req.body;
 
         if (acc) {
-            console.log(`This user login with Google sub:'${id}' has been existed`);
+            console.log(`This user login with username aka sub:'${username}' has been existed`);
             console.log('exit')
             const error = new HttpError(
                 `This user login with Google sub:'${id}' has been existed`,
@@ -90,28 +92,30 @@ module.exports = {
         let newUser;
         let token;
         try {
-            newUser = await accGoogleModel.add(
-                new accGoogleModel({
-                    ID: id,
+            newUser = await accM.add(
+                new accM({
                     Name: name,
+                    Username: username,
                     Email: email,
+                    Password: null,
                     DOB: dob,
                     Role: role,
                     Permission: 1
                 })
             );
+            //console.log("newUser in Google register", newUser);
         } catch (err) {
             console.error(err)
             const error = new HttpError("Something wrong when register new user with Google", 500);
             return next(error);
         }
+        
         // adding token
-
         try {
             token = jwt.sign(
                 {
                     userId: newUser.ID,
-                    name: newUser.Name,
+                    username: newUser.username,
                     role
                 },
                 process.env.JWT_SECRET_KEY,
@@ -129,6 +133,7 @@ module.exports = {
             user: {
                 id: newUser.ID,
                 name: newUser.Name,
+                username: newUser.Username,
                 email: newUser.Email,
                 token: token,
                 role: newUser.Role,
@@ -141,25 +146,28 @@ module.exports = {
         console.log("userID token",  req.userData.userId);
         const userID = req.userData.userId;
         console.log("update function userid from req: ", userID);
-        const acc = await accGoogleModel.getById(userID);
+        const acc = await accM.getByUserID(userID);
         if (!acc) {
           res.json({ message: "Invalid user" });
         } else {
-          const newName = req.body.newName ? req.body.newName : null;
-          const newEmail = req.body.newEmail ? req.body.newEmail : null;
-          const newDOB = req.body.newDOB ? req.body.newDOB : null;
-          if (!newName && !newEmail && !newDOB) {
+            const newUsername = req.body.newUsername ? req.body.newUsername : null;
+            const newName = req.body.newName ? req.body.newName : null;
+            const newEmail = req.body.newEmail ? req.body.newEmail : null;
+            const newDOB = req.body.newDOB ? req.body.newDOB : null;
+          if (!newName && !newDOB) {
             next (new HttpError("You have to provide at least one new information to update"));
           }
     
           const newValues = {
             user_id: userID,
+            newUsername,
+            newPassword: null,
             newName,
             newEmail,
-            newDOB,
+            newDOB
           };
           //console.log(newValues);
-          const result = await accGoogleModel.update(newValues);
+          const result = await accM.updateUser(newValues);
           //console.log("result", result);
     
           if (result) {

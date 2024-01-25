@@ -86,7 +86,6 @@ module.exports = {
       return next(error);
     }
     // adding token
-    
     try {
       token = jwt.sign(
         {
@@ -199,7 +198,7 @@ module.exports = {
         newPassword: newPw ? await bcrypt.hash(newPw, saltRound) : null,
         newName,
         newEmail,
-        newDOB,
+        newDOB
       };
       //console.log(newValues);
       const result = await accM.updateUser(newValues);

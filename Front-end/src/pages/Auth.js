@@ -7,6 +7,7 @@ import { useForm } from "../hooks/form-hook";
 import { useHttpClient } from "../hooks/http-hook";
 import { AuthContext } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
+import {ACCOUNT_GOOGLE_API as accGoogleApi} from "../keys/BackEndKeys";
 
 import { Button } from "@mui/material"
 
@@ -29,7 +30,7 @@ function Auth() {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [isRegisterWithGoogle, setIsRegisterWithGoogle] = useState(false);
   const [googleFormData, setGoogleFormData] = useState({
-    id: 0,
+    username: "",
     email: "",
   });
 
@@ -101,13 +102,13 @@ function Auth() {
       let data;
       try {
         data = await sendRequest(
-          `/api/account/google/register`,
+          `${accGoogleApi}/register`,
           "POST",
           {
             "Content-Type": "application/json",
           },
           JSON.stringify({
-            id: googleFormData.id,
+            username: googleFormData.username,
             name: formState.inputs.name.value,
             email: googleFormData.email,
             dob: formState.inputs.dob.value,
@@ -117,8 +118,10 @@ function Auth() {
         console.log("error in register with Google", err);
       }
       console.log("data in auth register wG", data);
-      auth.login(data.user.id, data.user.role.trim(), data.user.token);
-      navigate("/");
+      if (data) {
+        auth.login(data.user.id, data.user.role.trim(), data.user.token);
+        navigate("/");
+      }
       return;
     }
 
@@ -194,7 +197,7 @@ function Auth() {
     //console.log("name from Google ", nameFromGoogle);
     //console.log("credential decoded: ", credentialDecoded);
     setGoogleFormData({
-      id: subjectIdentifier,
+      username: subjectIdentifier,
       email: email,
     });
 
@@ -202,7 +205,7 @@ function Auth() {
     // fetch user to start register or navigate to home page
     try {
       data = await sendRequest(
-        `/api/account/google/check/${subjectIdentifier}`,
+        `${accGoogleApi}/check/${subjectIdentifier}`,
         "GET",
         {
           "Content-Type": "application/json",
@@ -211,12 +214,25 @@ function Auth() {
     } catch (err) {
       console.log(err)
     }
-    console.log("data of checking existed Google OAuth", data);
     console.log("data in auth login/signin", data);
     if (data?.existed) {
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
       navigate("/");
     } else {
+      setFormData(
+        {
+          ...formState.inputs,
+          name: {
+            value: "",
+            isValid: false,
+          },
+          dob: {
+            value: "",
+            isValid: false,
+          },
+        },
+        false
+      );
       console.log("Fill out info to start using Login with Google")
       setIsLoginMode(false);
       setIsRegisterWithGoogle(true);
