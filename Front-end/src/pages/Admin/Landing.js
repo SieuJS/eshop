@@ -84,6 +84,10 @@ function Landing() {
     };
   }, [socket]);
 
+  const banHandler = (userId, permission) => {
+    setUsersData(usersData.map((user) => user.ID === userId ? {...user, Permission:permission} : user))
+  }
+
   // for pagination
   const limit = 5;
   useEffect(() => {
@@ -139,7 +143,13 @@ function Landing() {
         <div className="col-xl-6 col-lg-12">
           <div class="charts-card overflow-x-scroll">
             <h2 class="chart-title text-light">Users Board</h2>
-            <AdminTable usersData={usersData} />
+            <div className="btn-add-item d-flex">
+              <button type="button" className="btn btn-primary ms-auto">
+                  <i className="fa-solid fa-circle-plus m-1"></i>
+                  Add Account Admin
+              </button>
+            </div>
+            <AdminTable usersData={usersData} banHandler = {banHandler}/>
             <div className="card-footer d-flex justify-content-center">
               <nav aria-label="Page navigation">
                 <ul className="pagination">
