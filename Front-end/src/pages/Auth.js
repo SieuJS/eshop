@@ -166,7 +166,8 @@ function Auth() {
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             dob: formState.inputs.dob.value,
-            role: "user"
+            role: "user",
+            permission : 1
           }));
       } catch (err) {
         console.log(err)
