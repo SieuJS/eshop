@@ -1,26 +1,26 @@
 import { useContext, useEffect, useState } from "react";
-import {useSelector, useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import cartSlice from "../redux/cartSlice";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 export default function CartPage(props) {
     const disPatch = useDispatch();
     const cartItems = useSelector(state => state.cart)
-    const [cart,setCart] = useState();
+    const [cart, setCart] = useState();
     const [total, setTotal] = useState()
     useEffect(() => {
         setCart(cartItems);
-        let total =0;
+        let total = 0;
         cartItems.forEach(element => {
-            total +=element.Price * element.orderQuantity;
+            total += element.Price * element.orderQuantity;
         });
         setTotal(total);
-    },[cartItems])
+    }, [cartItems])
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
                 <div className="col-lg-8 table-responsive mb-5">
-                    <table className="table table-bordered text-center mb-0">
+                    <table className="table table-bordered text-center mb-0" style={{ "--bs-table-color": "black" }}>
                         <thead className="bg-secondary text-dark">
                             <tr>
                                 <th>Products</th>
@@ -33,10 +33,22 @@ export default function CartPage(props) {
                         <tbody className="align-middle">
                             {
                                 cart && cart.map((item) => (
-                                    <tr key={item.ProID}>
-                                        <td className="align-middle">
-                                            <img src="img/product-1.jpg" alt="" style={{ width: 50 }} />{" "}
-                                            {item.ProName}
+                                    <tr key={item.ProID} style={{borderBottom: "none", borderTop: "none"}}>
+                                        <td className="align-middle d-flex align-items-center">
+                                            <div className="item-image" >
+                                                <img 
+                                                src={item.Image}
+                                                 style={{maxWidth: "50px", maxHeight: "50px"}}
+                                                  alt="product's item"/>
+                                            </div>
+                                            <div>
+                                                <Link 
+                                                className="m-0 mx-2"
+                                                to={`/product/${item.ProID}`}
+                                                >
+                                                    {item.ProName}
+                                                </Link>
+                                            </div>
                                         </td>
                                         <td className="align-middle">{item.Price} đ</td>
                                         <td className="align-middle">
@@ -45,7 +57,7 @@ export default function CartPage(props) {
                                                 style={{ width: 100 }}
                                             >
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-minus" onClick={() => disPatch(cartSlice.actions.add({...item, orderQuantity: -1}))}>
+                                                    <button className="btn btn-sm btn-primary btn-minus" onClick={() => disPatch(cartSlice.actions.add({ ...item, orderQuantity: -1 }))}>
                                                         <i className="fa fa-minus" />
                                                     </button>
                                                 </div>
@@ -55,7 +67,7 @@ export default function CartPage(props) {
                                                     value={item.orderQuantity}
                                                 />
                                                 <div className="input-group-btn">
-                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => disPatch(cartSlice.actions.add({...item, orderQuantity: 1}))}>
+                                                    <button className="btn btn-sm btn-primary btn-plus" onClick={() => disPatch(cartSlice.actions.add({ ...item, orderQuantity: 1 }))}>
                                                         <i className="fa fa-plus" />
                                                     </button>
                                                 </div>
@@ -63,7 +75,7 @@ export default function CartPage(props) {
                                         </td>
                                         <td className="align-middle">{item.Price * item.orderQuantity}</td>
                                         <td className="align-middle">
-                                            <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({...item, orderQuantity: item.orderQuantity*-1})))}>
+                                            <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({ ...item, orderQuantity: item.orderQuantity * -1 })))}>
                                                 <i className="fa fa-times" />
                                             </button>
                                         </td>
@@ -94,7 +106,7 @@ export default function CartPage(props) {
                                 <h5 className="font-weight-bold">{total}</h5>
                             </div>
                             <NavLink to="/checkout" className="btn btn-block btn-primary my-3 py-3">
-                                    Proceed To Checkout
+                                Proceed To Checkout
                             </NavLink>
                         </div>
                     </div>
