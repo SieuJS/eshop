@@ -1,6 +1,8 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import cartSlice from '../redux/cartSlice';
 import { UseDispatch, useDispatch } from 'react-redux';
+import { ToastContainer, toast } from "react-toastify";
+
 
 export default function ProductDetail(props) {
     const disPatch = useDispatch();
@@ -11,12 +13,16 @@ export default function ProductDetail(props) {
     const handleMinusClick = () => {
         // Giảm giá trị một đơn vị, nhưng không dưới 1
         setQuantity((prevQuantity) => Math.max(prevQuantity - 1, 1));
-      };
-    
-      const handlePlusClick = () => {
+    };
+
+    const handlePlusClick = () => {
         // Tăng giá trị lên một đơn vị
         setQuantity((prevQuantity) => prevQuantity + 1);
-      };
+    };
+
+    const notify = () => {
+        toast("Đã thêm vào giỏ hàng");
+    }
     return (
         <div className="container-fluid py-5" key={product.ProID}>
             <div className="row px-xl-5">
@@ -114,7 +120,8 @@ export default function ProductDetail(props) {
                                 </button>
                             </div>
                         </div>
-                        <button className="btn btn-primary px-3" onClick={() => disPatch(cartSlice.actions.add({...product ,orderQuantity: quantity}))}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        <button className="btn btn-primary px-3" onClick={() => { disPatch(cartSlice.actions.add({ ...product, orderQuantity: quantity })); notify() }}><i className="fa fa-shopping-cart mr-1"></i> Add To Cart</button>
+                        <ToastContainer/>
                     </div>
                     <div className="d-flex pt-2">
                         <p className="text-dark font-weight-medium mb-0 mr-2">Share on:</p>

@@ -75,7 +75,11 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "There some errors occured " });
 });
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const server = https.createServer({
+    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+}, app);
 
 const io = new Server(server, {
   cors: {
@@ -149,7 +153,5 @@ server.listen(port, () => {
 //     key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
 //     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
 // }, app);
-
-// server.listen(port, () => console.log(`Secure server on port ${port}`));
 
 // server.listen(port, () => console.log(`Secure server on port ${port}`));
