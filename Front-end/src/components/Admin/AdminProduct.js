@@ -4,7 +4,7 @@ import { useParams, Link, useSearchParams, useNavigate } from "react-router-dom"
 import useFetch from '../../customize/useFetch';
 import usePaginationFetch from "../../hooks/usePaginationFetch";
 import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
-
+import "./AdminProduct.css"
 export default function AdminProduct() {
   // const navigate = useNavigate();
   const { catID } = useParams()
