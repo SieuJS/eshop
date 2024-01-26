@@ -6,7 +6,6 @@ const productM = require('../models/product.m');
 module.exports = {
     getAllCat: async (req, res, next) => {
         try {
-
             const category = await categoryM.getAll();
             res.json(category)
         } catch (error) {

@@ -16,4 +16,13 @@ module.exports = class orderDetail {
         const rs = await db.one(query);
         return rs
     }
+
+    static async getAllDetails(orderId) {
+        try {
+            const details = await db.manyOrNone(`SELECT * FROM "OrderDetails" WHERE "OrderID" = $1`, [orderId]);
+            return details;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

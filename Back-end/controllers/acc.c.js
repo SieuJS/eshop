@@ -11,7 +11,6 @@ const urlServer = process.env.SERVER_URL
 module.exports = {
   getUserById : async (req, res, next) => {
     const {userId} = req.params;
-    //console.log("userId in func getUserById", userId);
     let identifierUser;
     try {
       identifierUser = await accM.getByUserID(userId);
@@ -20,6 +19,7 @@ module.exports = {
       console.error(err)
       return next (new HttpError("Some error when find user") , 500)
     }
+    //console.log("identifier get By Id", identifierUser);
     if(!identifierUser) 
       return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
     return res.status(200).json({user : identifierUser});
@@ -86,7 +86,7 @@ module.exports = {
       return next(error);
     }
     // adding token
-    
+    console.log(newUser.ID)
     try {
       token = jwt.sign(
         {
@@ -105,21 +105,38 @@ module.exports = {
       return next(error);
     }
 
+    let secondToken;
+    try {
+      secondToken = jwt.sign({
+        message : "Creat customr"
+      },
+      process.env.JWT_SECOND,
+      {expiresIn : "1h"}
+      )
+    }catch (err){
+      const error = new HttpError (
+        'Something wrong when add jwt', 505
+      );
+      return next(error);
+    }
+
     let fetchRes;
     try {
-      fetchRes = fetch(process.env.PAYMENT_SERVER_HOST,{
+      fetchRes = await fetch(process.env.PAYMENT_SERVER_HOST+"/api/account/create",{
         method : "POST",
         headers : {
           "Content-Type": "application/json",
           "Authorization" : `Bearer ${secondToken}`
         },
         body : JSON.stringify({
-          ShopId : identifierUser.ID,
-          Balance : 3000000
+          shopId : newUser.ID,
+          balance : 3000000
         })
       })
+      
     }
     catch (err) {
+      console.log(err)
       const error = new HttpError (
         'Something wrong when create ', 505
       );
@@ -149,7 +166,6 @@ module.exports = {
 
   logInHandler: async (req, res, next) => {
     const { username, password } = req.body;
-
     let identifierUser
     try {
       identifierUser = await accM.getByUsername(username);
@@ -244,7 +260,7 @@ module.exports = {
         newPassword: newPw ? await bcrypt.hash(newPw, saltRound) : null,
         newName,
         newEmail,
-        newDOB,
+        newDOB
       };
       //console.log(newValues);
       const result = await accM.updateUser(newValues);
@@ -359,5 +375,25 @@ module.exports = {
 
     const match = await bcrypt.compare(password, acc.Password);
     res.json({match: match});
-  }
+  },
+  getOrders: async (req, res, next) => {
+    const userId = req.userData.userId;
+    console.log("user id in get orders func", userId);
+    
+  },
+
+  banAcc: async (req, res, next) => {
+    try {
+      const userId = req.body.userId;
+      const permission = req.body.permission
+      const result = await accM.updatePermission(userId, permission);
+      res.json({
+        isSuccess: true,
+      });
+    } catch (error) {
+      console.error(err);
+      return next(new HttpError ("Some errors occurs", 500));
+    }    
+    
+  },
 };

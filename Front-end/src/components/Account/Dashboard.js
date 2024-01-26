@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
+import {ACCOUNT_API as accountApi} from "../../keys/BackEndKeys.js"
 
 export default function Dashboard() {
     const { userId, role } = useContext(AuthContext);
@@ -9,13 +10,16 @@ export default function Dashboard() {
     const [userInfo, setUserInfo] = useState({});
     useEffect(() => {
         async function fetchUser() {
-            const pathToUser = role === "user" ? "" : "/google";
-            const apiGetAccount = `/api/account${pathToUser}/${userId}`;
+            const pathToUser = (role == "user" ? "" : "/google");
+            const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
+            //console.log("api get in dashboard", apiGetAccount);
             if (userId) {
                 try {
                     const data = await sendRequest(
                         apiGetAccount,
-                        "GET");
+                        "GET",
+                        { "Content-type": "application/json" });
+                    console.log("data response in dashboard", data);
                     setUserInfo({ ...data.user });
                 }
                 catch (err) {

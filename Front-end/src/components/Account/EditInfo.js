@@ -3,6 +3,7 @@ import { useHttpClient } from "../../hooks/http-hook";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
+import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
 
 export default function EditInfo() {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ export default function EditInfo() {
         async function fetchUser() {
             if (userId) {
                 const pathToUser = role === "user" ? "" : "/google";
-                const apiGetAccount = `/api/account${pathToUser}/${userId}`;
+                const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
                 console.log("editinfo component, apiGetAccount", apiGetAccount);
                 try {
                     const response = await sendRequest(
@@ -72,7 +73,7 @@ export default function EditInfo() {
         newValues.ID = userId; // newValues.ID = userID; which is gotten from context
         //console.log("token from Context", token);
         const pathToUser = role === "user" ? "" : "/google";
-        const apiPostAccount = `/api/account${pathToUser}/update`;
+        const apiPostAccount = `${accountApi}${pathToUser}/update`;
         //console.log("apiPost in Edit component ", apiPostAccount);
         const response = await sendRequest(
             apiPostAccount,
@@ -168,42 +169,6 @@ export default function EditInfo() {
                 <p className="text-warning">Click the edit button next to the field which you want to update</p>
             </div>
             <form onSubmit={handleSubmit} className="info-content">
-                {role === "user" && (
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-4 text-end">
-                                <p>Username:</p>
-                            </div>
-                            <div className="col-8">
-                                <div>
-                                    <input
-                                        type="text"
-                                        onChange={handleChange}
-                                        name="newUsername"
-                                        value={userFormData.newUsername}
-                                        style={{ width: "200px" }}
-                                        disabled={usernameBtn}
-                                        className="mr-2">
-                                    </input>
-                                    <button onClick={manageUsernameFieldEnable}
-                                        className="btn-primary">
-                                        {usernameBtn && (
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                                            </svg>
-                                        )}
-                                        {!usernameBtn && (
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                </div>
-                                {(!validNewUsername && !usernameBtn) && <p className="text-danger">* This username is in use.</p>}
-                            </div>
-                        </div>
-                    </div>
-                )}
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">
@@ -238,41 +203,42 @@ export default function EditInfo() {
                         </div>
                     </div>
                 </div>
-                <div className="container">
-                    <div className="row">
-                        <div className="col-4 text-end">
-                            <p>Email:</p>
-                        </div>
-                        <div className="col-8">
-                            <div>
-
-                                <input
-                                    type="text"
-                                    onChange={handleChange}
-                                    name="newEmail"
-                                    value={userFormData.newEmail}
-                                    style={{ width: "200px" }}
-                                    disabled={emailBtn}
-                                    className="mr-2">
-                                </input>
-                                <button onClick={manageEmailFieldEnable}
-                                    className="btn-primary">
-                                    {emailBtn && (
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                                        </svg>
-                                    )}
-                                    {!emailBtn && (
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                        </svg>
-                                    )}
-                                </button>
+                {role == "user" && (
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-4 text-end">
+                                <p>Email:</p>
                             </div>
-                            {!validNewEmail && <p className="text-danger">* Invalid email. Please try again.</p>}
+                            <div className="col-8">
+                                <div>
+                                    <input
+                                        type="text"
+                                        onChange={handleChange}
+                                        name="newEmail"
+                                        value={userFormData.newEmail}
+                                        style={{ width: "200px" }}
+                                        disabled={emailBtn}
+                                        className="mr-2">
+                                    </input>
+                                    <button onClick={manageEmailFieldEnable}
+                                        className="btn-primary">
+                                        {emailBtn && (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                                            </svg>
+                                        )}
+                                        {!emailBtn && (
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" height="24px" width="24px" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                </div>
+                                {!validNewEmail && <p className="text-danger">* Invalid email. Please try again.</p>}
+                            </div>
                         </div>
                     </div>
-                </div>
+                )}
                 <div className="container">
                     <div className="row">
                         <div className="col-4 text-end">

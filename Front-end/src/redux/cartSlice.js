@@ -8,7 +8,6 @@ export default createSlice({
             const existingItemIndex = state.findIndex(item => item.ProID === action.payload.ProID);
             if (existingItemIndex !== -1) {
                 // Nếu sản phẩm đã tồn tại, cộng thêm quantity
-                console.log(action.payload.orderQuantity);
                 state[existingItemIndex].orderQuantity += action.payload.orderQuantity;
                 if (state[existingItemIndex].orderQuantity <= 0) {
                     state.splice(existingItemIndex, 1);
@@ -16,6 +15,9 @@ export default createSlice({
             } else {
                 state.push(action.payload);
             }
+        },
+        remove: (state,action) => {
+            state.splice(0,state.length);
         }
     }
     // switch (action.type) {

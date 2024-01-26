@@ -278,6 +278,11 @@
   .page-admin .pagination{
     justify-content: center;
   }
+
+  .icon-ban:hover,
+  .icon-unban:hover{
+    cursor: pointer;
+  }
   
   .charts {
     display: grid;

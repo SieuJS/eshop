@@ -42,15 +42,15 @@ module.exports = {
         return res.status(checkPayment.status || 401).json({ isSuccess: false });
       }
       try {
-        const orderid = await orderM.insert(date,userId,total,address,phone);
+        const orderid = await orderM.insert(date, userId, total, address, phone);
         for (const product of products) {
-          let item = new orderDetailM(orderid,product);
+          let item = new orderDetailM(orderid, product);
           await orderDetailM.insert(item);
         }
       }
-      catch(e) {
+      catch (e) {
         console.log(e);
-        return res.status(402).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
+        return res.status(502).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
       }
 
       res.status(200).json({ isSuccess: true });
@@ -58,5 +58,37 @@ module.exports = {
     catch (e) {
       console.log(e);
     }
+  },
+  getOrdersHandler: async (req, res, next) => {
+    const userId = req.userData.userId;
+    ///console.log("query page in orders controller", req.query.page);
+    if(!req.query.page) {
+      const orders = await orderM.getByUserId(userId);
+      res.json({
+        total_pages: 1,
+        total: orders.length,
+        orders: orders
+      });
+      return;
+    }
+    const page = parseInt(req.query.page);
+    const per_page = parseInt(req.query.per_page);
+    const offset = (page - 1) * per_page;
+    const data = await orderM.getByPage(userId, offset, per_page);
+    const totalRow = await orderM.getTotalByUserId(userId);
+    console.log("total row", totalRow);
+    res.json({
+      total_pages: Math.ceil(totalRow/per_page),
+      total: totalRow,
+      orders: data
+    })
+  },
+  getDetail: async (req, res, next) => {
+    const orderId = req.params.orderId;
+    //console.log("orderID in get detail func", orderId);
+    const details = await orderDetailM.getAllDetails(orderId);
+    res.json({
+      detail: details
+    })
   }
 }
