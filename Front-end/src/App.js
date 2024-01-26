@@ -21,6 +21,7 @@ import Orders from "./components/Account/Orders.js";
 import Password from "./components/Account/Password.js";
 import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
+import { Navigate } from 'react-router-dom';
 function App() {
   const { login, logout, token, userId, role } = AuthHook();
   console.log("app userid", userId);
@@ -45,7 +46,6 @@ function App() {
           <Routes>
             <Route path='/*' element={<Shop />} />
             <Route path="/login" element={<Auth />} />
-            <Route path='/admin/*' exact element={<Admin />} />
             {role == "admin" && (<Route path='/admin/*' exact element={<Admin />} />)}
             {role && role != "admin" && (
               <Route path="account" element={<AccountLayout />}>
@@ -55,6 +55,7 @@ function App() {
                 <Route path="password" element={<Password />} />
               </Route>
             )}
+            <Route path='/*' element={<Navigate to = "/" replace = {true} />} />
           </Routes>
         </AuthContext.Provider>
       </BrowserRouter>

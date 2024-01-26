@@ -4,7 +4,7 @@ const checkAuth = require('../middlewares/check-auth')
 const jwt = require("jsonwebtoken")
 const paymentKey = process.env.JWT_SECOND;
 const HttpError = require('../models/http-error')
-
+const AdminC = require('../controllers/admin.c')
 const accC = require('../controllers/acc.c')
 router.get('/', (req, res) => {
     res.json({message : "admin"});
@@ -29,5 +29,7 @@ router.get("/token", (req, res) => {
     }
     res.json({message : "Create token succes" , token })
 })
+
+router.post("/changePassword",checkAuth,AdminC.changePassword)
 
 module.exports = router;

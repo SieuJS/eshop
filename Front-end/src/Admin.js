@@ -5,10 +5,14 @@ import Dashboard from './pages/Admin/Dashboard'
 import CatContextProvider from './context/CatContext';
 import Landing from './pages/Admin/Landing';
 import { useState } from 'react';
+import { useContext } from 'react';
 
+import { AuthContext } from './context/AuthContext';
 import CrudAccount from './pages/Admin/CrudAccount';
 import AdminSidebar from './components/Admin/AdminSidebar';
 import AdminHeader from './components/Admin/AdminHeader';
+
+import { Navigate } from 'react-router-dom';
 function Admin() {
 
   const [openSideBar, setOpenSideBar] = useState(true)
@@ -16,13 +20,14 @@ function Admin() {
   const closeHandler = () => {
     setOpenSideBar(false)
   } 
-
+  const auth = useContext(AuthContext)
   const toggleHandler = () => {
     setOpenSideBar(prev => !prev)
   }
 
 
   return (
+    <>
     <div className='admin-container page-admin d-flex'>
     <AdminSidebar show = {openSideBar} onClose = {closeHandler}/>
     <div className='flex-grow-1 overflow-x-scroll'>
@@ -40,6 +45,7 @@ function Admin() {
       </main>
       </div>
     </div>
+    </>
   );
 }
 

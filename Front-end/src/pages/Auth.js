@@ -9,7 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 
 import { Button } from "@mui/material"
-
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_REQUIRE,
@@ -121,9 +121,8 @@ function Auth() {
       navigate("/");
       return;
     }
-
-    let data;
     console.log('clicked')
+    let data
     if (isLoginMode) {
       try {
         data = await sendRequest(
@@ -169,18 +168,17 @@ function Auth() {
         console.log(err)
       }
     }
-    if (data) {
-      console.log("data in auth login/signin", data);
-      auth.login(data.user.id, data.user.role.trim(), data.user.token);
-      
-      if (data.user.role === "admin") {
-        navigate("/admin");
-      } else {
-        navigate("/");
-      }
-      // navigate("/");
-    } else {
+      if(data)
+      {
+        auth.login(data.user.id, data.user.role.trim(), data.user.token);
+        
+        if (data.user.role.trim() === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/");
+        }
     }
+      // navigate("/");
   };
 
   async function handleGoogleOAuthBtn(credentialResponse) {
@@ -197,7 +195,6 @@ function Auth() {
       id: subjectIdentifier,
       email: email,
     });
-
     let data;
     // fetch user to start register or navigate to home page
     try {
@@ -224,6 +221,8 @@ function Auth() {
   }
 
   return (
+    <>
+    {isLoading && <ClipLoader/>}
     <section className="vh-100" style={{ backgroundColor: " #9A616D" }}>
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -417,6 +416,7 @@ function Auth() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 

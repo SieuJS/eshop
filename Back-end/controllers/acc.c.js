@@ -104,6 +104,35 @@ module.exports = {
       );
       return next(error);
     }
+
+    let fetchRes;
+    try {
+      fetchRes = fetch(process.env.PAYMENT_SERVER_HOST,{
+        method : "POST",
+        headers : {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${secondToken}`
+        },
+        body : JSON.stringify({
+          ShopId : identifierUser.ID,
+          Balance : 3000000
+        })
+      })
+    }
+    catch (err) {
+      const error = new HttpError (
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+    
+    if(!fetchRes.ok){
+      const error = new HttpError (
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+
     res.status(201).json({
       message: "Register new account successfully",
       user: {
@@ -152,7 +181,22 @@ module.exports = {
     } catch(err) {
       console.err(err)
       const error = new HttpError (
-        'Something wrong when add jwt', 500
+        'Something wrong when add jwt', 505
+      );
+      return next(error);
+    }
+
+    let secondToken;
+    try {
+      secondToken = jwt.sign({
+        message : "Creat customr"
+      },
+      process.env.JWT_SECOND,
+      {expiresIn : "1h"}
+      )
+    }catch (err){
+      const error = new HttpError (
+        'Something wrong when add jwt', 505
       );
       return next(error);
     }
