@@ -86,6 +86,7 @@ module.exports = {
       return next(error);
     }
     // adding token
+    console.log(newUser.ID)
     try {
       token = jwt.sign(
         {
@@ -103,6 +104,52 @@ module.exports = {
       );
       return next(error);
     }
+
+    let secondToken;
+    try {
+      secondToken = jwt.sign({
+        message : "Creat customr"
+      },
+      process.env.JWT_SECOND,
+      {expiresIn : "1h"}
+      )
+    }catch (err){
+      const error = new HttpError (
+        'Something wrong when add jwt', 505
+      );
+      return next(error);
+    }
+
+    let fetchRes;
+    try {
+      fetchRes = await fetch(process.env.PAYMENT_SERVER_HOST+"/api/account/create",{
+        method : "POST",
+        headers : {
+          "Content-Type": "application/json",
+          "Authorization" : `Bearer ${secondToken}`
+        },
+        body : JSON.stringify({
+          shopId : newUser.ID,
+          balance : 3000000
+        })
+      })
+      
+    }
+    catch (err) {
+      console.log(err)
+      const error = new HttpError (
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+    
+    if(!fetchRes.ok){
+      const error = new HttpError (
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+
     res.status(201).json({
       message: "Register new account successfully",
       user: {
