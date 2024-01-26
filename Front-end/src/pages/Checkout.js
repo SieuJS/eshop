@@ -8,7 +8,7 @@ export default function (props) {
         <>
             <Topbar />
             <Navbar />
-            <PageHeader />
+            <PageHeader title={"Shop Checkout"}/>
             <Checkout />
         </>
     )

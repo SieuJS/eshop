@@ -8,7 +8,7 @@ export default function Cart(props) {
         <>
             <Topbar />
             <Navbar />
-            <PageHeader />
+            <PageHeader title={"Shop Cart"} />
             <CartPage />
         </>
     )
