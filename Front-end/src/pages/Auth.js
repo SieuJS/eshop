@@ -9,7 +9,9 @@ import { AuthContext } from "../context/AuthContext";
 import { GoogleLogin } from "@react-oauth/google";
 import {ACCOUNT_GOOGLE_API as accGoogleApi} from "../keys/BackEndKeys";
 
-import { Button } from "@mui/material"
+import Modal from "@mui/material/Modal";
+import { Backdrop, Typography, Fade, Box,Button} from "@mui/material";
+
 import ClipLoader from "react-spinners/ClipLoader";
 import {
   VALIDATOR_EMAIL,
@@ -23,6 +25,20 @@ import {
   SIGN_UP_API as apiSignup,
 } from "../keys/BackEndKeys";
 
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+
 function Auth() {
   const navigate = useNavigate();
   const auth = useContext(AuthContext);
@@ -33,6 +49,11 @@ function Auth() {
     username: "",
     email: "",
   });
+
+  const handleClose = () => {
+    clearError();
+  }
+
 
   const [formState, inputHandler, setFormData] = useForm(
     {
@@ -172,6 +193,7 @@ function Auth() {
         console.log(err)
       }
     }
+    
     if (data) {
       //console.log("data in auth login/signin", data);
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
@@ -242,6 +264,30 @@ function Auth() {
     <>
     {isLoading && <ClipLoader/>}
     <section className="vh-100" style={{ backgroundColor: " #9A616D" }}>
+      {error && <Modal
+        open = {!!error}
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in = {!!error}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Authentication failed
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+               {error ? error : ""}
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>}
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col col-xl-10">
@@ -389,6 +435,7 @@ function Auth() {
                           className="btn btn-dark btn-lg btn-block"
                           onClick={authSubmitHandler}
                           variant="contained"
+                          disabled = {!formState.isValid}
                         >
                           {isLoginMode ? "Login" : "Register"}
                         </Button>

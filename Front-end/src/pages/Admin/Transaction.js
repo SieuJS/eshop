@@ -41,8 +41,6 @@ function Transaction() {
     
     setOpenSuccessModal(false);
     clearError();
-
-
   }
 
 // useEffect(() => {
