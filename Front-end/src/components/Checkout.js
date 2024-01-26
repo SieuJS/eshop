@@ -1,13 +1,12 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import cartSlice from "../redux/cartSlice"
-import { useState } from "react";
-import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery'
 import { BACK_END_SERVER } from "../keys/BackEndKeys";
 
 export default function Checkout() {
+    const disPatch = useDispatch();
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
     var total = 0;
@@ -31,7 +30,6 @@ export default function Checkout() {
         }
         data.products = products;
         data.total = total;
-        console.log(data);
 
         const userData = JSON.parse(localStorage.getItem('userData'));
         const token = userData.token;
@@ -48,7 +46,9 @@ export default function Checkout() {
         })
         .then((data) => {
             if (data.isSuccess) {
+                disPatch(cartSlice.actions.remove());
                 alert("DAT HANG THANH CONG",data.message)
+                navigate('/');
             }
             else {
                 alert("DAT HANG KHONG THANH CONG",data.message);

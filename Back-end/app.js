@@ -1,3 +1,4 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -145,6 +146,7 @@ io.use((socket, next) => {
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
 // app.listen(port, () => {
 //     console.log(`Listening on port ${port}`);
 // })
