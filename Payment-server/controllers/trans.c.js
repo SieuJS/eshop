@@ -36,6 +36,7 @@ module.exports = {
             if (userID) {
                 accID = await accM.getIdByUserID(userID);
             }
+            console.log(accID, page)
             const pageSize = 7; // số dòng trên 1 trang  
             const result = await transM.getByPage(accID, page, pageSize);
             res.json(result);
