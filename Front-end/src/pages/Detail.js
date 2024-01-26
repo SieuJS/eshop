@@ -10,14 +10,14 @@ import { BACK_END_SERVER } from "../keys/BackEndKeys.js";
 
 export default function Detail(props) {
     const {proid} = useParams();
-    const {data, isPending, Error} = useFetch(BACK_END_SERVER + `/api/product/${proid}`);
+    const {data: product, isPending, Error} = useFetch(BACK_END_SERVER + `/api/product/${proid}`);
     return (
         <>
             <Topbar />
             <Navbar />
             <PageHeader />
-            {data && <ProductDetail data= {data}/>}
-            <SameProduct/>
+            {product && <ProductDetail data= {product}/>}
+            {product && <SameProduct proid = {proid}/>}
         </>
     );
 };

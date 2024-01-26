@@ -2,6 +2,8 @@ const orderM = require('../models/order.m')
 const orderDetailM = require('../models/orderDetail.m')
 const jwt = require('jsonwebtoken')
 const jwtSecondKey = process.env.JWT_SECOND
+require('dotenv').config()
+const paymentServerURL = process.env.PAYMENT_SERVER_HOST
 
 module.exports = {
   placeOrder: async (req, res, next) => {
@@ -31,7 +33,7 @@ module.exports = {
         return next(error);
       }
       //Gọi fetch kiểm tra bên server phụ
-      const checkPayment = await fetch('http://localhost:5001/api/trans', {
+      const checkPayment = await fetch(paymentServerURL + '/api/trans', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -50,7 +52,7 @@ module.exports = {
       }
       catch (e) {
         console.log(e);
-        return res.status(502).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
+        return res.status(502).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
       }
 
       res.status(200).json({ isSuccess: true });
@@ -62,7 +64,7 @@ module.exports = {
   getOrdersHandler: async (req, res, next) => {
     const userId = req.userData.userId;
     ///console.log("query page in orders controller", req.query.page);
-    if(!req.query.page) {
+    if (!req.query.page) {
       const orders = await orderM.getByUserId(userId);
       res.json({
         total_pages: 1,
@@ -78,7 +80,7 @@ module.exports = {
     const totalRow = await orderM.getTotalByUserId(userId);
     console.log("total row", totalRow);
     res.json({
-      total_pages: Math.ceil(totalRow/per_page),
+      total_pages: Math.ceil(totalRow / per_page),
       total: totalRow,
       orders: data
     })

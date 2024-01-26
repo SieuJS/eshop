@@ -31,13 +31,13 @@ module.exports = {
     async getTransByPage (req, res, next){
         try {
             const page = req.query.page || 1;
+            let perPage = (req.query.per_page ? parseInt(req.query.per_page) : 7);
             const userID = parseInt(req.query.userID);
             let accID = null;
             if (userID) {
                 accID = await accM.getIdByUserID(userID);
             }
-            console.log(accID, page)
-            const pageSize = 7; // số dòng trên 1 trang  
+            const pageSize = perPage; // số dòng trên 1 trang  
             const result = await transM.getByPage(accID, page, pageSize);
             res.json(result);
         } catch (error) {

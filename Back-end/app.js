@@ -1,3 +1,4 @@
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 require("dotenv").config();
 const express = require("express");
 const app = express();
@@ -61,6 +62,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 app.use("/api/admin", adminRoute);
 app.use('/api/order',orderRoute)
+app.use("/api/trans", require("./routes/transaction.r.js"));
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search", searchC.search);
@@ -75,7 +77,11 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "There some errors occured " });
 });
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
+const server = https.createServer({
+    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+}, app);
 
 const io = new Server(server, {
   cors: {
@@ -141,6 +147,7 @@ io.use((socket, next) => {
 server.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
+
 // app.listen(port, () => {
 //     console.log(`Listening on port ${port}`);
 // })
@@ -149,7 +156,5 @@ server.listen(port, () => {
 //     key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
 //     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
 // }, app);
-
-// server.listen(port, () => console.log(`Secure server on port ${port}`));
 
 // server.listen(port, () => console.log(`Secure server on port ${port}`));
