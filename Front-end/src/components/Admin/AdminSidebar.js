@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
 import './AdminSidebar.css'
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { Button } from '@mui/material';
 export default function AdminSidebar(props) {
-
-
+    const auth = useContext(AuthContext)
+    const navigate = useNavigate()
     return (  
     <aside id="sidebar " className={ + props.show ? "" : "hide"} >
             <div className="sidebar-title">
@@ -29,8 +31,8 @@ export default function AdminSidebar(props) {
                 </NavLink>
             </li>
             <li className="sidebar-list-item" >
-                <NavLink to="/admin/customers" target="_blank" className={"sidebar-navlink"}>
-                <span className="material-icons-outlined">groups</span> Customers
+                <NavLink to="/admin/accounts" className={"sidebar-navlink"}>
+                <span className="material-icons-outlined">groups</span> Accounts
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
@@ -39,14 +41,17 @@ export default function AdminSidebar(props) {
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/"className={"sidebar-navlink"}>
-                <span className="material-icons-outlined">poll</span> Reports
+                <NavLink to="/admin/transactions"className={"sidebar-navlink"}>
+                <span className="material-icons-outlined">poll</span> Transaction
                 </NavLink>
             </li>
             <li className="sidebar-list-item">
-                <NavLink to="/"  className={"sidebar-navlink"}>
-                <span className="material-icons-outlined">settings</span> Settings
-                </NavLink>
+                <Button className={"sidebar-navlink"} onClick={()=> {
+                    auth.logout();
+                    navigate('/')
+                }}>
+                <span className="material-icons-outlined">settings</span> Log out
+                </Button>
             </li>
             </ul>
         </aside> 

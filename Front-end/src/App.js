@@ -22,10 +22,14 @@ import Password from "./components/Account/Password.js";
 import Transaction from './components/Account/Transaction.js';
 import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
+import { Navigate } from 'react-router-dom';
 function App() {
-  const { login, logout, token, userId, role } = AuthHook();
-  console.log("app userid", userId);
-  console.log("role in app", role);
+  const [ login, logout, token, userId, role ] = AuthHook();
+  useEffect(() =>{
+    console.log("app userid", userId);
+    console.log("role in app", role);
+  }, [])
+
 
   return (
     <>
@@ -44,9 +48,12 @@ function App() {
         >
           <Routes>
             <Route path="/home" element={<Shop/>} />
-            <Route path="/login" element={<Auth />} />
-            {role == "admin" && (<Route path='/admin/*' exact element={<Admin />} />)}
-            {role && role != "admin" && (
+            {
+              !token &&
+            <Route path="/login" element={<Auth/>} />
+            }
+            {role === "admin" && (<Route path='/admin/*' element={<Admin />} />)}
+            {role && role !== "admin" && (
               <Route path="account" element={<AccountLayout />}>
                 <Route index element={<AccountDashboard />} />
                 <Route path="editinfo" element={<EditInfo />} />
