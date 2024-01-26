@@ -32,12 +32,12 @@ module.exports = {
       }
       //Gọi fetch kiểm tra bên server phụ
       const checkPayment = await fetch('http://localhost:5001/api/trans', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        })
       if (!checkPayment.ok) {
         return res.status(checkPayment.status || 401).json({ isSuccess: false });
       }
@@ -50,7 +50,7 @@ module.exports = {
       }
       catch (e) {
         console.log(e);
-        return res.status(502).json({isSuccess: false, message: "Lỗi khi thêm dữ liệu"});
+        return res.status(502).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
       }
 
       res.status(200).json({ isSuccess: true });
@@ -62,7 +62,7 @@ module.exports = {
   getOrdersHandler: async (req, res, next) => {
     const userId = req.userData.userId;
     ///console.log("query page in orders controller", req.query.page);
-    if(!req.query.page) {
+    if (!req.query.page) {
       const orders = await orderM.getByUserId(userId);
       res.json({
         total_pages: 1,
@@ -78,7 +78,7 @@ module.exports = {
     const totalRow = await orderM.getTotalByUserId(userId);
     console.log("total row", totalRow);
     res.json({
-      total_pages: Math.ceil(totalRow/per_page),
+      total_pages: Math.ceil(totalRow / per_page),
       total: totalRow,
       orders: data
     })

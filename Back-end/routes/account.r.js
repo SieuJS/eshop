@@ -17,5 +17,6 @@ router.post("/delete", accC.deleteHandler);
 router.get("/:userId", accC.getUserById);
 router.get("/orders", checkAuth, accC.getOrders);
 router.post("/ban", accC.banAcc);
+router.get("/get-balance/:userId", checkAuth, accC.getBalance);
 
 module.exports = router;

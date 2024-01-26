@@ -61,6 +61,7 @@ app.use("/api/categories", categoryRoute);
 app.use("/api/product", productRoute);
 app.use("/api/admin", adminRoute);
 app.use('/api/order',orderRoute)
+app.use("/api/trans", require("./routes/transaction.r.js"));
 //app.use("/auth", authGoogleRoute);
 
 app.use("/api/search", searchC.search);

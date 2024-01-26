@@ -24,5 +24,14 @@ module.exports = {
 
     async getAll (req, res, next) {
         res.json({message : "get"})
+    },
+
+    async getBalance(req, res, next) {
+        const shopID = req.params.id;
+        const balance = await accM.getBalanceByShopID(shopID);
+        res.json({
+            shop_id: shopID,
+            balance: balance
+        })
     }
 }
