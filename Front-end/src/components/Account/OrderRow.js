@@ -18,7 +18,7 @@ export default function OrderRow({ anOrder, count }) {
                     }
                 );
                 setDetails(data.detail);
-                console.log("Detail in order row", data.detail);
+                //console.log("Detail in order row", data.detail);
             } catch (err) {
                 console.log("error in order row", err);
             }

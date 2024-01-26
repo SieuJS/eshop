@@ -12,7 +12,7 @@ export default function Dashboard() {
         async function fetchUser() {
             const pathToUser = (role == "user" ? "" : "/google");
             const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
-            console.log("api get in dashboard", apiGetAccount);
+            //console.log("api get in dashboard", apiGetAccount);
             if (userId) {
                 try {
                     const data = await sendRequest(

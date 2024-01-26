@@ -59,18 +59,33 @@ module.exports = {
       console.log(e);
     }
   },
-  getAllOrders: async (req, res, next) => {
+  getOrdersHandler: async (req, res, next) => {
     const userId = req.userData.userId;
-    //console.log("userid in getAllOrders func", userId);
-    const orders = await orderM.getByUserId(userId);
-    ///console.log("orders in controller get all func", orders);
+    ///console.log("query page in orders controller", req.query.page);
+    if(!req.query.page) {
+      const orders = await orderM.getByUserId(userId);
+      res.json({
+        total_pages: 1,
+        total: orders.length,
+        orders: orders
+      });
+      return;
+    }
+    const page = parseInt(req.query.page);
+    const per_page = parseInt(req.query.per_page);
+    const offset = (page - 1) * per_page;
+    const data = await orderM.getByPage(userId, offset, per_page);
+    const totalRow = await orderM.getTotalByUserId(userId);
+    console.log("total row", totalRow);
     res.json({
-      orders: orders
-    });
+      total_pages: Math.ceil(totalRow/per_page),
+      total: totalRow,
+      orders: data
+    })
   },
   getDetail: async (req, res, next) => {
     const orderId = req.params.orderId;
-    console.log("orderID in get detail func", orderId);
+    //console.log("orderID in get detail func", orderId);
     const details = await orderDetailM.getAllDetails(orderId);
     res.json({
       detail: details

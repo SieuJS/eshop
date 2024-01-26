@@ -19,13 +19,13 @@ import AccountLayout from './pages/AccountLayout.js';
 import AccountDashboard from "./components/Account/Dashboard.js"
 import Orders from "./components/Account/Orders.js";
 import Password from "./components/Account/Password.js";
+import Transaction from './components/Account/Transaction.js';
 import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
 function App() {
   const { login, logout, token, userId, role } = AuthHook();
   console.log("app userid", userId);
   console.log("role in app", role);
-  //const [routes, setRoutes] = useState({});
 
   return (
     <>
@@ -52,6 +52,7 @@ function App() {
                 <Route path="editinfo" element={<EditInfo />} />
                 <Route path="orders" element={<Orders />} />
                 <Route path="password" element={<Password />} />
+                <Route path="transaction" element={<Transaction />} />
               </Route>
             )}
             <Route path='/*' element={<Shop />} />

@@ -3,25 +3,47 @@ import { useHttpClient } from "../../hooks/http-hook.js"
 import { AuthContext } from "../../context/AuthContext.js";
 import { ORDERS_API as ordersApi } from "../../keys/BackEndKeys.js";
 import OrderRow from "./OrderRow.js";
+import ReactPaginate from "react-paginate";
 
 export default function Orders() {
+    const perPage = 5;
     const { sendRequest } = useHttpClient();
     const { token } = useContext(AuthContext);
     const [orderList, setOrderList] = useState([]);
+    const [currentPageIndex, setCurrentPageIndex] = useState(0);
+    const [totalPage, setTotalPage] = useState(0);
+
     useEffect(() => {
-        async function fetchOrders() {
-            const orders = await sendRequest(
-                ordersApi,
-                "GET",
-                {
-                    "Content-type": "application/json",
-                    "Authorization": `Bear ${token}`
-                });
-            console.log("orders ", orders.orders);
-            setOrderList(orders.orders);
-        }
-        fetchOrders();
+        fetchOrders(1);
     }, []);
+
+    async function fetchOrders(page) {
+        let apiPageRequest = ordersApi;
+        if (page > 0) {
+            apiPageRequest += `?page=${page}&per_page=5`;
+        }
+        console.log("api page request", apiPageRequest);
+        const orders = await sendRequest(
+            apiPageRequest,
+            "GET",
+            {
+                "Content-type": "application/json",
+                "Authorization": `Bear ${token}`
+            });
+        console.log("orders ", orders);
+        setOrderList(orders.orders);
+        setTotalPage(orders.total_pages);
+    }
+
+    function handlePageClick(event) {
+        const pageCliked = event.selected + 1; 
+        setCurrentPageIndex(event.selected);
+        console.log("handler page click", event);
+        fetchOrders(pageCliked);
+    }
+
+    console.log("perPage & currentPI", {pp: perPage, cPI: currentPageIndex});
+
     return (
         <>
             <div className="info-title mb-4">
@@ -30,7 +52,7 @@ export default function Orders() {
 
 
             <div className="bg-white w-100">
-                <table class="table table-striped" style={{ "--bs-table-color": "black" }}>
+                <table className="table table-striped" style={{ "--bs-table-color": "black" }}>
                     <thead>
                         <tr className="text-center">
                             <th scope="col" style={{ width: "5%" }}>N.o</th>
@@ -41,11 +63,27 @@ export default function Orders() {
                         </tr>
                     </thead>
                     <tbody>
-                        {orderList.length > 0 &&  orderList.map((order, index) => (
-                            <OrderRow anOrder = {{...order}} count={index+1} />
+                        {orderList.length > 0 && orderList.map((order, index) => (
+                            <OrderRow anOrder={{ ...order }} count={index + currentPageIndex*perPage + 1} />
                         ))}
-                   </tbody>
+                    </tbody>
                 </table>
+                <ReactPaginate
+                    breakLabel="..."
+                    nextLabel=" >"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={3}
+                    pageCount={totalPage}
+                    previousLabel="< "
+                    containerClassName="pagination justify-content-center"
+                    pageClassName="page-item"
+                    pageLinkClassName="page-link"
+                    previousClassName="page-item"
+                    previousLinkClassName="page-link"
+                    nextClassName="page-item"
+                    nextLinkClassName="page-link"
+                    activeClassName="active"
+                />
             </div>
         </>
     );
