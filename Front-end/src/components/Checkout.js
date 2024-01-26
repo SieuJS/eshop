@@ -15,11 +15,17 @@ export default function Checkout() {
     });
     const handlePlaceOrder = (products, total) => {  //Lưu ý: Trong mỗi product có thêm thuộc tính orderQuantity: số lượng sản phẩm này được mua
         //Kiểm tra xem còn đủ hàng không
+        let check = 1;
         products.forEach(product => {
             if (product.Quantity < product.orderQuantity) {
-                return alert(`Số lượng sản phẩm ${product.ProName} còn lại trong kho là ${product.Quantity}. Mong bạn đặt lại`)
+                alert(`Số lượng sản phẩm ${product.ProName} còn lại trong kho là ${product.Quantity}. Mong bạn đặt lại`);
+                check = 0;
+                return;
             }
         })
+        if (check==0) {
+            return;
+        }
 
         const data = {};
         data.info = {

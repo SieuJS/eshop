@@ -19,7 +19,7 @@ BEGIN
         END IF;
 		
 		-- Trừ số dư của người gửi
-		UPDATE "Account" SET "Balance" = "Balance" - amount WHERE "AccID" = sender_id;
+		UPDATE "Account" SET "Balance" = "Balance" - amount WHERE "AccID" = sender_id RETURNING "Balance" INTO sender_balance;
 		
 		-- Kiểm tra xem có cập nhật không
 		IF NOT FOUND THEN
@@ -27,12 +27,19 @@ BEGIN
 		END IF;
 
 		-- Cộng số dư cho người nhận
-		UPDATE "Account" SET "Balance" = "Balance" + amount WHERE "AccID" = receiver_id;
+		UPDATE "Account" SET "Balance" = "Balance" + amount WHERE "AccID" = receiver_id RETURNING "Balance" INTO receiver_balance;
 		
 		-- Kiểm tra xem có cập nhật không
 		IF NOT FOUND THEN
 			RAISE EXCEPTION 'Balance does not update. Transfer failed.';
 		END IF;
+		
+		-- Ghi log giao dịch
+		INSERT INTO "Transaction" ("AccID", "Amount", "OrderID", "Status", "Balance", "Date")
+		VALUES (sender_id, -amount, 1, 'success', sender_balance, CURRENT_TIMESTAMP);
+
+		INSERT INTO "Transaction" ("AccID", "Amount", "OrderID", "Status", "Balance", "Date")
+		VALUES (receiver_id, amount, 1, 'success' , receiver_balance, CURRENT_TIMESTAMP);
 		
 	EXCEPTION
         WHEN others THEN
@@ -43,5 +50,3 @@ BEGIN
 	COMMIT;
 END;
 $$;
-
-call proc_transaction(3,1,100)

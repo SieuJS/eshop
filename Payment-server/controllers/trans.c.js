@@ -14,12 +14,11 @@ module.exports = {
             // const { id, orderID, amount } = req.body
 
             const data = await transM.transaction(id, amount);
-            const res1 = await transM.saveTrans(id, 1, amount, 1);
 
             res.json({message : "The transaction is success"})
         } catch (error) {
             try {
-                const res2 = await transM.saveTrans(id, 1, amount, 0);
+                const res1 = await transM.saveTrans(id, 1, amount);
             } catch (error2) {
                 console.log(error2);
                 return next (new HttpError("Error transaction", 500));
@@ -27,5 +26,22 @@ module.exports = {
             console.error(error);
             return next (new HttpError("Error transaction", 500));
         }
-    }
+    },
+
+    async getTransByPage (req, res, next){
+        try {
+            const page = req.query.page || 1;
+            let perPage = (req.query.per_page ? parseInt(req.query.per_page) : 7);
+            const userID = parseInt(req.query.userID);
+            let accID = null;
+            if (userID) {
+                accID = await accM.getIdByUserID(userID);
+            }
+            const pageSize = perPage; // số dòng trên 1 trang  
+            const result = await transM.getByPage(accID, page, pageSize);
+            res.json(result);
+        } catch (error) {
+            next(error);
+        }
+    },
 }

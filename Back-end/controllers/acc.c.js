@@ -9,42 +9,42 @@ const jwtKey = process.env.JWT_SECRET_KEY;
 
 const urlServer = process.env.SERVER_URL
 module.exports = {
-  getUserById : async (req, res, next) => {
-    const {userId} = req.params;
-    //console.log("userId in func getUserById", userId);
+  getUserById: async (req, res, next) => {
+    const { userId } = req.params;
     let identifierUser;
     try {
       identifierUser = await accM.getByUserID(userId);
     }
-    catch(err) {
+    catch (err) {
       console.error(err)
-      return next (new HttpError("Some error when find user") , 500)
+      return next(new HttpError("Some error when find user"), 500)
     }
-    if(!identifierUser) 
-      return next(new HttpError("Can not find use with provide id: "+ userId, 404 ));
-    return res.status(200).json({user : identifierUser});
+    //console.log("identifier get By Id", identifierUser);
+    if (!identifierUser)
+      return next(new HttpError("Can not find use with provide id: " + userId, 404));
+    return res.status(200).json({ user: identifierUser });
   },
 
-  checkUsername : async (req, res, next) => {
-    const {username} = req.params;
-    let identifierUser ;
+  checkUsername: async (req, res, next) => {
+    const { username } = req.params;
+    let identifierUser;
     try {
       identifierUser = await accM.getByUsername(username);
     }
-    catch(err) {
+    catch (err) {
       console.error(err)
-      return next (new HttpError("Some error when find user") , 500)
+      return next(new HttpError("Some error when find user"), 500)
     }
-    if(!identifierUser) 
-      return res.json({valid: false});
-    return res.status(200).json({user : identifierUser, valid: true});
+    if (!identifierUser)
+      return res.json({ valid: false });
+    return res.status(200).json({ user: identifierUser, valid: true });
   },
 
 
   signUpHandler: async (req, res, next) => {
 
     const un = req.body.username;
-    
+
     const acc = await accM.getByUsername(un);
     const { name, email, password, dob, role } = req.body;
 
@@ -86,24 +86,70 @@ module.exports = {
       return next(error);
     }
     // adding token
-    
+    console.log(newUser.ID)
     try {
       token = jwt.sign(
         {
-          userId : newUser.ID, 
-          username : newUser.Username,
+          userId: newUser.ID,
+          username: newUser.Username,
           role
         },
         jwtKey,
-        {expiresIn : "1h"}
+        { expiresIn: "1h" }
       );
-    } catch(err) {
+    } catch (err) {
       console.error(err)
-      const error = new HttpError (
+      const error = new HttpError(
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
+
+    let secondToken;
+    try {
+      secondToken = jwt.sign({
+        message: "Creat customr"
+      },
+        process.env.JWT_SECOND,
+        { expiresIn: "1h" }
+      )
+    } catch (err) {
+      const error = new HttpError(
+        'Something wrong when add jwt', 505
+      );
+      return next(error);
+    }
+
+    let fetchRes;
+    try {
+      fetchRes = await fetch(process.env.PAYMENT_SERVER_HOST + "/api/account/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${secondToken}`
+        },
+        body: JSON.stringify({
+          shopId: newUser.ID,
+          balance: 3000000
+        })
+      })
+
+    }
+    catch (err) {
+      console.log(err)
+      const error = new HttpError(
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+
+    if (!fetchRes.ok) {
+      const error = new HttpError(
+        'Something wrong when create ', 505
+      );
+      return next(error);
+    }
+
     res.status(201).json({
       message: "Register new account successfully",
       user: {
@@ -111,8 +157,8 @@ module.exports = {
         name: newUser.Name,
         username: newUser.Username,
         email: newUser.Email,
-        token : token,
-        role : newUser.Role,
+        token: token,
+        role: newUser.Role,
         permission: newUser.Permission
       },
     });
@@ -120,11 +166,10 @@ module.exports = {
 
   logInHandler: async (req, res, next) => {
     const { username, password } = req.body;
-
     let identifierUser
     try {
       identifierUser = await accM.getByUsername(username);
-    }catch (err){
+    } catch (err) {
       console.error(err)
       return next(new HttpError("Some error occurs when find your account", 500));
     }
@@ -142,21 +187,21 @@ module.exports = {
     try {
       token = jwt.sign(
         {
-          userId : identifierUser.ID, 
-          username : identifierUser.Username,
-          role : identifierUser.Role
+          userId: identifierUser.ID,
+          username: identifierUser.Username,
+          role: identifierUser.Role
         },
         jwtKey,
-        {expiresIn : "1h"}
+        { expiresIn: "1h" }
       );
-    } catch(err) {
+    } catch (err) {
       console.err(err)
-      const error = new HttpError (
+      const error = new HttpError(
         'Something wrong when add jwt', 500
       );
       return next(error);
     }
-    
+
     res.status(201).json({
       message: "Login success",
       user: {
@@ -164,9 +209,9 @@ module.exports = {
         name: identifierUser.Name,
         username: identifierUser.Username,
         email: identifierUser.Email,
-        role : identifierUser.Role,
+        role: identifierUser.Role,
         permission: identifierUser.Permission,
-        token : token
+        token: token
       },
     });
   },
@@ -176,7 +221,7 @@ module.exports = {
   // update permisson will use another function
   updateHandler: async (req, res, next) => {
     console.log("enter update user handler");
-    console.log("userID token",  req.userData.userId);
+    console.log("userID token", req.userData.userId);
     const userID = req.userData.userId;
     console.log("update function userid from req: ", userID);
     const acc = await accM.getByUserID(userID);
@@ -200,7 +245,7 @@ module.exports = {
         newPassword: newPw ? await bcrypt.hash(newPw, saltRound) : null,
         newName,
         newEmail,
-        newDOB,
+        newDOB
       };
       //console.log(newValues);
       const result = await accM.updateUser(newValues);
@@ -251,57 +296,53 @@ module.exports = {
       }
     }
   },
-  getList : async (req, res, next) => {
+  getList: async (req, res, next) => {
     let data;
-    let {limit, start} = req.query;
+    let { limit, start } = req.query;
     [limit, start] = [limit ? parseInt(limit) : 5, start ? parseInt(start) : 1]
-    try { 
+    try {
       data = await accM.getList(limit, start);
     }
     catch (err) {
       console.error(err);
-      return next(new HttpError ("Some errors occurs", 500));
+      return next(new HttpError("Some errors occurs", 500));
     }
     const total = data.totalPage
     res.json({
       start,
       limit,
-      ...data ,
-      next : start === total ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start+1}`,
-      prev : start === '1' ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start-1}`
+      ...data,
+      next: start === total ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start + 1}`,
+      prev: start === '1' ? null : `${urlServer}/api/admin/list/page?limit=${limit}&start=${start - 1}`
     })
   },
-  lockAcc : async (req, res, next) => {
-    const  {userId} = req.params;
-    let identifierUser ;
+  lockAcc: async (req, res, next) => {
+    const { userId } = req.params;
+    let identifierUser;
     try {
       identifierUser = accM.getByUserID(userId);
     }
-    catch (err)
-    {
+    catch (err) {
       console.error(err);
-      return next(new HttpError("Some error occurs when find user",500));
+      return next(new HttpError("Some error occurs when find user", 500));
     }
-    if (!identifierUser)
-    {
-      return next (new HttpError("Can not find use",404));
+    if (!identifierUser) {
+      return next(new HttpError("Can not find use", 404));
     }
-    
-    if(identifierUser.Role === "admin")
-    {
-      return next (new HttpError("Can not lock Admin acc",420));
+
+    if (identifierUser.Role === "admin") {
+      return next(new HttpError("Can not lock Admin acc", 420));
     }
-    if(identifierUser.Role === "locked")
-    {
-      return next (new HttpError("This account has been locked",420));
+    if (identifierUser.Role === "locked") {
+      return next(new HttpError("This account has been locked", 420));
     }
     try {
-    accM.lockUser(userId);
+      accM.lockUser(userId);
     }
     catch {
-      return next (new HttpError("Cannot lock", 420));
+      return next(new HttpError("Cannot lock", 420));
     }
-    return res.json({message : "Lock success"})
+    return res.json({ message: "Lock success" })
   },
   checkPassword: async (req, res, next) => {
     const userId = req.userData.userId;
@@ -309,11 +350,69 @@ module.exports = {
     console.log("user id in check password func", userId);
     const acc = await accM.getByUserID(userId);
     if (!acc) {
-      next (new HttpError("Invalid user ID. Cannot check password"));
+      next(new HttpError("Invalid user ID. Cannot check password"));
       return;
     }
 
     const match = await bcrypt.compare(password, acc.Password);
-    res.json({match: match});
+    res.json({ match: match });
+  },
+  getOrders: async (req, res, next) => {
+    const userId = req.userData.userId;
+    console.log("user id in get orders func", userId);
+
+  },
+
+  banAcc: async (req, res, next) => {
+    try {
+      const userId = req.body.userId;
+      const permission = req.body.permission
+      const result = await accM.updatePermission(userId, permission);
+      res.json({
+        isSuccess: true,
+      });
+    } catch (error) {
+      console.error(err);
+      return next(new HttpError("Some errors occurs", 500));
+    }
+
+  },
+  getBalance: async (req, res, next) => {
+    const userId = req.params.userId;
+    console.log("user id in get balance", userId);
+    let tokenToPaymentServer;
+    try {
+      tokenToPaymentServer = jwt.sign({
+        userId: userId
+      },
+        process.env.JWT_SECOND,
+        { expiresIn: "1h" }
+      )
+    } catch (err) {
+      const error = new HttpError(
+        'Something wrong when add jwt', 505
+      );
+      return next(error);
+    }
+
+    let fetchBalance;
+    try {
+      fetchBalance = await fetch(process.env.PAYMENT_SERVER_HOST + `/api/account/get-balance/${userId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${tokenToPaymentServer}`
+        },
+      })
+    }
+    catch (err) {
+      console.log("err in getBalance controller", err);
+      return next(new HttpError('Something wrong when create ', 505));
+    }
+
+    if (fetchBalance.ok) {
+      const result = await fetchBalance.json();
+      res.json(result);
+    }
   }
 };

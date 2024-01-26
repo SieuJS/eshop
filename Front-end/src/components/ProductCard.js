@@ -19,7 +19,6 @@ export default function ProductCard({ item }) {
                 </div>
                 <div className="card-footer d-flex justify-content-between bg-light border">
                     <NavLink to={"/products/detail/" + item.CatID} className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1"></i>View Detail</NavLink>
-                    {/* Dữ liệu local không có ProID nên tạm thay bằng CatID để test */}
                     <NavLink to="/products/detail/" className="btn btn-sm text-dark p-0"><i className="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</NavLink>
                 </div>
             </div>

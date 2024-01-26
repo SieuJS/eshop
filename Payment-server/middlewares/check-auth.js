@@ -8,7 +8,7 @@ module.exports = (req, res, next ) => {
     if(req.method === "OPTIONS"){
         return next();
     }
-
+    console.log("start check")
     try {
         const authHeaders = req.headers.authorization// authorization : "Bear Token" 
         if(!authHeaders) {
@@ -27,6 +27,7 @@ module.exports = (req, res, next ) => {
         next();
 
     }catch (err) {
+        console.log("auth payment server check",err)
         return next (new HttpError(err.message, 401));
     }
 };
