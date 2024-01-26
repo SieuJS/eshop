@@ -184,6 +184,8 @@ function Auth() {
       // navigate("/");
   };
 
+}
+
   async function handleGoogleOAuthBtn(credentialResponse) {
     const credentialDecoded = jwtDecode(credentialResponse.credential);
     //console.log("from GG login", credentialDecoded);
