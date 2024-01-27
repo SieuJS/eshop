@@ -98,6 +98,8 @@ const io = new Server(server, {
   },
 });
 
+
+
 io.use((socket, next) => {
   if (socket.handshake.query && socket.handshake.query.token) {
     const clientToken = socket.handshake.query.token.split(" ")[1];
@@ -120,7 +122,7 @@ io.use((socket, next) => {
     }
   }next();
 }).on("connection", ( socket) => {
-    console.log("Some one connected", socket.userData)
+    console.log("Admin connected", socket.userData)
   socket.on("join", ({ name }) => {
     console.log("Someone connected");
   });

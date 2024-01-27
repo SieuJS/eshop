@@ -107,6 +107,7 @@ function Transaction() {
       }
       setTrans(data);
   }
+  console.log(trans)
 
   return (
     <div className="chart-card">
@@ -183,7 +184,7 @@ function Transaction() {
                 return (
                   <tr key={index} style={{textAlign: 'center'}}>
                     <td>{tran.TransID}</td>
-                    <td>{tran.AccID}</td>
+                    <td>{tran.ShopID}</td>
                     <td>{tran.Amount}</td>
                     <td>{tran.OrderID}</td>
                     <td>{tran.Status}</td>

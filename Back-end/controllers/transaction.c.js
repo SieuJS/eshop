@@ -30,9 +30,10 @@ module.exports = {
                 });
             if (response.ok) {
                 const data = await response.json();
-                res.json(data);
+                return res.json(data);
             }else {
-                res.json({
+                return res.status(404).json({
+                    message : "Can not find",
                     data: [],
                     totalPage: 0,
                     total: 0
