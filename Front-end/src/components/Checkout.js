@@ -4,12 +4,24 @@ import cartSlice from "../redux/cartSlice"
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery'
 import { BACK_END_SERVER } from "../keys/BackEndKeys";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Checkout() {
     const disPatch = useDispatch();
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
     var total = 0;
+    const successNotify = () => {
+        disPatch(cartSlice.actions.remove());
+        toast("Đặt hàng thành công");
+    }
+    const pendingNotify = () => {
+        disPatch(cartSlice.actions.remove());
+        toast("Đơn hàng đang được xử lý.")
+    }
+    const failNotify = () => {
+        toast("Đặt hàng thất bại")
+    }
     products.forEach(element => {
         total += element.Price * element.orderQuantity;
     });
@@ -52,16 +64,14 @@ export default function Checkout() {
         })
         .then((data) => {
             if (data.isPending) {
-                alert("Đơn hàng đang được xử lý. Mong bạn đợi trong giây lát");
+                pendingNotify();
             }
             else
             if (data.isSuccess) {
-                disPatch(cartSlice.actions.remove());
-                alert("ĐẶT HÀNG THÀNH CÔNG",data.message)
-                navigate('/');
+                successNotify();
             }
             else {
-                alert("ĐẶT HÀNG KHÔNG THÀNH CÔNG",data.message);
+                failNotify();
             }
         })
     }
@@ -220,6 +230,7 @@ export default function Checkout() {
                             <button className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" onClick={() => handlePlaceOrder(products,total)}>
                                 Place Order
                             </button>
+                            <ToastContainer/>
                         </div>
                     </div>
                 </div>

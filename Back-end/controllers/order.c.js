@@ -56,7 +56,11 @@ module.exports = {
         if (!checkPayment.ok) {
           return res.status(checkPayment.status || 401).json({ isSuccess: false });
         }
-        //Nếu server phụ trả về thành công, thực hiện update status của đơn hàng
+        //Nếu server phụ trả về thành công, thực hiện update status của đơn hàng và thêm sản phẩm vào order detail
+        for (const product of products) {
+          let item = new orderDetailM(orderid, product);
+          await orderDetailM.insert(item);
+        }
         await orderM.updateStatus(orderid, 'success');
 
         res.status(200).json({ isSuccess: true });
