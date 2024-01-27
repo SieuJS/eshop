@@ -50,11 +50,11 @@ export default function DataTable(props) {
                   <td>{user.DOB}</td>
                   <td>{user.Role.trim().toLowerCase()}</td>
                   <td>
-                    {user.Permission !== 1 ? (
+                    {user.Role.trim().toLowerCase() !== 'admin' ? user.Permission !== 1 ? (
                       <i class="fa-solid fa-lock icon-ban" onClick={() => handlePermission(user.ID, user.Permission)}></i>
                     ) : (
                       <i class="fa-solid fa-unlock icon-unban" onClick={() => handlePermission(user.ID, user.Permission)}></i>
-                    )}
+                    ) : ''}
                   </td>
                 </tr>
               );

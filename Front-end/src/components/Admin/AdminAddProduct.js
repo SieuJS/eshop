@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import FileInput from "./FileInput";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function AdminAddProduct() {
     const preset_key = "zjqlggti"
@@ -77,7 +78,7 @@ export default function AdminAddProduct() {
             }
         }
         
-        const res = await fetch('/api/product/add', {
+        const res = await fetch(`${beUrl}/api/product/add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

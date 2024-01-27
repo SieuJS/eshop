@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
+import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -145,10 +146,10 @@ function Landing() {
           <div class="charts-card overflow-x-scroll">
             <h2 class="chart-title text-light">Users Board</h2>
             <div className="btn-add-item d-flex">
-              <button type="button" className="btn btn-primary ms-auto">
+              <Link to="/admin/account/add" type="button" className="btn btn-primary ms-auto">
                   <i className="fa-solid fa-circle-plus m-1"></i>
                   Add Account Admin
-              </button>
+              </Link>
             </div>
             <AdminTable usersData={usersData} banHandler = {banHandler}/>
             <div className="card-footer d-flex justify-content-center">

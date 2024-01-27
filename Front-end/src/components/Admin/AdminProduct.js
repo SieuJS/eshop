@@ -155,7 +155,7 @@ export default function AdminProduct() {
                               <td>{parseFloat(pro.Price).toLocaleString()}</td>
                               <td>{pro.Quantity}</td>
                               <td>
-                                <Link to={`${beUrl}/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm m-1">
+                                <Link to={`/admin/product/edit?catID=${catID}&proID=${pro.ProID}`} className="btn btn-primary btn-sm m-1">
                                   <i className="fa fa-pencil"></i>
                                 </Link>
                                 <button href="" className="btn btn-danger btn-sm m-1" onClick={(e) => deleteRow(pro.ProID)}>

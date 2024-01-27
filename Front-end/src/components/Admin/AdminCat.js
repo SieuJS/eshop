@@ -2,6 +2,7 @@ import $ from 'jquery'
 // import './AdminCat.css'
 import { useState, useContext, useEffect } from 'react';
 import { CatContext } from '../../context/CatContext.js';
+import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function AdminCat() {
   const { allCategories, setAllCategories, isLoading, isError } = useContext(CatContext);
@@ -76,7 +77,7 @@ export default function AdminCat() {
       CatName : catName
     }
 
-    const data = await fetch('/api/categories/add', {
+    const data = await fetch(`${beUrl}/api/categories/add`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ export default function AdminCat() {
 
     if (confirmDelete) {
       try {
-        const result = await fetch(`/api/categories/delete?CatID=${id}`);
+        const result = await fetch(`${beUrl}/api/categories/delete?CatID=${id}`);
         const data = await result.json();
         if (data.success) {
           setAllCategories(allCategories.filter((item) => item.CatID !== id));
@@ -119,7 +120,7 @@ export default function AdminCat() {
       CatID: catID,
       CatName: catNameEdit,
     }
-    const data = await fetch('/api/categories/update', {
+    const data = await fetch(`${beUrl}/api/categories/update`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
