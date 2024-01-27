@@ -5,7 +5,7 @@
 .cat-product-container {
     display: grid;
     grid-template-columns: minmax(200px, 300px) minmax(600px,1fr);
-    grid-template-rows: 600px 600px;
+    /* grid-template-rows: 600px 600px; */
     justify-items: stretch;
 }
 

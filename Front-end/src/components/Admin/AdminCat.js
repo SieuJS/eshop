@@ -15,7 +15,7 @@ export default function AdminCat() {
   // const [categories, setCategories] = useState([]) // du lieu nay dung de phan trang
   // const [name, setName] = useState('');
   const [page, setPage] = useState(1)
-  const pageSize = 4
+  const pageSize = 7
   const lastIndex = page * pageSize;
   const firstIndex = lastIndex - pageSize;
   const categories = allCategories.slice(firstIndex, lastIndex);

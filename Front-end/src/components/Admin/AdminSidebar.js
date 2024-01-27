@@ -7,7 +7,7 @@ export default function AdminSidebar(props) {
     const auth = useContext(AuthContext)
     const navigate = useNavigate()
     return (  
-    <aside id="sidebar " className={ + props.show ? "" : "hide"} >
+    <aside id="sidebar " className={ + props.show ? "" : "hide"} style = {{width: '15%'}} >
             <div className="sidebar-title">
             <div className="sidebar-brand">
                 <span className="material-icons-outlined">shopping_cart</span> STORE
@@ -31,7 +31,7 @@ export default function AdminSidebar(props) {
                 </NavLink>
             </li>
             <li className="sidebar-list-item" >
-                <NavLink to="/admin/accounts" className={"sidebar-navlink"}>
+                <NavLink to="/admin/accounts/add" className={"sidebar-navlink"}>
                 <span className="material-icons-outlined">groups</span> Accounts
                 </NavLink>
             </li>

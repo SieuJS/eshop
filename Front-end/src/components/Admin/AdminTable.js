@@ -1,4 +1,5 @@
 import * as React from "react";
+import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function DataTable(props) {
   const usersData = props.usersData;
@@ -8,7 +9,7 @@ export default function DataTable(props) {
       permission = 0
     else
       permission = 1
-    const result = await fetch('http://localhost:5000/api/account/ban', {
+    const result = await fetch(`${beUrl}/api/account/ban`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
