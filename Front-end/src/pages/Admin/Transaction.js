@@ -27,7 +27,7 @@ function Transaction() {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [trans, setTrans] = useState();
-  const [curPage, setCurPage] = useState(1);
+  const [curPage, setCurPage] = useState(0);
   const [searchPattern, setSearchPattern] = useState();
   const [userID, setUserID] = useState();
 
@@ -48,15 +48,19 @@ function Transaction() {
 //     setOpenSuccessModal(true)
 //   }
 // },[error])
-  console.log(userID)
+
+
   useEffect(() => {
     const fetchTrans = async () => {
       let data;
+
       try {
         data = await sendRequest(
           `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
-            userID ? `userID=${userID}&` : ""
-          }page=${curPage}`
+            searchPattern ? `userID=${searchPattern}&` : ""
+          }page=${curPage+1}` , "GET" ,{
+            authorization : `Beearer ${auth.token}`
+          }
         );
       } catch (err) {
         
@@ -66,21 +70,37 @@ function Transaction() {
     };
     fetchTrans();
 
-  }, [sendRequest, curPage]);
-
-  const onPageChange = (e, p) => {
+  }, [sendRequest]);
+  console.log(curPage)
+  const onPageChange = async (e, p) => {
+    console.log("page, changed")
     setCurPage(p);
-  };
-  const onSearch =async (e) => {
-    e.preventDefault();
     let data;
-    setUserID(searchPattern)
-    setTrans(undefined)
       try {
         data = await sendRequest(
           `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
-            userID ? `userID=${userID}&` : ""
-          }page=${curPage}`
+            searchPattern ? `userID=${searchPattern}&` : ""
+          }page=${curPage+1}` , "GET" ,{
+            authorization : `Beearer ${auth.token}`
+          }
+        );
+      } catch (err) {
+        
+      }
+      setTrans(data);
+    };
+  const onSearch =async (e) => {
+    e.preventDefault();
+    let data;
+    // setUserID(searchPattern)
+    setCurPage(0)
+      try {
+        data = await sendRequest(
+          `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
+            searchPattern ? `userID=${searchPattern}&` : ""
+          }page=${curPage+1}` , "GET" ,{
+            authorization : `Beearer ${auth.token}`
+          }
         );
       } catch (err) {
         
@@ -157,7 +177,6 @@ function Transaction() {
             </tr>
           </thead>
           <tbody className="trans-body">
-   
             {trans &&
               trans.data &&
               trans.data.map((tran, index) => {
@@ -181,9 +200,9 @@ function Transaction() {
         <Pagination
           className="pagination text-light"
           count={(trans && trans.totalPage) || 1}
-          defaultPage={curPage}
           color="primary"
           onChange={onPageChange}
+          
         />
       </div>
     </div>

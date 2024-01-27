@@ -26,7 +26,6 @@ function Landing() {
   const [reqUrl, setReqUrl] = useState(getUsersUrl);
   const [page, setPage] = useState();
   const [totalPage, setTotalPage] = useState();
-
   // for stat
   const [socket, setSocket] = useState();
   const [statData, setStatData] = useState();
@@ -98,7 +97,9 @@ function Landing() {
     const fetchUsers = async () => {
       let data;
       try {
-        data = await sendRequest(reqUrl);
+        data = await sendRequest(reqUrl, "GET" , {
+          "authorization" : `beare ${auth.token}`
+        });
         setUsersData(data.data);
         setPage(data.start);
         setTotalPage(data.totalPage);

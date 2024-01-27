@@ -5,7 +5,9 @@ const jwtKey = process.env.JWT_SECRET_KEY;
 
 module.exports = (req,res,next) => {
     try {
-        const role = req.role;
+        
+        const role = req.userData.role;
+        console.log(role);
         if (!role) {
             const error = new Error('Authorization failed');
             throw error;
@@ -14,7 +16,7 @@ module.exports = (req,res,next) => {
             const error = new Error('Authorization failed');
             throw error;
         }
-        next();
+        return next();
     }
     catch (e) {
         return next (new HttpError(err.message, 402));

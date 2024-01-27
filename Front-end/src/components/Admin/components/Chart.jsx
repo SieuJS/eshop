@@ -3,7 +3,7 @@ import Chart  from "react-apexcharts";
 function ShopChart(props) {
     if(props.data)
     {
-    console.log([props.data.accStat, props.data.prodStat, props.data.catStat, props.data.orderStat])
+
     }
     const state = {
         options: {

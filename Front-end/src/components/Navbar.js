@@ -85,7 +85,7 @@ export default function Navbar() {
                                 {showAccountOptions && (
                                     <nav className="collapse show navbar align-items-start justify-content-end p-0 border border-top-0 border-bottom-0 navbar-vertical navbar-light">
                                         <div className="bg-secondary navbar-nav overflow-hidden position-absolute" >
-                                            {auth.role !== "admin" && (
+                                            {auth.role.trim() !== "admin" && (
                                                 <div>
                                                     <span className="mx-1">
                                                         <svg
@@ -103,7 +103,7 @@ export default function Navbar() {
                                                     </Link>
                                                 </div>
                                             )}
-                                            {auth.role === "admin" &&
+                                            {auth.role.trim() === "admin" &&
                                                 <div>
                                                     <span className="mx-1">
                                                         <svg

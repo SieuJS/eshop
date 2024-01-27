@@ -24,13 +24,14 @@ module.exports = (req, res, next ) => {
         const decodedToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
         req.userData  =  {
             userId : decodedToken.userId,
-            role : decodedToken.role
+            role : decodedToken.role.trim()
         }  
         //req.useId = decodedToken.userId;
         console.log("userid in middleware: ", decodedToken.userId);
-        next();
+        return next();
 
     }catch (err) {
+    
         return next (new HttpError(err.message, 402));
     }
 };

@@ -1,22 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const checkAuth = require('../middlewares/check-auth')
 const jwt = require("jsonwebtoken")
 const paymentKey = process.env.JWT_SECOND;
 const HttpError = require('../models/http-error')
 const AdminC = require('../controllers/admin.c')
-
+const checkAuth = require('../middlewares/check-auth')
+const checkRole= require('../middlewares/check-role');
 const accC = require('../controllers/acc.c')
-router.get('/', (req, res) => {
-    res.json({message : "admin"});
-})
-
-router.get("/list/page", accC.getList);
-
-router.get("/trans/get-by-page" , AdminC.getTransByPage)
 
 
-router.get("/token", (req, res) => {
+
+router.post('/login',AdminC.signInHandler );
+
+router.get("/list/page",checkAuth,checkRole, accC.getList);
+
+router.get("/trans/get-by-page" , checkAuth,checkRole,AdminC.getTransByPage)
+
+
+router.get("/token",checkAuth,checkRole, (req, res) => {
     let token ;
     try {
         token = jwt.sign(
@@ -34,6 +35,6 @@ router.get("/token", (req, res) => {
     res.json({message : "Create token succes" , token })
 })
 
-router.post("/changePassword",checkAuth,AdminC.changePassword)
+router.post("/changePassword",checkAuth,checkRole,AdminC.changePassword)
 
 module.exports = router;

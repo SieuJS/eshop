@@ -1,9 +1,12 @@
 import * as React from "react";
 import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+
 export default function DataTable(props) {
   const usersData = props.usersData;
-
+  const auth = useContext(AuthContext)
   const handlePermission = async (userId, permission) => {
     if (permission === 1)
       permission = 0
@@ -12,7 +15,8 @@ export default function DataTable(props) {
     const result = await fetch(`${beUrl}/api/account/ban`, {
       method: 'POST',
       headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization' : `bearer ${auth.token}`
       },
       body: JSON.stringify({
         userId: userId,

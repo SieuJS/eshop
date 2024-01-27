@@ -5,7 +5,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from '@mui/material';
 export default function AdminSidebar(props) {
     const auth = useContext(AuthContext)
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const logoutHandler = () => {
+        auth.logout();
+        navigate('/admin/login')
+    }
     return (  
     <aside id="sidebar " className={ + props.show ? "" : "hide"} style = {{width: '15%'}} >
             <div className="sidebar-title">
@@ -45,14 +49,21 @@ export default function AdminSidebar(props) {
                 <span className="material-icons-outlined">poll</span> Transaction
                 </NavLink>
             </li>
-            <li className="sidebar-list-item">
-                <Button className={"sidebar-navlink"} onClick={()=> {
-                    auth.logout();
-                    navigate('/')
-                }}>
-                <span className="material-icons-outlined">settings</span> Log out
-                </Button>
-            </li>
+            {auth.isLoggedIn &&
+                <li className="sidebar-list-item">
+                    <Button className={"sidebar-navlink"} onClick={logoutHandler}>
+                    <span className="material-icons-outlined">settings</span> Log out
+                    </Button>
+                </li>
+            }       
+            {
+                !auth.isLoggedIn && 
+                <li className="sidebar-list-item">
+                    <NavLink className={"sidebar-navlink"} to ="/admin/login">
+                        <i class="fa-solid fa-right-to-bracket">Login</i>
+                    </NavLink>
+                </li>
+            }
             </ul>
         </aside> 
 

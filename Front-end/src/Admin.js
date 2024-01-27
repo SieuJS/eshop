@@ -1,5 +1,5 @@
 
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route , Navigate} from 'react-router-dom';
 
 import { useState, useContext } from 'react';
 
@@ -16,6 +16,7 @@ import Landing from './pages/Admin/Landing';
 import Transaction from "./pages/Admin/Transaction"
 import AdminAddAccount from './components/Admin/AdminAddAccount'
 import AdminEditAccount from './components/Admin/AdminEditAccount'
+import AdminAuth from "./pages/Admin/Auth"
 
 function Admin() {
 
@@ -27,8 +28,32 @@ function Admin() {
   const toggleHandler = () => {
     setOpenSideBar(prev => !prev)
   }
-
-
+  console.log(auth.isLoggedIn, auth.role)
+  let protectedRoutes ;
+ 
+  if(auth.isLoggedIn && auth.role.trim() === 'admin') {
+    protectedRoutes = (
+    <>
+          <Route path='product/*' exect element={<Products />} />
+          <Route path='category' exect element={<Categories />} />
+          <Route path = "accounts/changepass" exact element = {<CrudAccount/>}/>
+          <Route path = "accounts/add" exact element = {<AdminAddAccount/>}/>
+          <Route path = "accounts/edit" exact element = {<AdminEditAccount/>}/>
+          <Route path='dashboard' exact element={< Landing />} />
+          <Route path = "transactions" element = {<Transaction/>} />
+          <Route path ="/*" element = {<Navigate to ="/admin/dashboard" />}/>
+      </>
+    )
+  }
+  else {
+    protectedRoutes = (
+      <>
+        <Route path = "/login" exact element = {<AdminAuth/>}/>
+        <Route path ="/*" element = {<Navigate to ="/admin/login" />}/>
+      </>
+    )
+  }
+ 
   return (
     <>
     <div className='admin-container page-admin d-flex'>
@@ -38,13 +63,7 @@ function Admin() {
       <main className="main-container ">
       <CatContextProvider>
         <Routes>
-          <Route path='/product/*' exect element={<Products />} />
-          <Route path='/category' exect element={<Categories />} />
-          <Route path = "/accounts/changepass" exact element = {<CrudAccount/>}/>
-          <Route path = "/accounts/add" exact element = {<AdminAddAccount/>}/>
-          <Route path = "/accounts/edit" exact element = {<AdminEditAccount/>}/>
-          <Route path='/dashboard' exact element={< Landing />} />
-          <Route path = "/transactions" element = {<Transaction/>} />
+          {protectedRoutes}
           {/* <Route path='/dashboard' exect element={<Dashboard />} /> */}
         </Routes>
       </CatContextProvider>

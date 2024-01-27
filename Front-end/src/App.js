@@ -47,13 +47,9 @@ function App() {
           }
         >
           <Routes>
-            <Route path="/home" element={<Shop/>} />
-            {
-              !token &&
-            <Route path="/login" element={<Auth/>} />
-            }
-            {role === "admin" && (<Route path='/admin/*' element={<Admin />} />)}
-            {role && role !== "admin" && (
+            <Route path="/*" element={<Shop/>} />
+            <Route path='/admin/*' element={<Admin />} />
+            {role && role.trim() !== "admin" && (
               <Route path="account" element={<AccountLayout />}>
                 <Route index element={<AccountDashboard />} />
                 <Route path="editinfo" element={<EditInfo />} />
@@ -62,7 +58,14 @@ function App() {
                 <Route path="transaction" element={<Transaction />} />
               </Route>
             )}
-            <Route path='/*' element={<Shop />} />
+            {
+              !token &&
+              <>
+            <Route path = "/login" element = {<Auth/>}/>
+            <Route path="/*" element={<Navigate to = "/login" />} />
+            </>
+            }
+            <Route path='/*' element={<Navigate to = "/home" />}/>
           </Routes>
         </AuthContext.Provider>
       </BrowserRouter>
