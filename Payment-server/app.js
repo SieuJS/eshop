@@ -18,6 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get('/',(req,res) => {
+    res.json("HELLO FROM PAYMENT SERVER")
+})
 app.use ((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers',
@@ -27,7 +30,6 @@ app.use ((req,res,next) => {
 })
 
 app.use(checkAuth)
-
 app.use("/api/account", AccRouter);
 app.use("/api/trans", TransRouter);
 
