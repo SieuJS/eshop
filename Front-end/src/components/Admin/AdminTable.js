@@ -8,6 +8,8 @@ export default function DataTable(props) {
   const usersData = props.usersData;
   const auth = useContext(AuthContext)
   const handlePermission = async (userId, permission) => {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const token = userData.token;
     if (permission === 1)
       permission = 0
     else

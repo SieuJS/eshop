@@ -12,7 +12,7 @@ module.exports = (req,res,next) => {
             const error = new Error('Authorization failed');
             throw error;
         }
-        if (role != 'admin') {
+        if (role.toLowerCase().trim() !== 'admin') {
             const error = new Error('Authorization failed');
             throw error;
         }

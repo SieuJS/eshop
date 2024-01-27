@@ -15,6 +15,7 @@ export default function AdminEditProduct() {
     const proID = searchParams.get("proID")
     const navigate = useNavigate();
 
+    const [isLoad, setIsLoad] = useState(false);
     const [fileList, setFileList] = useState(null)
     const { dataFetch, isLoading, isError } = useFetch(`${beUrl}/api/product/get-by-pro/${proID}`);
     const { allCategories, setAllCategories} = useContext(CatContext);
@@ -75,6 +76,7 @@ export default function AdminEditProduct() {
         // }
 
         if (fileList) {
+            setIsLoad(true);
             const formDataCloud = new FormData()
             formDataCloud.append('file', fileList)
             formDataCloud.append('upload_preset', preset_key);
@@ -84,6 +86,7 @@ export default function AdminEditProduct() {
                 body: formDataCloud
             })
             const dataCloud = await resCloud.json();
+            setIsLoad(false)
             console.log(dataCloud.secure_url);
             if (dataCloud.secure_url) {
                 // formData.append('proImage', file);
@@ -92,9 +95,12 @@ export default function AdminEditProduct() {
             // formData.append('proImage', fileList);
         }
 
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
         const res = await fetch(`${beUrl}/api/product/update`, {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(entity),
@@ -116,6 +122,13 @@ export default function AdminEditProduct() {
         </div>
 
         <div className="row">
+            {isLoad == true && (
+                <div style={{ textAlign: "center" }}>
+                    <div className="spinner-border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                </div>
+            )}
             <div className="side-title col-sm-4">
               <div className="table-cards">
                 <div className="cat-card card">

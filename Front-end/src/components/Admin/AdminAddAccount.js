@@ -69,9 +69,12 @@ export default function AdminAddAccount() {
             return;
         }
         
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
         const result = await fetch(`${beUrl}/api/account/registerAdmin`, {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(accountInfo),

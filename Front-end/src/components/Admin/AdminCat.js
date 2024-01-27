@@ -77,9 +77,12 @@ export default function AdminCat() {
       CatName : catName
     }
 
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const token = userData.token;
     const data = await fetch(`${beUrl}/api/categories/add`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(entity),
@@ -98,7 +101,14 @@ export default function AdminCat() {
 
     if (confirmDelete) {
       try {
-        const result = await fetch(`${beUrl}/api/categories/delete?CatID=${id}`);
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
+        const result = await fetch(`${beUrl}/api/categories/delete?CatID=${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
         const data = await result.json();
         if (data.success) {
           setAllCategories(allCategories.filter((item) => item.CatID !== id));
@@ -120,9 +130,12 @@ export default function AdminCat() {
       CatID: catID,
       CatName: catNameEdit,
     }
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    const token = userData.token;
     const data = await fetch(`${beUrl}/api/categories/update`, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(entity),
