@@ -16,6 +16,7 @@ import { BACK_END_SERVER } from "../../keys/BackEndKeys";
 import Admin from "../../Admin";
 
 import Modal from '@mui/material/Modal';
+import { NavLink } from "react-router-dom";
 
 const style = {
   position: 'absolute',
@@ -155,143 +156,163 @@ function CrudAccount() {
   };
 
   return (
-    <div className="crud-container d-flex justify-content-center">
-      { isLoading && <ClipLoader
-        loading = {isLoading}
-        size={200}
-        aria-label="Loading Spinner"
-      />}
-      <div className="cat-card card">
-        <div className="card-header text-center">Account</div>
-        <div className="card-body">
-            
-        <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={openSuccessModal}
-        onClose={handleClose}
-        closeAfterTransition
-        slots={{ backdrop: Backdrop }}
-        slotProps={{
-          backdrop: {
-            timeout: 500,
-          },
-        }}
-      >
-        <Fade in={openSuccessModal}>
-          <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Password {error && "can't"} changed!!
-            </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-               {error ? error : "Change password success"}
-            </Typography>
-          </Box>
-        </Fade>
-      </Modal>
+    <div className="row">
+      <div className="side-title col-sm-4">
+        <div className="table-cards">
+          <div className="cat-card card">
+              <div className="card-header">
+                  Account Manager
+              </div>
+              <div className="card-body">
+                  <div className="list-group list-group-flush">
+                      <NavLink to={`/admin/accounts/add`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Register Account</NavLink>
+                      <NavLink to={`/admin/accounts/edit`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Edit Account</NavLink>
+                      <NavLink to={`/admin/accounts/changepass`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Change Password</NavLink>
+                  </div>    
+              </div>
+          </div>               
+        </div>
+      </div>
+      <div className="side-title col-sm-8">
+        <div className="table-cards">
+          { isLoading && <ClipLoader
+            loading = {isLoading}
+            size={200}
+            aria-label="Loading Spinner"
+          />}
+          <div className="cat-card card">
+            <div className="card-header text-center">Account</div>
+            <div className="card-body">
+                
+            <Modal
+            aria-labelledby="transition-modal-title"
+            aria-describedby="transition-modal-description"
+            open={openSuccessModal}
+            onClose={handleClose}
+            closeAfterTransition
+            slots={{ backdrop: Backdrop }}
+            slotProps={{
+              backdrop: {
+                timeout: 500,
+              },
+            }}
+          >
+            <Fade in={openSuccessModal}>
+              <Box sx={style}>
+                <Typography id="transition-modal-title" variant="h6" component="h2">
+                  Password {error && "can't"} changed!!
+                </Typography>
+                <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                  {error ? error : "Change password success"}
+                </Typography>
+              </Box>
+            </Fade>
+          </Modal>
 
-          <form>
-            {admin && (
-                <Input
-                  className="form-control"
-                  element="input"
-                  id="username"
-                  onInput={inputHandler}
-                  type="text"
-                  lable="User name"
-                  initialValue={admin.Username}
-                  validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
-                  errorText={{
-                    MINLENGTH: "Chiều dài lớn hơn 5",
-                    REQUIRE: "Ô này không được để trống",
-                  }}
-                  disabled={true}
-                />)
-            }
-                {admin && disableEdit  &&(
-                  <Input
-                    className="form-control"
-                    element="input"
-                    id="password"
-                    onInput={inputHandler}
-                    type="password"
-                    lable="Password"
-                    initialValue={admin.Password}
-                    validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
-                    errorText={{
-                      MINLENGTH: "Chiều dài lớn hơn 5",
-                      REQUIRE: "Ô này không được để trống",
-                    }}
-                    disabled={disableEdit}
-                  />
+              <form>
+                {admin && (
+                    <Input
+                      className="form-control"
+                      element="input"
+                      id="username"
+                      onInput={inputHandler}
+                      type="text"
+                      lable="User name"
+                      initialValue={admin.Username}
+                      validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
+                      errorText={{
+                        MINLENGTH: "Chiều dài lớn hơn 5",
+                        REQUIRE: "Ô này không được để trống",
+                      }}
+                      disabled={true}
+                    />)
+                }
+                    {admin && disableEdit  &&(
+                      <Input
+                        className="form-control"
+                        element="input"
+                        id="password"
+                        onInput={inputHandler}
+                        type="password"
+                        lable="Password"
+                        initialValue={admin.Password}
+                        validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
+                        errorText={{
+                          MINLENGTH: "Chiều dài lớn hơn 5",
+                          REQUIRE: "Ô này không được để trống",
+                        }}
+                        disabled={disableEdit}
+                      />
+                    )}
+
+                {!disableEdit && (
+                  <>
+                    <Input
+                      className="form-control"
+                      element="input"
+                      id="oldPassword"
+                      onInput={inputHandler}
+                      type="password"
+                      lable="Old Password"
+                      validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
+                      errorText={{
+                        MINLENGTH: "Chiều dài lớn hơn 5",
+                        REQUIRE: "Ô này không được để trống",
+                      }}
+                      disabled={disableEdit}
+                    />
+                      <Input
+                        className="form-control"
+                        element="input"
+                        id="newPassword"
+                        onInput={inputHandler}
+                        type="password"
+                        lable="New Password"
+                        validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
+                        errorText={{
+                          MINLENGTH: "Chiều dài lớn hơn 5",
+                          REQUIRE: "Ô này không được để trống",
+                          COMPARE_STR: "Mật khẩu không trùng khớp",
+                        }}
+                        disabled={disableEdit}
+                      />
+                    <Input
+                      className="form-control"
+                      element="input"
+                      id="newRePassword"
+                      onInput={inputHandler}
+                      type="password"
+                      lable="Repate new password"
+                      validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE(),VALIDATOR_COMPARE_STR(
+                        formState.inputs.newPassword.value
+                      )]}
+                      errorText={{
+                        MINLENGTH: "Chiều dài lớn hơn 5",
+                        REQUIRE: "Ô này không được để trống",
+                        COMPARE_STR: "Mật khẩu không trùng khớp",
+                      }}
+                      disabled={disableEdit}
+                    />
+                  </>
                 )}
-
-            {!disableEdit && (
-              <>
-                <Input
-                  className="form-control"
-                  element="input"
-                  id="oldPassword"
-                  onInput={inputHandler}
-                  type="password"
-                  lable="Old Password"
-                  validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
-                  errorText={{
-                    MINLENGTH: "Chiều dài lớn hơn 5",
-                    REQUIRE: "Ô này không được để trống",
-                  }}
-                  disabled={disableEdit}
-                />
-                  <Input
-                    className="form-control"
-                    element="input"
-                    id="newPassword"
-                    onInput={inputHandler}
-                    type="password"
-                    lable="New Password"
-                    validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE()]}
-                    errorText={{
-                      MINLENGTH: "Chiều dài lớn hơn 5",
-                      REQUIRE: "Ô này không được để trống",
-                      COMPARE_STR: "Mật khẩu không trùng khớp",
-                    }}
-                    disabled={disableEdit}
-                  />
-                <Input
-                  className="form-control"
-                  element="input"
-                  id="newRePassword"
-                  onInput={inputHandler}
-                  type="password"
-                  lable="Repate new password"
-                  validators={[VALIDATOR_MINLENGTH(6), VALIDATOR_REQUIRE(),VALIDATOR_COMPARE_STR(
-                    formState.inputs.newPassword.value
-                  )]}
-                  errorText={{
-                    MINLENGTH: "Chiều dài lớn hơn 5",
-                    REQUIRE: "Ô này không được để trống",
-                    COMPARE_STR: "Mật khẩu không trùng khớp",
-                  }}
-                  disabled={disableEdit}
-                />
-              </>
-            )}
-            <div className="d-flex justify-content-center gap-3">
-              <button
-                className="btn btn-primary"
-                onClick={() => setDisableEdit((prev) => !prev)}
-                type="button"
-              >
-                {disableEdit ? "EDIT" : "LOCK"}
-              </button>
-              {!disableEdit && (
-                <button className="btn btn-primary" onClick={submitHandler}
-                disabled = {!formState.isValid}>
-                  SUBMIT
-                </button>
-              )}
+                <div className="d-flex justify-content-center gap-3">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => setDisableEdit((prev) => !prev)}
+                    type="button"
+                  >
+                    {disableEdit ? "EDIT" : "LOCK"}
+                  </button>
+                  {!disableEdit && (
+                    <button className="btn btn-primary" onClick={submitHandler}
+                    disabled = {!formState.isValid}>
+                      SUBMIT
+                    </button>
+                  )}
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>

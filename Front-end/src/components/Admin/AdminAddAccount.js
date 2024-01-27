@@ -100,8 +100,9 @@ export default function AdminAddAccount() {
                     </div>
                     <div className="card-body">
                         <div className="list-group list-group-flush">
-                            <NavLink to={`/admin/account/add`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Register Account</NavLink>
-                            <NavLink to={`/admin/account/edit`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Edit Account</NavLink>
+                            <NavLink to={`/admin/accounts/add`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Register Account</NavLink>
+                            <NavLink to={`/admin/accounts/edit`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Edit Account</NavLink>
+                            <NavLink to={`/admin/accounts/changepass`} className="list-group-item list-group-item-action" style={{ borderRadius: "6px", margin: "2px 0" }}>Change Password</NavLink>
                         </div>    
                     </div>
                 </div>               

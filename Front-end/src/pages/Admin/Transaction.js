@@ -162,7 +162,7 @@ function Transaction() {
               trans.data &&
               trans.data.map((tran, index) => {
                 return (
-                  <tr key={index}>
+                  <tr key={index} style={{textAlign: 'center'}}>
                     <td>{tran.TransID}</td>
                     <td>{tran.AccID}</td>
                     <td>{tran.Amount}</td>

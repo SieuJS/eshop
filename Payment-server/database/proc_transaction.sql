@@ -1,6 +1,7 @@
 CREATE OR REPLACE PROCEDURE proc_transaction(
     sender_id INT,
     receiver_id INT,
+	order_id INT,
     amount INT
 )
 LANGUAGE plpgsql
@@ -36,10 +37,10 @@ BEGIN
 		
 		-- Ghi log giao dịch
 		INSERT INTO "Transaction" ("AccID", "Amount", "OrderID", "Status", "Balance", "Date")
-		VALUES (sender_id, -amount, 1, 'success', sender_balance, CURRENT_TIMESTAMP);
+		VALUES (sender_id, -amount, order_id, 'success', sender_balance, CURRENT_TIMESTAMP);
 
 		INSERT INTO "Transaction" ("AccID", "Amount", "OrderID", "Status", "Balance", "Date")
-		VALUES (receiver_id, amount, 1, 'success' , receiver_balance, CURRENT_TIMESTAMP);
+		VALUES (receiver_id, amount, order_id, 'success' , receiver_balance, CURRENT_TIMESTAMP);
 		
 	EXCEPTION
         WHEN others THEN
