@@ -18,7 +18,7 @@ export default (props) => {
     const proid = props.proid;
     const disPatch = useDispatch();
     const handleViewDetail = () => {
-
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     };
     const notify = () => {
         toast("Đã thêm vào giỏ hàng");

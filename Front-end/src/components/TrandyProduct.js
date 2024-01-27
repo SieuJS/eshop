@@ -4,6 +4,7 @@ import cartSlice from "../redux/cartSlice"
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function ProductList(props) {
     const navigate = useNavigate();
@@ -15,6 +16,9 @@ export default function ProductList(props) {
     const pageNumbers = Array.from({ length: pages }, (_, index) => index + 1);
     const onPageChange = props.onPageChange;
     const { data: categories, isPending, error } = useFetch('/api/categories');
+    const notify = () => {
+        toast("Đã thêm vào giỏ hàng");
+    }
 
     //price filter
     const [min, setMin] = useState(params.get('min'));
@@ -79,6 +83,7 @@ export default function ProductList(props) {
             <div className="text-center mb-4">
                 <h2 className="section-title px-5"><span className="px-2">Trandy Products</span></h2>
             </div>
+            <ToastContainer/>
             <div className="row px-xl-5 pb-3">
                 {
                     products && products.map((product) => (
@@ -98,7 +103,7 @@ export default function ProductList(props) {
                                         <i className="fas fa-eye text-primary mr-1" />
                                         View Detail
                                     </Link>
-                                    <button className="btn btn-sm text-dark p-0" onClick={() => disPatch(cartSlice.actions.add({ ...product, orderQuantity: 1 }))}>
+                                    <button className="btn btn-sm text-dark p-0" onClick={() => { disPatch(cartSlice.actions.add({ ...product, orderQuantity: 1 })); notify() }}>
                                         <i className="fas fa-shopping-cart text-primary mr-1" />
                                         Add To Cart
                                     </button>

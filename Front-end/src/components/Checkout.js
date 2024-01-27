@@ -51,13 +51,17 @@ export default function Checkout() {
             return res.json()
         })
         .then((data) => {
+            if (data.isPending) {
+                alert("Đơn hàng đang được xử lý. Mong bạn đợi trong giây lát");
+            }
+            else
             if (data.isSuccess) {
                 disPatch(cartSlice.actions.remove());
-                alert("DAT HANG THANH CONG",data.message)
+                alert("ĐẶT HÀNG THÀNH CÔNG",data.message)
                 navigate('/');
             }
             else {
-                alert("DAT HANG KHONG THANH CONG",data.message);
+                alert("ĐẶT HÀNG KHÔNG THÀNH CÔNG",data.message);
             }
         })
     }
