@@ -54,9 +54,12 @@ export default function AdminEditAccount() {
 
         accountInfo.userId = userId
         
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
         const result = await fetch(`${beUrl}/api/account/updateAdmin`, {
             method: 'POST',
             headers: {
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(accountInfo),
