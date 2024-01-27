@@ -43,7 +43,7 @@ module.exports = {
             const result = await transM.getByPage(userID, page, pageSize);
             res.json(result);
         } catch (error) {
-            next(error);
+            next(new HttpError(error.message,500));
         }
     },
     async getTransByOrderID (req,res,next) {

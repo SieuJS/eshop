@@ -8,6 +8,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Backdrop, Typography, Fade, Box} from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
 import Modal from "@mui/material/Modal";
+
 import "./Transaction.css";
 
 const style = {
@@ -27,13 +28,13 @@ function Transaction() {
   const { isLoading, sendRequest, error, clearError } = useHttpClient();
   const auth = useContext(AuthContext);
   const [trans, setTrans] = useState();
-  const [curPage, setCurPage] = useState(0);
+  const [curPage, setCurPage] = useState(1);
   const [searchPattern, setSearchPattern] = useState();
   const [userID, setUserID] = useState();
-
+  const [offset, setOffset] = useState(0);
+  const [max ,setMax] = useState(7)
 
   // error 
-
 
   const [openSuccessModal, setOpenSuccessModal] =useState(false)
 
@@ -71,10 +72,10 @@ function Transaction() {
     fetchTrans();
 
   }, [sendRequest]);
-  console.log(curPage)
   const onPageChange = async (e, p) => {
-    console.log("page, changed")
     setCurPage(p);
+
+
     let data;
       try {
         data = await sendRequest(
@@ -92,13 +93,15 @@ function Transaction() {
   const onSearch =async (e) => {
     e.preventDefault();
     let data;
+    
     // setUserID(searchPattern)
-    setCurPage(0)
+    setCurPage(1)
+    setOffset(0)
       try {
         data = await sendRequest(
           `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
             searchPattern ? `userID=${searchPattern}&` : ""
-          }page=${curPage+1}` , "GET" ,{
+          }page=${1}` , "GET" ,{
             authorization : `Beearer ${auth.token}`
           }
         );
@@ -107,7 +110,6 @@ function Transaction() {
       }
       setTrans(data);
   }
-  console.log(trans)
 
   return (
     <div className="chart-card">
@@ -203,7 +205,8 @@ function Transaction() {
           count={(trans && trans.totalPage) || 1}
           color="primary"
           onChange={onPageChange}
-          
+          page = {curPage}
+          disableInitialCallback={true}
         />
       </div>
     </div>
