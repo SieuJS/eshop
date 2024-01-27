@@ -3,13 +3,14 @@ const pgp = require("pg-promise")({ capSQL: true });
 const tbName = "Orders";
 
 module.exports = class Order {
-    static async insert(orderdate, userid, total, address, phone) {
+    static async insert(orderdate, userid, total, address, phone, status) {
         const data = {
             "OrderDate": orderdate,
             "UserID": userid,
             "Total": total,
             "Address": address,
-            "Phone": phone
+            "Phone": phone,
+            "Status": status
         }
         const query = pgp.helpers.insert(data, null, tbName) + 'RETURNING "OrderID"';
         const rs = await db.one(query);
@@ -59,5 +60,27 @@ module.exports = class Order {
         }catch (err) {
             throw err;
         }
+    }
+
+    static async updateStatus(orderid, status) {
+        try {
+            await db.query(`
+            UPDATE "Orders"
+            SET "Status" = '${status}'
+            WHERE "OrderID" = ${orderid}
+            `)
+        }
+        catch(e) {
+            console.log(e);
+            throw err;
+        }
+    }
+
+    static async getAllPending() {
+        const rs = await db.query(`
+        SELECT * FROM "Orders"
+        WHERE "Status" = 'pending'
+        `)
+        return rs;
     }
 }
