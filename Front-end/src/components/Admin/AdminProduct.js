@@ -95,7 +95,14 @@ export default function AdminProduct() {
 
     if (confirmDelete) {
       try {
-        const result = await fetch(`${beUrl}/api/product/delete?proID=${proID}`);
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        const token = userData.token;
+        const result = await fetch(`${beUrl}/api/product/delete?proID=${proID}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
         const data = await result.json();
         if (data.success) {
           setAllProducts(allProducts.filter((item) => item.ProID !== proID));

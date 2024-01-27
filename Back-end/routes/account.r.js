@@ -4,6 +4,7 @@ const googlePath = require("./auth/auth-google.r.js")
 const accC = require("../controllers/acc.c.js");
 
 const checkAuth = require("../middlewares/check-auth.js");
+const checkRole = require('../middlewares/check-role')
 //router.use(checkAuth);
 
 router.use("/google", googlePath);
@@ -18,9 +19,9 @@ router.get("/:userId", accC.getUserById);
 router.get("/orders", checkAuth, accC.getOrders);
 
 // ducthinh update
-router.post("/ban", accC.banAcc);
+router.post("/ban", checkAuth, checkRole, accC.banAcc);
 router.get("/get-balance/:userId", checkAuth, accC.getBalance);
-router.post("/registerAdmin", accC.signUpAdminHandler);
-router.post("/updateAdmin", accC.updateAdminHandler);
+router.post("/registerAdmin", checkAuth, checkRole, accC.signUpAdminHandler);
+router.post("/updateAdmin", checkAuth, checkRole, accC.updateAdminHandler);
 
 module.exports = router;
