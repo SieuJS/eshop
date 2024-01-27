@@ -11,6 +11,7 @@ import AdminSidebar from "../../components/Admin/AdminSidebar";
 import ShopChart from "../../components/Admin/components/Chart";
 import Statistic from "../../components/Admin/Statistic";
 import AdminTable from "../../components/Admin/AdminTable";
+import { BACK_END_SERVER  } from "../../keys/BackEndKeys";
 
 import io from "socket.io-client";
 
@@ -57,7 +58,7 @@ function Landing() {
   useEffect(() => {
     if (auth.isLoggedIn) {
       setSocket(
-        io.connect("http://localhost:5000", {
+        io.connect(BACK_END_SERVER, {
           query: { token: `Bearer ${auth.token}` },
         })
       );

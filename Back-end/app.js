@@ -56,9 +56,15 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
   next();
 });
-app.post('/', (req, res) => {
-
-  res.json("Chao " + req.body.name)
+app.get('/', async (req, res) => {
+  return res.status(404).json({message : "faile"})
+  const delay = () => {
+  setTimeout(()=> {
+    return res.json({message : "Chao "})
+  }, 5000)
+  }
+  
+  await delay();
 })
 app.use("/api/account", accountRoute);
 app.use("/api/categories", categoryRoute);
