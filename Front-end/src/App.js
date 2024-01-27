@@ -24,7 +24,7 @@ import Auth from './pages/Auth.js'
 function App() {
   const { login, logout, token, userId, role } = AuthHook();
   console.log("app userid", userId);
-  console.log("role in app", role);
+  console.log("role in app ", role);
   //const [routes, setRoutes] = useState({});
 
   return (

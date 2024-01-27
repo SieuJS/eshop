@@ -16,6 +16,10 @@ router.post("/update", checkAuth, accC.updateHandler);
 router.post("/delete", accC.deleteHandler);
 router.get("/:userId", accC.getUserById);
 router.get("/orders", checkAuth, accC.getOrders);
+
+// ducthinh update
 router.post("/ban", accC.banAcc);
+router.post("/registerAdmin", accC.signUpAdminHandler);
+router.post("/updateAdmin", accC.updateAdminHandler);
 
 module.exports = router;

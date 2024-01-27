@@ -7,6 +7,8 @@ import Landing from './pages/Admin/Landing';
 import { useState } from 'react';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
+import AdminAddAccount from './components/Admin/AdminAddAccount';
+import AdminEditAccount from './components/Admin/AdminEditAccount';
 import { Navigate } from 'react-router-dom';
 
 import AdminSidebar from './components/Admin/AdminSidebar';
@@ -36,6 +38,8 @@ function Admin() {
           <Route path='/product/*' exect element={<Products />} />
           <Route path='/category' exect element={<Categories />} />
           <Route path='/dashboard' exect element={< Landing />} />
+          <Route path='/account/add' exect element={< AdminAddAccount />} />
+          <Route path='/account/edit' exect element={< AdminEditAccount />} />
           {/* <Route path='/dashboard' exect element={<Dashboard />} /> */}
         </Routes>
       </CatContextProvider>
