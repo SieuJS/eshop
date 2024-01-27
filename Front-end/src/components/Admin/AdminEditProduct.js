@@ -4,6 +4,7 @@ import { useEffect, useState, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import useFetch from "../../customize/useFetch";
 import { CatContext } from "../../context/CatContext";
+import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function AdminEditProduct() {
     const preset_key = "zjqlggti"
@@ -15,7 +16,7 @@ export default function AdminEditProduct() {
     const navigate = useNavigate();
 
     const [fileList, setFileList] = useState(null)
-    const { dataFetch, isLoading, isError } = useFetch(`/api/product/get-by-pro/${proID}`);
+    const { dataFetch, isLoading, isError } = useFetch(`${beUrl}/api/product/get-by-pro/${proID}`);
     const { allCategories, setAllCategories} = useContext(CatContext);
     const [proInfo, setProInfo] = useState({})
     const [errorInput, setErrorInput] = useState({});
@@ -91,7 +92,7 @@ export default function AdminEditProduct() {
             // formData.append('proImage', fileList);
         }
 
-        const res = await fetch('/api/product/update', {
+        const res = await fetch(`${beUrl}/api/product/update`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
