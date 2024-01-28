@@ -30,6 +30,24 @@ export default function ProductList(props) {
             const newURL = `${window.location.pathname}?${params.toString()}`;
             navigate(newURL);
         }
+        else if (min) {
+            params.set('min',min);
+            params.delete('max');
+            const newURL = `${window.location.pathname}?${params.toString()}`;
+            navigate(newURL);
+        }
+        else if (max) {
+            params.set('max',max);
+            params.delete('min');
+            const newURL = `${window.location.pathname}?${params.toString()}`;
+            navigate(newURL);
+        }
+        else {
+            params.delete('min');
+            params.delete('max');
+            const newURL = `${window.location.pathname}?${params.toString()}`;
+            navigate(newURL);
+        }
     }
 
     //name filter

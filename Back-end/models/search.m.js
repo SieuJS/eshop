@@ -7,8 +7,11 @@ module.exports = {
             let catidArr = catid.split(',');
             queryString += ` AND "CatID" IN (${catid})`
         }
-        if (min != null && max != null) {
-            queryString += ` AND "Price" BETWEEN ${min} AND ${max}`
+        if (min != null) {
+            queryString += ` AND "Price" >= ${min}`
+        }
+        if (max != null) {
+            queryString += ` AND "Price" <= ${max}`
         }
 
         // const startIndex = (page - 1) * productsPerPage;

@@ -15,16 +15,23 @@ export default function Checkout() {
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
     var total = 0;
-    const successNotify = () => {
+    const notify = (type, message) => {
         disPatch(cartSlice.actions.remove());
-        toast("Đặt hàng thành công");
+        if (type == 'success') {
+            toast.success(message);
+        }
+        else if (type== 'fail') {
+            toast.error(message);
+        }
+        else if (type== 'empty') {
+            toast.error(message);
+        }
+        else if (type=='pending') {
+            toast(message);
+        }
     }
-    const pendingNotify = () => {
-        disPatch(cartSlice.actions.remove());
-        toast("Đơn hàng đang được xử lý.")
-    }
-    const failNotify = () => {
-        toast("Đặt hàng thất bại")
+    const handleToastClose = () => {
+        navigate('/account/orders')
     }
     function formatWithDot(n) {
         return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
@@ -33,6 +40,9 @@ export default function Checkout() {
         total += element.Price * element.orderQuantity;
     });
     const handlePlaceOrder = (products, total) => {  //Lưu ý: Trong mỗi product có thêm thuộc tính orderQuantity: số lượng sản phẩm này được mua
+        if (products.length == 0) {
+            return notify("empty","Bạn chưa đặt bất cứ món hàng nào.");
+        }
         //Kiểm tra xem còn đủ hàng không
         let check = 1;
         products.forEach(product => {
@@ -74,14 +84,13 @@ export default function Checkout() {
                 logout();
             }
             else if (data.isPending) {
-                pendingNotify();
+                notify("pending","Đơn hàng đang được xử lý và sẽ sớm có kết quả.");
             }
-            else
-            if (data.isSuccess) {
-                successNotify();
+            else if (data.isSuccess) {
+                notify("success","Đặt hàng thành công");
             }
             else {
-                failNotify();
+                notify("fail","Đặt hàng thất bại")
             }
         })
     }
@@ -233,14 +242,14 @@ export default function Checkout() {
                         <div className="card-footer border-secondary bg-transparent">
                             <div className="d-flex justify-content-between mt-2">
                                 <h5 className="font-weight-bold">Total</h5>
-                                <h5 className="font-weight-bold">{total}đ</h5>
+                                <h5 className="font-weight-bold">{formatWithDot(total)}đ</h5>
                             </div>
                         </div>
                         <div className="card-footer border-secondary bg-transparent">
                             <button className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" onClick={() => handlePlaceOrder(products,total)}>
                                 Place Order
                             </button>
-                            <ToastContainer/>
+                            <ToastContainer autoClose={false} onClose={handleToastClose} position="top-center"/>
                         </div>
                     </div>
                 </div>
