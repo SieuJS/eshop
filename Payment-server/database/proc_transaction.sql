@@ -2,13 +2,13 @@ CREATE OR REPLACE PROCEDURE proc_transaction(
     sender_id INT,
     receiver_id INT,
 	order_id INT,
-    amount BIGINT
+    amount numeric(19,4)
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    sender_balance BIGINT;
-    receiver_balance BIGINT;
+    sender_balance numeric(19,4);
+    receiver_balance numeric(19,4);
 BEGIN
     -- Bắt đầu thực hiện các thay đổi trong giao dịch
 	BEGIN
