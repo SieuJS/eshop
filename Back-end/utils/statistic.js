@@ -8,7 +8,7 @@ const pgp = require("pg-promise")({capSQL: true});
 module.exports = {
     AccStats : async () => {
         try {
-            const data  = await db.oneOrNone('SELECT COUNT(*) FROM "Users" Where "Role" = $1' , ['User']);
+            const data  = await db.oneOrNone('SELECT COUNT(*) FROM "Users" Where "Role" != $1' , ['admin']);
             return data.count
         }
         catch (err) {

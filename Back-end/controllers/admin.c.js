@@ -30,7 +30,6 @@ const getToken = () => {
 const getTransByPage = async (req, res, next) => {
   const page = req.query.page || 1;
   const userID = parseInt(req.query.userID) || undefined;
-
   let response ;
   let paymentToken = getToken();
   try {

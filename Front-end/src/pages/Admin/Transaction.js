@@ -62,7 +62,7 @@ function Transaction() {
         data = await sendRequest(
           `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
             searchPattern ? `userID=${searchPattern}&` : ""
-          }page=${curPage+1}` , "GET" ,{
+          }page=${curPage}` , "GET" ,{
             authorization : `Beearer ${auth.token}`
           }
         );

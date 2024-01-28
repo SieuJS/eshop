@@ -35,14 +35,17 @@ module.exports = {
             const page = req.query.page || 1;
             let perPage = (req.query.per_page ? parseInt(req.query.per_page) : 7);
             const userID = req.query.userID;
+                
             // let accID = null;
             // if (userID) {
             //     accID = await accM.getIdByUserID(userID);
             // }
             const pageSize = perPage; // số dòng trên 1 trang  
             const result = await transM.getByPage(userID, page, pageSize);
+            console.log(result)
             res.json(result);
         } catch (error) {
+            console.log(error)
             next(new HttpError(error.message,500));
         }
     },
