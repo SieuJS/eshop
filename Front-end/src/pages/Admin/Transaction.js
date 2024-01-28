@@ -191,7 +191,7 @@ function Transaction() {
               />
               </div>
             )}
-        <table className="table">
+        <table className="table ">
           <thead>
             <tr className="text-center">
               <th scope="col">ID TRANS</th>
@@ -215,7 +215,7 @@ function Transaction() {
                     <td>{tran.OrderID}</td>
                     <td>{tran.Status}</td>
                     <td>{tran.Balance}</td>
-                    <td>{tran.Date}</td>
+                    <td>{new Date(Date.parse(tran.Date)).toUTCString().split('GMT')[0].split(', ')[1]}</td>
                   </tr>
                 );
               })}

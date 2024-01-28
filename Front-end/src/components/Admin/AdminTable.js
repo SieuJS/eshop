@@ -3,6 +3,7 @@ import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import "./AdminTable.css"
 
 export default function DataTable(props) {
   const usersData = props.usersData;

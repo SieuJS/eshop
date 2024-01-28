@@ -1,14 +1,18 @@
 table {
     table-layout: fixed;
+    overflow-x : scroll;
 }
 
 .trans-body{
     max-height: 512px;
 }
 .trans-row > td {
-    white-space: nowrap;
+white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.trans-row > td:hover {
+    overflow: visible;
 }
 
 .trans-search {
