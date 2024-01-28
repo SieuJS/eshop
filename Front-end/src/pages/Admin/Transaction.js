@@ -9,6 +9,8 @@ import { Backdrop, Typography, Fade, Box} from "@mui/material";
 import ClipLoader from "react-spinners/ClipLoader";
 import Modal from "@mui/material/Modal";
 
+import {useParams} from 'react-router-dom'
+
 import "./Transaction.css";
 
 const style = {
@@ -33,6 +35,7 @@ function Transaction() {
   const [userID, setUserID] = useState();
   const [offset, setOffset] = useState(0);
   const [max ,setMax] = useState(7)
+
 
   // error 
 

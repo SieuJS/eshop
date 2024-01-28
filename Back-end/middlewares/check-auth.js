@@ -10,6 +10,7 @@ module.exports = (req, res, next ) => {
     }
 
     try {
+        console.log("get in check auth", req.headers)
         const authHeaders = req.headers.authorization// authorization : "Bear Token" 
         if(!authHeaders) {
             const error = new Error('Authentication failed');
@@ -21,6 +22,7 @@ module.exports = (req, res, next ) => {
             throw error;
         }
         const decodedToken = jwt.verify(token , process.env.JWT_SECRET_KEY);
+        console.log(decodedToken)
         req.userData  =  {
             userId : decodedToken.userId,
             role : decodedToken.role.trim()
