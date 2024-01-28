@@ -63,7 +63,8 @@ CREATE TABLE "Orders" (
   "UserID" int4 NOT NULL,
   "Total" numeric(19,4) NOT NULL,
 	"Address" varchar(100),
-	"Phone" varchar(50)
+	"Phone" varchar(50),
+  "Status" varchar(10)
 )
 ;
 

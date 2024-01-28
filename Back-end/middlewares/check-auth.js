@@ -28,7 +28,6 @@ module.exports = (req, res, next ) => {
             role : decodedToken.role.trim()
         }  
         //req.useId = decodedToken.userId;
-        console.log("userid in middleware: ", decodedToken.userId);
         return next();
 
     }catch (err) {

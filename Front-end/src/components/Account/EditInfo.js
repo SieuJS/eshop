@@ -4,8 +4,10 @@ import LoadingSpinner from "../UIElements/LoadingSpinner";
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
+import { ToastContainer, toast } from "react-toastify";
+//import { useOutletContext } from "react-router-dom"
 
-export default function EditInfo() {
+export default function EditInfo(props) {
     const navigate = useNavigate();
     const { userId, token, role } = useContext(AuthContext);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
@@ -27,13 +29,12 @@ export default function EditInfo() {
     const [nameBtn, setNameBtn] = useState(true);
     const [emailBtn, setEmailBtn] = useState(true);
     const [dobBtn, setDobBtn] = useState(true);
-
     useEffect(() => {
         async function fetchUser() {
             if (userId) {
                 const pathToUser = role === "user" ? "" : "/google";
                 const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
-                console.log("editinfo component, apiGetAccount", apiGetAccount);
+                //console.log("editinfo component, apiGetAccount", apiGetAccount);
                 try {
                     const response = await sendRequest(
                         apiGetAccount,
@@ -55,7 +56,7 @@ export default function EditInfo() {
             }
         }
         fetchUser();
-    }, [userId]);
+    }, []);
 
     function handleChange(event) {
         const targetName = event.target.name;
@@ -111,8 +112,6 @@ export default function EditInfo() {
                 setValidNewUsername(!existedUserName);
             }
 
-            //console.log("before send request", validNewUsername, validNewName, validNewEmail);
-            //console.log("state of disabled edit buttons", usernameBtn, nameBtn, emailBtn, dobBtn);
             if ((!existedUserName && checkName && checkEmail) || !dobBtn) {
                 // Prepare data:
                 // Only update the data of the field which is enabling the editor button
@@ -125,8 +124,11 @@ export default function EditInfo() {
 
                 if (!usernameBtn || !nameBtn || !emailBtn || !dobBtn) {
                     const result = updateUserInfo(newValues);
-                    console.log("send request result", result);
-                    navigate("/account");
+                    //console.log("send request result", result);
+                    notifySuccess();
+                    setEmailBtn(true);
+                    setNameBtn(true);
+                    setDobBtn(true);
                 }
             }
         } else if (role === "usergoogle") {
@@ -138,8 +140,10 @@ export default function EditInfo() {
                 }
                 if (!nameBtn || !emailBtn || !dobBtn) {
                     const result = updateUserInfo(newValues);
-                    console.log("send request result for update usergoogle", result);
-                    navigate("/account");
+                    // console.log("send request result for update usergoogle", result);
+                    notifySuccess();
+                    setNameBtn(true);
+                    setDobBtn(true);
                 }
             }
         }
@@ -161,6 +165,12 @@ export default function EditInfo() {
         e.preventDefault();
         setDobBtn(prev => !prev);
     }
+
+    const notifySuccess = () => {
+        toast("Thay đổi thông tin thành công");
+    }
+
+    // console.log("changes", changes);
     return (
         <>
             {isLoading && (<LoadingSpinner asOverlay />)}
@@ -288,6 +298,7 @@ export default function EditInfo() {
                     </div>
                 </div>
             </form>
+            <ToastContainer />
         </>
     );
 }

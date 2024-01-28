@@ -81,4 +81,14 @@ module.exports = class Account {
             throw err
         }
     }
+
+    static async getPermission (userId)  {
+        try {
+            const data = await db.oneOrNone(`SELECT "Permission" FROM "Users" WHERE "ID" =$1`, [userId]);
+            return data
+        }
+        catch (err){
+            throw err
+        }
+    }
 }

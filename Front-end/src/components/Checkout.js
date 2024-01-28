@@ -4,9 +4,13 @@ import cartSlice from "../redux/cartSlice"
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery'
 import { BACK_END_SERVER } from "../keys/BackEndKeys";
+import { useContext } from "react";
+import {AuthContext} from '../context/AuthContext'
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function Checkout() {
+    const { logout } = useContext(AuthContext);
+
     const disPatch = useDispatch();
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
@@ -63,7 +67,10 @@ export default function Checkout() {
             return res.json()
         })
         .then((data) => {
-            if (data.isPending) {
+            if (data.isBan) {
+                logout();
+            }
+            else if (data.isPending) {
                 pendingNotify();
             }
             else
@@ -203,8 +210,8 @@ export default function Checkout() {
                         <div className="card-body">
                             <h5 className="font-weight-medium mb-3">Products</h5>
                             {
-                                products && products.map((item) => (
-                                    <div className="d-flex justify-content-between">
+                                products && products.map((item, index) => (
+                                    <div className="d-flex justify-content-between" key={index}>
                                         <p>{item.ProName} x{item.orderQuantity} </p>
                                         <p>{item.orderQuantity * item.Price}đ</p>
                                     </div>

@@ -33,7 +33,19 @@ router.get("/orders", checkAuth, accC.getOrders);
 // ducthinh update
 router.post("/ban", checkAuth, checkRole, accC.banAcc);
 router.get("/get-balance/:userId", checkAuth, accC.getBalance);
-router.post("/registerAdmin", checkAuth, checkRole, accC.signUpAdminHandler);
-router.post("/updateAdmin", checkAuth, checkRole, accC.updateAdminHandler);
+
+router.post("/registerAdmin", checkAuth, checkRole, [
+    check("accountName").isLength({min:1}),
+    check('accountUser').isLength({ min: 1 }),
+    check('accountDOB').not().isEmpty(),
+    check('accountEmail').normalizeEmail().isEmail(),
+    check('accountPass').isLength({min:6}),
+], accC.signUpAdminHandler);
+
+router.post("/updateAdmin", checkAuth, checkRole, [
+    check("Name").isLength({min:1}),
+    check('Email').normalizeEmail().isEmail(),
+    check('DOB').not().isEmpty()
+], accC.updateAdminHandler);
 
 module.exports = router;

@@ -6,33 +6,10 @@ import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
 
 export default function Account() {
     const { userId, role } = useContext(AuthContext);
-    const [userInfo, setUserInfo] = useState({});
-    const { sendRequest, isLoading, error, clearError } = useHttpClient();
-
-    useEffect(() => {
-        async function fetchUser() {
-            const pathToUser = role == "user" ? "" : "/google";
-            const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
-            if (userId) {
-                try {
-                    const data = await sendRequest(
-                        apiGetAccount,
-                        "GET");
-                    setUserInfo({ ...data.user });
-                }
-                catch (err) {
-                    throw err;
-                }
-            }
-        }
-        fetchUser();
-    }, [role]);
-
     return (
         <div className="bg-secondary">
             <div className="m-0 bg-primary border border-bottom">
                 <p className="m-3">You are logging as {role}</p>
-                <p className="m-3"><b>{userInfo.Name}</b></p>
             </div>
             <nav className="d-flex flex-column py-4 mx-2 gap-2">
                 <NavLink

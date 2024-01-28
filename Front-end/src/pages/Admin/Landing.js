@@ -147,12 +147,6 @@ function Landing() {
           </div>
           <div class="charts-card overflow-x-scroll">
             <h2 class="chart-title text-light">Users Board</h2>
-            <div className="btn-add-item d-flex">
-              <Link to="/admin/account/add" type="button" className="btn btn-primary ms-auto">
-                  <i className="fa-solid fa-circle-plus m-1"></i>
-                  Add Account Admin
-              </Link>
-            </div>
             <AdminTable usersData={usersData} banHandler = {banHandler}/>
             <div className="card-footer d-flex justify-content-center">
               <nav aria-label="Page navigation">
