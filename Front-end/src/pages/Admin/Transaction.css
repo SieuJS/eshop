@@ -5,7 +5,7 @@ table {
 .trans-body{
     max-height: 512px;
 }
-.trans-body > td {
+.trans-row > td {
     white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
