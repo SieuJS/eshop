@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
 
-export default function Account() {
+export default function Account(props) {
     const { userId, role } = useContext(AuthContext);
     const [userInfo, setUserInfo] = useState({});
     const { sendRequest, isLoading, error, clearError } = useHttpClient();
@@ -26,7 +26,7 @@ export default function Account() {
             }
         }
         fetchUser();
-    }, [role]);
+    }, [props.changes]);
 
     return (
         <div className="bg-secondary">

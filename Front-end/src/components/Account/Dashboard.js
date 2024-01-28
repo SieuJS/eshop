@@ -28,7 +28,7 @@ export default function Dashboard() {
             }
         }
         fetchUser();
-    }, [userId]);
+    }, []);
     return (
         <>
             {isLoading && (<LoadingSpinner asOverlay />)}

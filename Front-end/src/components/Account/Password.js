@@ -3,6 +3,7 @@ import { useHttpClient } from "../../hooks/http-hook";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import {ACCOUNT_API as accountApi} from "../../keys/BackEndKeys.js"
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Password() {
     const { sendRequest } = useHttpClient();
@@ -62,8 +63,13 @@ export default function Password() {
                         newPassword: passwordForm.newPw
                     })
                 )
-                console.log("result after update password", result);
-                navigate("/account");
+                notifySuccess();
+                setPasswordForm({
+                    oldPw: "",
+                    newPw: "",
+                    newPwAgain: ""
+                });
+                //navigate("/account");
             }
         } catch (err) {
             throw err;
@@ -78,6 +84,10 @@ export default function Password() {
     useEffect(() => {
         checkMatchNewPw();
     }, [passwordForm.newPwAgain]);
+
+    const notifySuccess = () => {
+        toast("Thay đổi mật khẩu thành công");
+    }
 
     return (
         <>
@@ -157,6 +167,7 @@ export default function Password() {
                     </div>
                 </div>
             </form>
+            <ToastContainer/>
         </>
     );
 }

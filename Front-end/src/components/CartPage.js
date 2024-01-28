@@ -7,15 +7,19 @@ export default function CartPage(props) {
     const disPatch = useDispatch();
     const cartItems = useSelector(state => state.cart)
     const [cart, setCart] = useState();
-    const [total, setTotal] = useState()
+    const [total, setTotal] = useState("")
     useEffect(() => {
         setCart(cartItems);
         let total = 0;
         cartItems.forEach(element => {
             total += element.Price * element.orderQuantity;
         });
-        setTotal(total);
-    }, [cartItems])
+        const totalCustom = formatWithDot(total);
+        setTotal(totalCustom);
+    }, [cartItems]);
+    function formatWithDot(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
     return (
         <div className="container-fluid pt-5">
             <div className="row px-xl-5">
@@ -93,7 +97,7 @@ export default function CartPage(props) {
                         <div className="card-body">
                             <div className="d-flex justify-content-between mb-3 pt-1">
                                 <h6 className="font-weight-medium">Subtotal</h6>
-                                <h6 className="font-weight-medium">{total}</h6>
+                                <h6 className="font-weight-medium">{total} đ</h6>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <h6 className="font-weight-medium">Shipping</h6>
@@ -103,7 +107,7 @@ export default function CartPage(props) {
                         <div className="card-footer border-secondary bg-transparent">
                             <div className="d-flex justify-content-between mt-2">
                                 <h5 className="font-weight-bold">Total</h5>
-                                <h5 className="font-weight-bold">{total}</h5>
+                                <h5 className="font-weight-bold">{total} đ</h5>
                             </div>
                             <NavLink to="/checkout" className="btn btn-block btn-primary my-3 py-3">
                                 Proceed To Checkout

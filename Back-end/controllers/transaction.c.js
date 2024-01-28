@@ -20,7 +20,7 @@ module.exports = {
             );
 
             const response = await fetch(
-                `http://localhost:5001/api/trans/get-by-page?userID=${userId}&page=${page}&per_page=${per_page}`,
+                `https://localhost:5001/api/trans/get-by-page?userID=${userId}&page=${page}&per_page=${per_page}`,
                 {
                     method: 'GET',
                     headers: {
