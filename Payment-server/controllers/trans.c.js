@@ -42,10 +42,8 @@ module.exports = {
             // }
             const pageSize = perPage; // số dòng trên 1 trang  
             const result = await transM.getByPage(userID, page, pageSize);
-            console.log(result)
             res.json(result);
         } catch (error) {
-            console.log(error)
             next(new HttpError(error.message,500));
         }
     },
