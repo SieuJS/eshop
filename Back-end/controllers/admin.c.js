@@ -29,9 +29,8 @@ const getToken = () => {
 
 const getTransByPage = async (req, res, next) => {
   const page = req.query.page || 1;
-  const userID = parseInt(req.query.userID);
+  const userID = parseInt(req.query.userID) || undefined;
 
-  console.log(userID)
   let response ;
   let paymentToken = getToken();
   try {
