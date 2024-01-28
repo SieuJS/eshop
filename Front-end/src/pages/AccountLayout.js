@@ -4,9 +4,11 @@ import Footer from "../components/Footer";
 import SideBar from "../components/Account/SideBar";
 import { Outlet } from "react-router-dom";
 import { useState } from "react"
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 export default function AccountLayout() {
     const [changes, setChanges] = useState(0);
+    const auth = useContext(AuthContext);
     console.log("AccountLayout rendered");
     return (
         <>
@@ -18,6 +20,7 @@ export default function AccountLayout() {
                         <SideBar />
                     </div>
                     <div className="col-lg-9 bg-light">
+                        {!auth.isLoggedIn && "You are not sign in yet"}
                         <Outlet />
                     </div>
                 </div>

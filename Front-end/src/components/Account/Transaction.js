@@ -32,7 +32,7 @@ export default function Transaction() {
         }
         fetchBalance();
         fetchTransactions(1);
-    }, []);
+    }, [token]);
 
     async function fetchTransactions(page) {
         //console.log("api page request", apiPageRequest);

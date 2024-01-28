@@ -16,7 +16,7 @@ export default function Orders() {
 
     useEffect(() => {
         fetchOrders(1);
-    }, []);
+    }, [token]);
 
     async function fetchOrders(page) {
         let apiPageRequest = ordersApi;

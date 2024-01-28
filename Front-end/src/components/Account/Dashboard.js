@@ -27,7 +27,7 @@ export default function Dashboard() {
             }
         }
         fetchUser();
-    }, []);
+    }, [role]);
     console.log("Dashboard rendered");
     return (
         <>

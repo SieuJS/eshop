@@ -22,13 +22,12 @@ function Customer() {
   return (
     <>
       <Routes>
-        <Route path='/home' exact element={<Home />} />
+       
         <Route path='/category' exact element={<ProductList />} />
         <Route path='/product/:proid' exact element={<Detail />} />
         <Route path='/productlist' exact element={<ProductList />} />
         <Route path='/search' exact element={<ProductList />} />
         { isLoggedIn && routes}
-        {<Route path='/*' element={<Navigate to ={"/home"} />}/>}
       </Routes>
     </>
   );
