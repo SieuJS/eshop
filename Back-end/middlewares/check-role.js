@@ -7,7 +7,6 @@ module.exports = (req,res,next) => {
     try {
         
         const role = req.userData.role;
-        console.log(role);
         if (!role) {
             const error = new Error('Authorization failed');
             throw error;

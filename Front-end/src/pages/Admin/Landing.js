@@ -20,7 +20,6 @@ import './Landing.css'
 
 function Landing() {
   const auth = useContext(AuthContext);
-
   const [usersData, setUsersData] = useState(undefined);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [reqUrl, setReqUrl] = useState(getUsersUrl);
@@ -97,8 +96,8 @@ function Landing() {
     const fetchUsers = async () => {
       let data;
       try {
-        data = await sendRequest(reqUrl, "GET" , {
-          "authorization" : `beare ${auth.token}`
+        data = await sendRequest(reqUrl, "GET" ,{
+          authorization : `Bearer ${auth.token}`
         });
         setUsersData(data.data);
         setPage(data.start);
@@ -113,7 +112,9 @@ function Landing() {
   const onPageChange = async (nextPage) => {
     let data;
     try {
-      data = await sendRequest(`${reqUrl}?limit=5&start=${nextPage}`);
+      data = await sendRequest(`${reqUrl}?limit=5&start=${nextPage}`, "GET" ,{
+        authorization : `Bearer ${auth.token}`
+      });
       setUsersData(data.data);
       setPage(data.start);
       setTotalPage(data.totalPage);

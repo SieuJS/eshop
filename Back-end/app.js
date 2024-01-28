@@ -122,7 +122,7 @@ io.use((socket, next) => {
     }
   }next();
 }).on("connection", ( socket) => {
-    console.log("Admin connected", socket.userData)
+
   socket.on("join", ({ name }) => {
     console.log("Someone connected");
   });
