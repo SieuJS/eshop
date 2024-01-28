@@ -28,7 +28,7 @@ function Customer() {
         <Route path='/productlist' exact element={<ProductList />} />
         <Route path='/search' exact element={<ProductList />} />
         { isLoggedIn && routes}
-        {<Route path='/*' element={<Navigate to ={isLoggedIn ? "/home": "/login"}/>} />}
+        {<Route path='/*' element={<Navigate to ={"/home"} />}/>}
       </Routes>
     </>
   );

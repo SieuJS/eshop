@@ -1,5 +1,14 @@
+table {
+    table-layout: fixed;
+}
+
 .trans-body{
-    height: 512px;
+    max-height: 512px;
+}
+.trans-row > td {
+    white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .trans-search {
@@ -8,4 +17,8 @@
     justify-content: center;
     align-items: center;
     gap : 1rem
+}
+
+.trans-row {
+    min-height: 73px;
 }

@@ -35,6 +35,7 @@ module.exports = {
             const page = req.query.page || 1;
             let perPage = (req.query.per_page ? parseInt(req.query.per_page) : 7);
             const userID = req.query.userID;
+                
             // let accID = null;
             // if (userID) {
             //     accID = await accM.getIdByUserID(userID);
