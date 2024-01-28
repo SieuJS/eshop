@@ -236,6 +236,10 @@ function Auth() {
       console.log(err)
     }
     console.log("data in auth login/signin", data);
+    if (!data) {
+      navigate("/login");
+      return;
+    }
     if (data?.existed) {
       auth.login(data.user.id, data.user.role.trim(), data.user.token);
       navigate("/");
