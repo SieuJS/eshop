@@ -18,7 +18,7 @@ export default function CartPage(props) {
         setTotal(totalCustom);
     }, [cartItems]);
     function formatWithDot(n) {
-        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     return (
         <div className="container-fluid pt-5">
@@ -54,7 +54,7 @@ export default function CartPage(props) {
                                                 </Link>
                                             </div>
                                         </td>
-                                        <td className="align-middle">{item.Price} đ</td>
+                                        <td className="align-middle">{formatWithDot(item.Price)} đ</td>
                                         <td className="align-middle">
                                             <div
                                                 className="input-group quantity mx-auto"
@@ -77,7 +77,7 @@ export default function CartPage(props) {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="align-middle">{item.Price * item.orderQuantity}</td>
+                                        <td className="align-middle">{formatWithDot(item.Price * item.orderQuantity) }đ</td>
                                         <td className="align-middle">
                                             <button className="btn btn-sm btn-primary" onClick={() => disPatch(() => disPatch(cartSlice.actions.add({ ...item, orderQuantity: item.orderQuantity * -1 })))}>
                                                 <i className="fa fa-times" />

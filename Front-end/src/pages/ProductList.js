@@ -25,7 +25,7 @@ export default function (props) {
 
     const {data: products, pages, isPending, Error} = usePaginationFetch(urlFetch);
     
-    const onPageChange = (index) => {
+    const onPageChange = (e,index) => {
         params.set('page',index);
         const newURL = `${window.location.pathname}?${params.toString()}`;
         navigate(newURL);

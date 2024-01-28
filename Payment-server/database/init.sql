@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS "Account";
 CREATE TABLE "Account" (
   	"AccID" serial NOT NULL,
   	"ShopID" varchar(50),
-	"Balance" int8
+	"Balance" numeric(19,4)
 )
 ;
 ALTER TABLE "Account" ADD PRIMARY KEY ("AccID");
@@ -15,10 +15,10 @@ DROP TABLE IF EXISTS "Transaction";
 CREATE TABLE "Transaction" (
   	"TransID" serial NOT NULL,
 	"AccID" int4,
-  	"Amount" int4,
+  	"Amount" numeric(19,4),
 	"OrderID" int4,
 	"Status" varchar(50),
-	"Balance" int8,
+	"Balance" numeric(19,4),
 	"Date" timestamp without time zone,
 	CONSTRAINT FK_Account
 		FOREIGN KEY ("AccID")
