@@ -2,15 +2,15 @@ CREATE OR REPLACE PROCEDURE proc_save_trans(
     sender_id INT, -- ID người gửi
     receiver_id INT, -- ID người nhận
     order_id INT,
-    amount BIGINT -- Số tiền gửi
+    amount numeric(19,4) -- Số tiền gửi
 )
 LANGUAGE plpgsql
 AS $$
 DECLARE
     -- Khai báo biến
     sta_string VARCHAR(50);
-    sender_balance BIGINT;
-    receiver_balance BIGINT;
+    sender_balance numeric(19,4);
+    receiver_balance numeric(19,4);
 BEGIN
     -- Tìm số dư tài khoản gửi
     SELECT "Balance" INTO sender_balance FROM "Account" WHERE "AccID" = sender_id;
