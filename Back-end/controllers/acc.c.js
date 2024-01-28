@@ -433,7 +433,10 @@ module.exports = {
   },
 
   signUpAdminHandler: async (req, res, next) => {
-
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new HttpError("Your input is not valid", 422));
+    }
     const {accountName, accountUser, accountDOB, accountEmail, accountPass} = req.body    
     // const acc = await accM.getByUsername(accountUser);
 
@@ -482,6 +485,10 @@ module.exports = {
 
   updateAdminHandler: async (req, res, next) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(new HttpError("Your input is not valid", 422));
+      }
       const { userId, Name, Email, DOB } = req.body;
       const newValues = {
         userId,

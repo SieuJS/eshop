@@ -36,6 +36,10 @@ module.exports = {
 
         if (!identifierUser)
             return res.status(200).json({ existed: false })
+        if (identifierUser.Permission == 0) {
+            const error = new HttpError("Account has been banned", 500);
+            return next(error);
+        }
         try {
             token = jwt.sign(
                 {
