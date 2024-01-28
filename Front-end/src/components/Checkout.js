@@ -210,8 +210,8 @@ export default function Checkout() {
                         <div className="card-body">
                             <h5 className="font-weight-medium mb-3">Products</h5>
                             {
-                                products && products.map((item) => (
-                                    <div className="d-flex justify-content-between">
+                                products && products.map((item, index) => (
+                                    <div className="d-flex justify-content-between" key={index}>
                                         <p>{item.ProName} x{item.orderQuantity} </p>
                                         <p>{item.orderQuantity * item.Price}đ</p>
                                     </div>

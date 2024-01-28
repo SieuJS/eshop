@@ -58,6 +58,7 @@ export default function OrderRow({ anOrder, count }) {
                     })}
                 </td>
                 <td>{orderInfo.total} VND</td>
+                <td>{anOrder.Status}</td>
             </tr>
         </>
     );

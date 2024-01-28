@@ -57,11 +57,11 @@ export default function Transaction() {
     function formatWithDot(n) {
         return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
     }
-
+    console.log("Transaction rendered");
     return (
         <>
             <div className="info-title mb-4">
-                <h2>Transaction history{transactionList?.length < 1 && "is empty"}</h2>
+                <h2>Transaction history {transactionList?.length < 1 && "is empty"}</h2>
             </div>
             <div className="info-title mb-4">
                 <h4>Current balance: <span className="text-info">{balance}</span></h4>

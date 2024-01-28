@@ -19,7 +19,6 @@ export default function Dashboard() {
                         apiGetAccount,
                         "GET",
                         { "Content-type": "application/json" });
-                    console.log("data response in dashboard", data);
                     setUserInfo({ ...data.user });
                 }
                 catch (err) {
@@ -29,6 +28,7 @@ export default function Dashboard() {
         }
         fetchUser();
     }, []);
+    console.log("Dashboard rendered");
     return (
         <>
             {isLoading && (<LoadingSpinner asOverlay />)}

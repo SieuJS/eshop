@@ -23,7 +23,7 @@ export default function Orders() {
         if (page > 0) {
             apiPageRequest += `?page=${page}&per_page=5`;
         }
-        console.log("api page request", apiPageRequest);
+        //console.log("api page request", apiPageRequest);
         const orders = await sendRequest(
             apiPageRequest,
             "GET",
@@ -31,7 +31,7 @@ export default function Orders() {
                 "Content-type": "application/json",
                 "Authorization": `Bear ${token}`
             });
-        console.log("orders ", orders);
+        //console.log("orders ", orders);
         setOrderList(orders.orders);
         setTotalPage(orders.total_pages);
     }
@@ -42,9 +42,7 @@ export default function Orders() {
         console.log("handler page click", event);
         fetchOrders(pageCliked);
     }
-
-    console.log("perPage & currentPI", {pp: perPage, cPI: currentPageIndex});
-
+    console.log("Order rendered");
     return (
         <>
             <div className="info-title mb-4">
@@ -57,10 +55,11 @@ export default function Orders() {
                     <thead>
                         <tr className="text-center">
                             <th scope="col" style={{ width: "5%" }}>N.o</th>
-                            <th scope="col" style={{ width: "20%" }}>Date</th>
+                            <th scope="col" style={{ width: "15%" }}>Date</th>
                             <th scope="col" style={{ width: "25%" }}>Address, phone</th>
                             <th scope="col" style={{ width: "35%" }}>Details</th>
-                            <th scope="col" style={{ width: "15%" }}>Total</th>
+                            <th scope="col" style={{ width: "10%" }}>Total</th>
+                            <th scope="col" style={{ width: "10%" }}>Status</th>
                         </tr>
                     </thead>
                     <tbody>

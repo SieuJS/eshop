@@ -395,7 +395,7 @@ module.exports = {
   },
   getBalance: async (req, res, next) => {
     const userId = req.params.userId;
-    console.log("user id in get balance", userId);
+    //console.log("user id in get balance", userId);
     let tokenToPaymentServer;
     try {
       tokenToPaymentServer = jwt.sign({

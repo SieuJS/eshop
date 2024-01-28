@@ -13,7 +13,6 @@ import { Navigate } from 'react-router-dom';
 
 function Customer() {
   const {isLoggedIn} = useContext(AuthContext)
-  console.log("Get in customer", isLoggedIn)
   const routes = (
     <>
       <Route path='/cart' exact element={< Cart />} />

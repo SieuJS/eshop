@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from "../../context/AuthContext";
 import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
 import { ToastContainer, toast } from "react-toastify";
-import { useOutletContext } from "react-router-dom"
+//import { useOutletContext } from "react-router-dom"
 
 export default function EditInfo(props) {
     const navigate = useNavigate();
@@ -17,7 +17,6 @@ export default function EditInfo(props) {
         newEmail: "",
         newDOB: ""
     });
-    const [changes, setChanges] = useOutletContext();
 
     // dynamic information validation
     const [validNewUsername, setValidNewUsername] = useState(true);
@@ -35,7 +34,7 @@ export default function EditInfo(props) {
             if (userId) {
                 const pathToUser = role === "user" ? "" : "/google";
                 const apiGetAccount = `${accountApi}${pathToUser}/${userId}`;
-                console.log("editinfo component, apiGetAccount", apiGetAccount);
+                //console.log("editinfo component, apiGetAccount", apiGetAccount);
                 try {
                     const response = await sendRequest(
                         apiGetAccount,
@@ -113,8 +112,6 @@ export default function EditInfo(props) {
                 setValidNewUsername(!existedUserName);
             }
 
-            //console.log("before send request", validNewUsername, validNewName, validNewEmail);
-            //console.log("state of disabled edit buttons", usernameBtn, nameBtn, emailBtn, dobBtn);
             if ((!existedUserName && checkName && checkEmail) || !dobBtn) {
                 // Prepare data:
                 // Only update the data of the field which is enabling the editor button
@@ -132,8 +129,6 @@ export default function EditInfo(props) {
                     setEmailBtn(true);
                     setNameBtn(true);
                     setDobBtn(true);
-                    setChanges(prev => prev + 1);
-                    //navigate("/");
                 }
             }
         } else if (role === "usergoogle") {
@@ -149,7 +144,6 @@ export default function EditInfo(props) {
                     notifySuccess();
                     setNameBtn(true);
                     setDobBtn(true);
-                    setChanges(prev => prev + 1);
                 }
             }
         }
@@ -176,7 +170,7 @@ export default function EditInfo(props) {
         toast("Thay đổi thông tin thành công");
     }
 
-    console.log("changes", changes);
+    // console.log("changes", changes);
     return (
         <>
             {isLoading && (<LoadingSpinner asOverlay />)}
