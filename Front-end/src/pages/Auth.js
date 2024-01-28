@@ -293,11 +293,11 @@ function Auth() {
         </Fade>
       </Modal>}
       <div className="container py-5 h-100">
-        <div className="row d-flex justify-content-center align-items-center h-100">
+        <div className="row d-flex justify-content-center align-items-center h-100 ">
           <div className="col col-xl-10">
             <div className="card" style={{ borderRadius: "1rem" }}>
               <div className="row g-0">
-                <div className="col-md-6 col-lg-5 d-none d-md-block">
+                <div className="col-md-6 col-lg-5 d-none d-md-block  ">
                   <img
                     src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img1.webp"
                     alt="login form"
@@ -305,7 +305,7 @@ function Auth() {
                     style={{ borderRadius: "1rem 0 0 1rem" }}
                   />
                 </div>
-                <div className="col-md-6 col-lg-7 d-flex align-items-center">
+                <div className="col-md-6 col-lg-7 d-flex align-items-center ">
                   <div className="card-body p-4 p-lg-5 text-black">
                     <form>
                       <div className="d-flex align-items-center mb-3 pb-1">
@@ -434,9 +434,9 @@ function Auth() {
                         </>
                       )}
 
-                      <div className="pt-1 mb-4">
+                      <div className="pt-1 mb-4 w-80">
                         <Button
-                          className="btn btn-dark btn-lg btn-block"
+                          className="btn btn-dark btn-lg"
                           onClick={authSubmitHandler}
                           variant="contained"
                           disabled = {!formState.isValid}
