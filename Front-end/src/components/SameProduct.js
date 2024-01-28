@@ -23,6 +23,9 @@ export default (props) => {
     const notify = () => {
         toast("Đã thêm vào giỏ hàng");
     }
+    function formatWithDot(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
     const { data, isPending, Error } = useFetch(BACK_END_SERVER + `/api/product/sameproduct/${proid}`);
     const [sameproducts, setSameproducts] = useState(data);
     useEffect(() => {
@@ -48,7 +51,7 @@ export default (props) => {
                                         <div className="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                             <h6 className="text-truncate mb-3">{product.ProName}</h6>
                                             <div className="d-flex justify-content-center">
-                                                <h6>{product.Price}</h6>
+                                                <h6>{formatWithDot(product.Price)} VND</h6>
                                             </div>
                                         </div>
                                         <div className="card-footer d-flex justify-content-between bg-light border">

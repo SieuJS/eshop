@@ -26,6 +26,9 @@ export default function Checkout() {
     const failNotify = () => {
         toast("Đặt hàng thất bại")
     }
+    function formatWithDot(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
     products.forEach(element => {
         total += element.Price * element.orderQuantity;
     });
@@ -213,14 +216,14 @@ export default function Checkout() {
                                 products && products.map((item, index) => (
                                     <div className="d-flex justify-content-between" key={index}>
                                         <p>{item.ProName} x{item.orderQuantity} </p>
-                                        <p>{item.orderQuantity * item.Price}đ</p>
+                                        <p>{formatWithDot(item.orderQuantity * item.Price)}đ</p>
                                     </div>
                                 ))
                             }
                             <hr className="mt-0" />
                             <div className="d-flex justify-content-between mb-3 pt-1">
                                 <h6 className="font-weight-medium">Subtotal</h6>
-                                <h6 className="font-weight-medium">{total}đ</h6>
+                                <h6 className="font-weight-medium">{formatWithDot(total)}đ</h6>
                             </div>
                             <div className="d-flex justify-content-between">
                                 <h6 className="font-weight-medium">Shipping</h6>

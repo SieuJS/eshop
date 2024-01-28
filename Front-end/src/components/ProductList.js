@@ -6,6 +6,7 @@ import useFetch from "../hooks/useFetch";
 import { useNavigate } from "react-router-dom";
 import { BACK_END_SERVER } from "../keys/BackEndKeys";
 import { ToastContainer, toast } from "react-toastify";
+import MyPagination from "../components/pagination"
 
 export default function ProductList(props) {
     const navigate = useNavigate();
@@ -77,6 +78,9 @@ export default function ProductList(props) {
 
     const notify = () => {
         toast("Đã thêm vào giỏ hàng");
+    }
+    function formatWithDot(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     return (
         <div className="container-fluid pt-5">
@@ -173,7 +177,7 @@ export default function ProductList(props) {
                                         <div className="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                             <h6 className="text-truncate mb-3">{product.ProName}</h6>
                                             <div className="d-flex justify-content-center">
-                                                <h6>{product.Price} VND</h6>
+                                                <h6>{formatWithDot(product.Price)} VND</h6>
                                             </div>
                                         </div>
                                         <div className="card-footer d-flex justify-content-between bg-light border">
@@ -193,40 +197,7 @@ export default function ProductList(props) {
                         }
                         <ToastContainer/>
                         <div className="col-12 pb-1">
-                            <nav aria-label="Page navigation">
-                                <ul className="pagination justify-content-center mb-3">
-                                    <li className="page-item">
-                                        <button className="page-link" aria-label="Previous" onClick={() => {
-                                            if (page != 1) {
-                                                onPageChange(page - 1);
-                                            }
-                                        }}>
-                                            <span aria-hidden="true">«</span>
-                                            <span className="sr-only">Previous</span>
-                                        </button>
-                                    </li>
-                                    {
-                                        pageNumbers && pageNumbers.map((index) => (
-                                            <li key={index} className={`page-item ${index === page ? 'active' : ''}`}>
-                                                <button className="page-link" onClick={() => onPageChange(index)}>
-                                                    {index}
-                                                </button>
-                                            </li>
-                                        )
-                                        )
-                                    }
-                                    <li className="page-item">
-                                        <button className="page-link" aria-label="Next" onClick={() => {
-                                            if (page != pages) {
-                                                onPageChange(page + 1);
-                                            }
-                                        }}>
-                                            <span aria-hidden="true">»</span>
-                                            <span className="sr-only">Next</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <MyPagination count={pages} onChange={onPageChange} page={page}/>
                         </div>
                     </div>
                 </div>

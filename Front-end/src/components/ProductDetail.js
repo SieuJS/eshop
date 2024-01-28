@@ -23,6 +23,9 @@ export default function ProductDetail(props) {
     const notify = () => {
         toast("Đã thêm vào giỏ hàng");
     }
+    function formatWithDot(n) {
+        return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
     return (
         <div className="container-fluid py-5" key={product.ProID}>
             <div className="row px-xl-5">
@@ -54,7 +57,7 @@ export default function ProductDetail(props) {
                         </div>
                         <small className="pt-1">(50 Reviews)</small>
                     </div>
-                    <h3 className="font-weight-semi-bold mb-4">{product.Price} VND</h3>
+                    <h3 className="font-weight-semi-bold mb-4">{formatWithDot(product.Price)} VND</h3>
                     <p className="mb-4"></p>
                     <div className="d-flex mb-3">
                         <p className="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
