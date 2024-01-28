@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
 import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
 
 export default function AdminEditAccount() {
@@ -68,7 +69,9 @@ export default function AdminEditAccount() {
         const data = await result.json();
         console.log(data);
         if (data.user) {
-            window.alert('Update successfull')
+            toast("Cập nhật thành công");
+        } else {
+            toast("Cập nhật thất bại")
         }
     }
 
@@ -123,6 +126,7 @@ export default function AdminEditAccount() {
                             <button type="submit" onClick={(e) => handleSubmit(e)} className="btn btn-primary">Save</button>
                         </form>
                     </div>
+                    <ToastContainer/>
                   </div>
                 </div>
             </div>

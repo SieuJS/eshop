@@ -3,6 +3,7 @@ const AccM = require("../models/acc.m");
 const HttpError = require('../models/http-error')
 const paymentUrl = process.env.PAYMENT_SERVER_HOST;
 const bcrypt = require('bcrypt');
+const {validationResult} = require('express-validator')
 const saltRound = 10;
 const jwt = require('jsonwebtoken')
 const checkAuth = require('../middlewares/check-auth')
@@ -43,19 +44,26 @@ const getTransByPage = async (req, res, next) => {
     })
   }
   catch (err) {
-    console.error(err)
+    console.log("No crash")
     return next (new HttpError("Can not connect to get your data"));
   }
-  const data = await response.json();
+  
   if(!response.ok){
-    console.error(data.message)
-    return next (new HttpError("No userID have detect"));
+    return next (new HttpError("Could not get data"));
   }
   else 
+  {
+  const data = await response.json();
   return res.json(data)
+  }
 };
 
 const changePassword = async (req, res, next ) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new HttpError("Your input is not valid", 422));
+    }
+
     const {newPassword, oldPassword} = req.body
     let AdminId = req.userData.userId ;
     let idetifierAdmin ;
@@ -91,6 +99,10 @@ const changePassword = async (req, res, next ) => {
 
 const signInHandler = async (req ,res, next) => {
   const { username, password } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(new HttpError("Your input is not valid", 422));
+  }
     let identifierUser
     try {
       identifierUser = await AccM.getByUsername(username);

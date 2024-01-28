@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { BACK_END_SERVER as beUrl } from "../../keys/BackEndKeys";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AdminAddAccount() {
     const [accountInfo, setAccountInfo] = useState({
@@ -45,12 +46,13 @@ export default function AdminAddAccount() {
             errors.accountEmail = 'Email is invalid'
         }
 
-        if (value.accountPass === '') {
-            errors.accountPass = 'Password is required'
+        const regexPass = /^.{6,}$/
+        if (!regexPass.test(value.accountPass)) {
+            errors.accountPass = 'Password requires at least 6 characters'
         }
 
-        if (value.accountConfirmPass === '') {
-            errors.accountConfirmPass = 'Value is required'
+        if (!regexPass.test(value.accountConfirmPass)) {
+            errors.accountConfirmPass = 'Password requires at least 6 characters'
         } else {
             if (value.accountConfirmPass !== value.accountPass)
                 errors.accountConfirmPass = 'no match!'
@@ -58,7 +60,7 @@ export default function AdminAddAccount() {
 
 
         return errors   
-    }   
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -83,7 +85,9 @@ export default function AdminAddAccount() {
         const data = await result.json();
         console.log(data);
         if (data.user) {
-            window.alert('register successful')
+            toast('register successful');
+        } else {
+            toast('fail')
         }
     }
 
@@ -155,6 +159,7 @@ export default function AdminAddAccount() {
                             <button type="submit" onClick={(e) => handleSubmit(e)} className="btn btn-primary">Save</button>
                         </form>
                     </div>
+                    <ToastContainer/>
                   </div>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 const orderM = require('../models/order.m')
 const orderDetailM = require('../models/orderDetail.m')
+const accM = require('../models/acc.m')
 const jwt = require('jsonwebtoken')
 const jwtSecondKey = process.env.JWT_SECOND
 require('dotenv').config()
@@ -15,13 +16,28 @@ module.exports = {
       const address = req.body.info.address;
       const phone = req.body.info.phone;
 
+      // check ban
+      const permission = await accM.getPermission(userId);
+      if (permission.Permission === 0) {
+        return res.status(502).json({ isBan: true, message: "Account has already banned" });
+      }
+
+      //Thêm vào bảng 
+      var orderid;
+      try {
+        orderid = await orderM.insert(date, userId, total, address, phone, 'pending');
+      }
+      catch (e) {
+        console.log(e);
+        return res.status(502).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
+      }
       //Thêm token để gửi đến server phụ
       try {
         token = jwt.sign(
           {
             userId: userId,
-            amount: total
-            // orderID : (pendingStatus)
+            amount: total,
+            orderID: orderid
           },
           jwtSecondKey,
           { expiresIn: "1h" }
@@ -36,33 +52,111 @@ module.exports = {
       //add order with pending status
 
       //Gọi fetch kiểm tra bên server phụ
-      const checkPayment = await fetch(paymentServerURL + '/api/trans', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      })
-  
-      if (!checkPayment.ok) {
-        return res.status(checkPayment.status || 401).json({ isSuccess: false });
-      }
       try {
-        const orderid = await orderM.insert(date, userId, total, address, phone);
+        const checkPayment = await fetch(paymentServerURL + '/api/trans', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        if (!checkPayment.ok) {
+          return res.status(checkPayment.status || 401).json({ isSuccess: false });
+        }
+        //Nếu server phụ trả về thành công, thực hiện update status của đơn hàng và thêm sản phẩm vào order detail
         for (const product of products) {
           let item = new orderDetailM(orderid, product);
           await orderDetailM.insert(item);
         }
+        await orderM.updateStatus(orderid, 'success');
+
+        res.status(200).json({ isSuccess: true });
       }
       catch (e) {
-        console.log(e);
-        return res.status(502).json({ isSuccess: false, message: "Lỗi khi thêm dữ liệu" });
-      }
+        if (e.message == "fetch failed") {  //Nếu server phụ bị lỗi, không thể fetch
+          res.status(503).json({ isPending: true }) //Trả về người dùng nội dung: đơn hàng đang được xử lý
 
-      res.status(200).json({ isSuccess: true });
+          //Fetch liên tục đến khi server Payment hoạt động trở lại
+          let response;
+          let reconnect = setInterval(async () => {
+            try {
+              response = await fetch(paymentServerURL);
+
+              //Nếu server hoạt động trở lại
+              if (response) {
+                clearInterval(reconnect)    //Xóa interval
+                const pendingOrders = await orderM.getAllPending(); //Lấy toàn bộ đơn hàng pending
+                const orderIDs = pendingOrders.map(item => {
+                  return item.OrderID
+                })
+
+                //Tạo token với dữ liệu là các orderid của các đơn hàng pending
+                if (pendingOrders.length !== 0) {
+                  var newToken;
+                  try {
+                    newToken = jwt.sign(
+                      {
+                        orderids: orderIDs
+                      },
+                      jwtSecondKey,
+                      { expiresIn: "1h" }
+                    );
+                  } catch (err) {
+                    console.error(err)
+                    const error = new HttpError(
+                      'Something wrong when add jwt', 500
+                    );
+                    return next(error);
+                  }
+
+                  try {
+                    //Fetch đến server Payment để lấy các trans có orderid nằm trong danh sách orderid trên
+                    fetch(paymentServerURL + '/api/trans/get-trans-by-orderid', {
+                      method: 'GET',
+                      headers: {
+                        'Authorization': `Bearer ${newToken}`,
+                        'Content-Type': 'application/json',
+                      },
+                    })
+                      .then(res => {
+                        return res.json()
+                      })
+                      .then(trans => {
+                        if (trans) {
+                          //Trước tiên ta chuyển tất cả các order đang pending sang trạng thái fail
+                          pendingOrders.forEach(async order => {
+                            await orderM.updateStatus(order.OrderID,'fail');
+                          })
+
+                          //Sau đó chuyển tất cả các order có trans = success, tức là đã thực hiện trans về trạng thái success
+                          trans.forEach(async tran => {
+                            if (tran.Status == "success") {
+                              await orderM.updateStatus(tran.OrderID, 'success');
+                              for (const product of products) {
+                                let item = new orderDetailM(orderid, product);
+                                await orderDetailM.insert(item);
+                              }
+                            }
+                          });
+                        }
+                      })
+                  }
+                  catch (e) {
+
+                  }
+                }
+              }
+            }
+            catch (error) {
+
+            }
+          }, 5000)
+        }
+      }
     }
     catch (e) {
-      console.log(e);
+      console.log(e)
+      res.status(502).json({ isSuccess: false, message: "LOI HE THONG" });
     }
   },
   getOrdersHandler: async (req, res, next) => {

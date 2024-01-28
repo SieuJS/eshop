@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRound = 10;
 const HttpError = require("../models/http-error");
+const {validationResult} = require('express-validator')
+
 // Quy uoc loi input tu client la 420
 const jwtKey = process.env.JWT_SECRET_KEY;
 
@@ -42,7 +44,10 @@ module.exports = {
 
 
   signUpHandler: async (req, res, next) => {
-
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new HttpError("Your input is not valid", 422));
+    }
     const un = req.body.username;
 
     const acc = await accM.getByUsername(un);
@@ -165,6 +170,10 @@ module.exports = {
   },
 
   logInHandler: async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new HttpError("Your input is not valid", 422));
+    }
     const { username, password } = req.body;
     let identifierUser
     try {

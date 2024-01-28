@@ -4,12 +4,28 @@ import cartSlice from "../redux/cartSlice"
 import { useNavigate } from "react-router-dom";
 import $ from 'jquery'
 import { BACK_END_SERVER } from "../keys/BackEndKeys";
+import { useContext } from "react";
+import {AuthContext} from '../context/AuthContext'
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Checkout() {
+    const { logout } = useContext(AuthContext);
+
     const disPatch = useDispatch();
     const navigate = useNavigate();
     const products = useSelector((state) => state.cart);
     var total = 0;
+    const successNotify = () => {
+        disPatch(cartSlice.actions.remove());
+        toast("Đặt hàng thành công");
+    }
+    const pendingNotify = () => {
+        disPatch(cartSlice.actions.remove());
+        toast("Đơn hàng đang được xử lý.")
+    }
+    const failNotify = () => {
+        toast("Đặt hàng thất bại")
+    }
     products.forEach(element => {
         total += element.Price * element.orderQuantity;
     });
@@ -51,13 +67,18 @@ export default function Checkout() {
             return res.json()
         })
         .then((data) => {
+            if (data.isBan) {
+                logout();
+            }
+            else if (data.isPending) {
+                pendingNotify();
+            }
+            else
             if (data.isSuccess) {
-                disPatch(cartSlice.actions.remove());
-                alert("DAT HANG THANH CONG",data.message)
-                navigate('/');
+                successNotify();
             }
             else {
-                alert("DAT HANG KHONG THANH CONG",data.message);
+                failNotify();
             }
         })
     }
@@ -216,6 +237,7 @@ export default function Checkout() {
                             <button className="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3" onClick={() => handlePlaceOrder(products,total)}>
                                 Place Order
                             </button>
+                            <ToastContainer/>
                         </div>
                     </div>
                 </div>
