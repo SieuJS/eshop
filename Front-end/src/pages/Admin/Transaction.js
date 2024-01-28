@@ -76,21 +76,20 @@ function Transaction() {
 
   }, [sendRequest]);
   const onPageChange = async (e, p) => {
-    setCurPage(p);
-
-
+   
     let data;
       try {
         data = await sendRequest(
           `${BACK_END_SERVER}/api/admin/trans/get-by-page?${
             searchPattern ? `userID=${searchPattern}&` : ""
-          }page=${curPage+1}` , "GET" ,{
+          }page=${p}` , "GET" ,{
             authorization : `Beearer ${auth.token}`
           }
         );
       } catch (err) {
         
       }
+      setCurPage(p);
       setTrans(data);
     };
   const onSearch =async (e) => {
@@ -112,6 +111,28 @@ function Transaction() {
         
       }
       setTrans(data);
+  }
+
+  const filler = () => {
+    let td = [];
+    if(trans && trans.data ){
+      let dataLength = trans.data.length ;
+      while(dataLength < 7){
+        td.push(
+          <tr key={dataLength} style={{textAlign: 'center'}} className="trans-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+            </tr>
+        )
+        dataLength ++;
+      } 
+    }
+    return td;
   }
 
   return (
@@ -187,7 +208,7 @@ function Transaction() {
               trans.data &&
               trans.data.map((tran, index) => {
                 return (
-                  <tr key={index} style={{textAlign: 'center'}}>
+                  <tr key={index} style={{textAlign: 'center'}} className="trans-row">
                     <td>{tran.TransID}</td>
                     <td>{tran.ShopID}</td>
                     <td>{tran.Amount}</td>
@@ -198,6 +219,7 @@ function Transaction() {
                   </tr>
                 );
               })}
+              {filler()}
           </tbody>
         </table>
       </div>
