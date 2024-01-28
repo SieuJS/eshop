@@ -117,7 +117,7 @@ export default function AdminEditProduct() {
                 <Link to={`/admin/product/${catID}`} className="btn btn-secondary me-3">
                     <i className="fa-solid fa-left-long"></i>
                 </Link>
-                ADD PRODUCT
+                EDIT PRODUCT
             </h2>
         </div>
 

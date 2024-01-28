@@ -1,5 +1,6 @@
 const orderM = require('../models/order.m')
 const orderDetailM = require('../models/orderDetail.m')
+const accM = require('../models/acc.m')
 const jwt = require('jsonwebtoken')
 const jwtSecondKey = process.env.JWT_SECOND
 require('dotenv').config()
@@ -14,6 +15,12 @@ module.exports = {
       const total = req.body.total;
       const address = req.body.info.address;
       const phone = req.body.info.phone;
+
+      // check ban
+      const permission = await accM.getPermission(userId);
+      if (permission.Permission === 0) {
+        return res.status(502).json({ isBan: true, message: "Account has already banned" });
+      }
 
       //Thêm vào bảng 
       var orderid;
