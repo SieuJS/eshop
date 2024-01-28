@@ -16,17 +16,22 @@ export default function Checkout() {
     const products = useSelector((state) => state.cart);
     var total = 0;
     const notify = (type, message) => {
+        if (type=== 'outOfStock') {
+            toast.error(message);
+            return;
+        }
         disPatch(cartSlice.actions.remove());
-        if (type == 'success') {
+        if (type === 'success') {
+            console.log("SUCCESS");
             toast.success(message);
         }
-        else if (type== 'fail') {
+        else if (type=== 'fail') {
             toast.error(message);
         }
-        else if (type== 'empty') {
+        else if (type=== 'empty') {
             toast.error(message);
         }
-        else if (type=='pending') {
+        else if (type=== 'pending') {
             toast(message);
         }
     }
@@ -41,13 +46,13 @@ export default function Checkout() {
     });
     const handlePlaceOrder = (products, total) => {  //Lưu ý: Trong mỗi product có thêm thuộc tính orderQuantity: số lượng sản phẩm này được mua
         if (products.length == 0) {
-            return notify("empty","Bạn chưa đặt bất cứ món hàng nào.");
+            return notify("empty","You haven't placed any orders yet.");
         }
         //Kiểm tra xem còn đủ hàng không
         let check = 1;
         products.forEach(product => {
             if (product.Quantity < product.orderQuantity) {
-                alert(`Số lượng sản phẩm ${product.ProName} còn lại trong kho là ${product.Quantity}. Mong bạn đặt lại`);
+                notify('outOfStock',`The quantity of products ${product.ProName} remains is ${product.Quantity}. Please reorder`);
                 check = 0;
                 return;
             }
@@ -84,13 +89,14 @@ export default function Checkout() {
                 logout();
             }
             else if (data.isPending) {
-                notify("pending","Đơn hàng đang được xử lý và sẽ sớm có kết quả.");
+                notify("pending","The order is being processed, and results will be available soon.");
             }
             else if (data.isSuccess) {
-                notify("success","Đặt hàng thành công");
+                notify("success","Order placed successfully.");
             }
             else {
-                notify("fail","Đặt hàng thất bại")
+                const mess = data.message;
+                notify("fail",mess);
             }
         })
     }

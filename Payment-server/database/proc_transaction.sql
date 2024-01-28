@@ -46,7 +46,7 @@ BEGIN
         WHEN others THEN
             -- Nếu có lỗi, hủy bỏ giao dịch
             ROLLBACK;
-            RAISE EXCEPTION 'Transfer failed. Please try again.';
+            RAISE EXCEPTION '%', SQLERRM;
     END;
 	COMMIT;
 END;

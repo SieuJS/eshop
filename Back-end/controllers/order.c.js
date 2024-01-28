@@ -60,8 +60,10 @@ module.exports = {
             'Content-Type': 'application/json',
           },
         })
+        const data= await checkPayment.json();
         if (!checkPayment.ok) {
-          return res.status(checkPayment.status || 401).json({ isSuccess: false });
+          await orderM.updateStatus(orderid, 'fail');
+          return res.status(checkPayment.status || 401).json({ isSuccess: false , message: data?.message});
         }
         //Nếu server phụ trả về thành công, thực hiện update status của đơn hàng và thêm sản phẩm vào order detail
         for (const product of products) {

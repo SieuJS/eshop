@@ -26,7 +26,7 @@ module.exports = {
                 return next (new HttpError("Error transaction", 500));
             }
             console.error(error);
-            return next (new HttpError("Error transaction", 500));
+            return next (new HttpError(error.message, 500));
         }
     },
 
