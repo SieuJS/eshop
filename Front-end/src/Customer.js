@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 
 import Home from "./pages/Home.js";
@@ -13,7 +13,6 @@ import { useContext } from 'react';
 
 function Customer() {
   const {isLoggedIn} = useContext(AuthContext)
-  const [inPath , setInPath] = useState()
   const routes = (
     <>
       <Route path='/cart' exact element={< Cart />} />
@@ -21,15 +20,6 @@ function Customer() {
     </>
   )
   
-  useEffect(()=> {
-
-  })
-
-  useEffect(()=> {
-    if(isLoggedIn) {
-      
-    }
-  }, [isLoggedIn])
   return (
     <>
       <Routes>
@@ -38,7 +28,12 @@ function Customer() {
         <Route path='/product/:proid' exact element={<Detail />} />
         <Route path='/productlist' exact element={<ProductList />} />
         <Route path='/search' exact element={<ProductList />} />
+        
         { isLoggedIn && routes}
+        <Route path = "/" exact element = {<Home/>}/>
+        {!isLoggedIn &&
+        <Route path = "/*" element = {<Navigate to = "/login" />}/>
+        }
       </Routes>
     </>
   );
