@@ -1,6 +1,5 @@
-table {
+.trans-table {
     table-layout: fixed;
-    overflow-x : scroll;
 }
 
 .trans-body{
@@ -21,8 +20,4 @@ white-space: nowrap;
     justify-content: center;
     align-items: center;
     gap : 1rem
-}
-
-.trans-row {
-    min-height: 73px;
 }

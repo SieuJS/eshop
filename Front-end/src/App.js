@@ -22,18 +22,33 @@ import Password from "./components/Account/Password.js";
 import Transaction from './components/Account/Transaction.js';
 import EditInfo from "./components/Account/EditInfo.js";
 import Auth from './pages/Auth.js'
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 function App() {
+  const [inPath , setInPath] = useState()
   const [login, logout, token, userId, role] = AuthHook();
+  const location = useLocation()
+  const navigate = useNavigate()
   useEffect(() => {
     console.log("app userid", userId);
     console.log("role in app", role);
   }, [])
 
+  useEffect(()=> {
+    setInPath(location.pathname)
+  },[])
+
+  useEffect(()=> {
+    if(token){
+      navigate(inPath);
+    }
+    else {
+      navigate('/login')
+    }
+  },[token])
 
   return (
     <>
-      <BrowserRouter>
+      
         <AuthContext.Provider
           value={
             {
@@ -63,6 +78,7 @@ function App() {
                 }
               </Route>
             )}
+            <Route path="/*" element={<Shop />} />
             {
               !token &&
               <>
@@ -70,11 +86,9 @@ function App() {
                 <Route path="/*" element={<Navigate to="/login" />} />
               </>
             }
-            <Route path="/*" element={<Shop />} />
-            
           </Routes>
         </AuthContext.Provider>
-      </BrowserRouter>
+      
     </>
   );
 }

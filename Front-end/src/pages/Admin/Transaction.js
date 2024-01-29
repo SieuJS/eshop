@@ -136,6 +136,7 @@ function Transaction() {
   }
 
   return (
+    <div>
     <div className="chart-card">
       {
         error &&
@@ -191,7 +192,7 @@ function Transaction() {
               />
               </div>
             )}
-        <table className="table ">
+        <table className="trans-table">
           <thead>
             <tr className="text-center">
               <th scope="col">ID TRANS</th>
@@ -234,6 +235,7 @@ function Transaction() {
           disableInitialCallback={true}
         />
       </div>
+    </div>
     </div>
   );
 }
