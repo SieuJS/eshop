@@ -9,7 +9,7 @@ import { AuthContext } from "../context/AuthContext";
 export default function AccountLayout() {
     const [changes, setChanges] = useState(0);
     const auth = useContext(AuthContext);
-    console.log("AccountLayout rendered");
+    //console.log("AccountLayout rendered");
     return (
         <>
             <Topbar />

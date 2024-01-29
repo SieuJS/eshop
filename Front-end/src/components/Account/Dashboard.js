@@ -2,12 +2,13 @@ import { useState, useEffect, useContext } from "react";
 import { useHttpClient } from "../../hooks/http-hook";
 import { AuthContext } from "../../context/AuthContext";
 import LoadingSpinner from "../UIElements/LoadingSpinner";
-import {ACCOUNT_API as accountApi} from "../../keys/BackEndKeys.js"
+import { ACCOUNT_API as accountApi } from "../../keys/BackEndKeys.js"
 
 export default function Dashboard() {
     const { userId, role } = useContext(AuthContext);
     const { isLoading, sendRequest, error, clearError } = useHttpClient();
     const [userInfo, setUserInfo] = useState({});
+    const [dobLocal, setDobLocal] = useState("");
     useEffect(() => {
         async function fetchUser() {
             const pathToUser = (role == "user" ? "" : "/google");
@@ -19,7 +20,15 @@ export default function Dashboard() {
                         apiGetAccount,
                         "GET",
                         { "Content-type": "application/json" });
-                    setUserInfo({ ...data.user });
+                    console.log("respone in account dashboard", data);
+                    setUserInfo({ ...data?.user });
+
+                    // convert UTC date to local date
+                    const utcDate = data?.user.DOB;
+                    const options = {day: "numeric", month: "numeric", year: "numeric"}; // format options
+                    const localDate = new Date(utcDate).toLocaleString("en-GB", options).substring(0, 10);
+                    const newlocalDate = localDate.replace(/\//g, '-')
+                    setDobLocal(newlocalDate);
                 }
                 catch (err) {
                     throw err;
@@ -28,7 +37,7 @@ export default function Dashboard() {
         }
         fetchUser();
     }, [role]);
-    console.log("Dashboard rendered");
+    //console.log("Dashboard rendered");
     return (
         <>
             {isLoading && (<LoadingSpinner asOverlay />)}
@@ -75,7 +84,7 @@ export default function Dashboard() {
                             <p>Date of birth:</p>
                         </div>
                         <div className="col-8">
-                            <p>{userInfo.DOB}</p>
+                            <p>{dobLocal}</p>
                         </div>
                     </div>
                 </div>
