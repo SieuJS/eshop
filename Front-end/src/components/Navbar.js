@@ -55,8 +55,6 @@ export default function Navbar() {
                             <div className="navbar-nav mr-auto py-0">
                                 <NavLink to="/" className="nav-item nav-link active">Home</NavLink>
                                 <NavLink to="/productlist" className="nav-item nav-link">All products</NavLink>
-                                <NavLink to="/detail" className="nav-item nav-link">Shop Detail</NavLink>
-                                <NavLink to="/contact" className="nav-item nav-link">Contact</NavLink>
                             </div>
                         </div>
                     </nav>

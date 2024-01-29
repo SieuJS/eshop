@@ -17,6 +17,7 @@ export default function EditInfo(props) {
         newEmail: "",
         newDOB: ""
     });
+    //const [localDOB, newLocalDOB] = useState("");
 
     // dynamic information validation
     const [validNewUsername, setValidNewUsername] = useState(true);
@@ -43,11 +44,17 @@ export default function EditInfo(props) {
                             'Content-Type': 'application/json'
                         });
                     const info = response?.user;
+
+                    // convert UTC date to local date
+                    const utcDate = response?.user.DOB;
+                    const localDate = new Date(utcDate);
+                    const formatedDate = formatDate(localDate);
+
                     setUserFormData({
-                        newName: info.Name ? info.Name : null,
-                        newUsername: info.Username ? info.Username : null,
-                        newEmail: info.Email ? info.Email : null,
-                        newDOB: info.DOB ? info.DOB.substring(0, 10) : null
+                        newName: info?.Name ? info.Name : null,
+                        newUsername: info?.Username ? info.Username : null,
+                        newEmail: info?.Email ? info.Email : null,
+                        newDOB: info?.DOB ? formatedDate : null
                     });
                 }
                 catch (err) {
@@ -57,6 +64,24 @@ export default function EditInfo(props) {
         }
         fetchUser();
     }, []);
+
+    function formatDate(date) {
+        // get the year, month, and day
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1; // months are zero-based
+        let day = date.getDate();
+
+        // add leading zeros if needed
+        if (month < 10) {
+            month = "0" + month;
+        }
+        if (day < 10) {
+            day = "0" + day;
+        }
+
+        // return the formatted date string
+        return year + "-" + month + "-" + day;
+    }
 
     function handleChange(event) {
         const targetName = event.target.name;
