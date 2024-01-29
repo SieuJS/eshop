@@ -19,6 +19,7 @@ module.exports = {
             setTimeout(() => {
                 res.json({message : "The transaction is success"})
             },5000)
+            // res.json({message : "The transaction is success"})
         } catch (error) {
             console.log(error);
             try {
@@ -51,8 +52,9 @@ module.exports = {
     },
     async getTransByOrderID (req,res,next) {
         try {
-            const orderids = req.userData.orderids;
-            const rs = await transM.getTransByOrderID(orderids);
+            const orderid = req.userData.orderid;
+            console.log(orderid);
+            const rs = await transM.getTransByOrderID(orderid);
             res.status(200).json(rs);
         } catch (error) {
             next(error);

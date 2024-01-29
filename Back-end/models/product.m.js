@@ -121,6 +121,14 @@ module.exports = class Product{
             throw(error);
           }
     }
+    static async updateQuantity(proid, amount) {
+        try {
+            const rs = db.query(`UPDATE "Products" SET "Quantity" = "Quantity" + ${amount} WHERE "ProID" = ${proid}`)
+        }
+        catch (e) {
+            throw(e);
+        }
+    }
     
     // static async getMaxID() {
     //     try {

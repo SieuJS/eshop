@@ -58,8 +58,7 @@ module.exports = class Trans {
     }
 
     static async getTransByOrderID(orderid) {
-        const str = orderid.join(',');
-        const rs = await db.query(`SELECT * FROM "Transaction" WHERE "OrderID" IN (${str})`)
+        const rs = await db.query(`SELECT * FROM "Transaction" WHERE "OrderID" = ${orderid}`)
         return rs;
     }
 }
