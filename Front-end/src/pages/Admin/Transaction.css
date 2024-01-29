@@ -4,6 +4,12 @@
     max-height: 512px;
 }
 
+.trans-body > th, td{
+    padding: 2rem;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
 
 .trans-search {
     width: 20%;
