@@ -35,6 +35,10 @@ function App() {
 
   useEffect(()=> {
     setInPath(location.pathname)
+    if(location.pathname === "/")
+    {
+      navigate('/home')
+    }
   },[])
   console.log(inPath)
   useEffect(()=> {
