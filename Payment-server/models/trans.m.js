@@ -47,7 +47,6 @@ module.exports = class Trans {
             const total = await db.one(`SELECT COUNT(*) FROM "Transaction" tb1 JOIN "Account" tb2 ON tb1."AccID" = tb2."AccID" ${userIDCondition}`);
             const totalData = parseInt(total.count)
             const totalPage = Math.ceil(totalData / pageSize);
-
             return {
                 data: data,
                 totalPage: totalPage,
@@ -60,9 +59,7 @@ module.exports = class Trans {
 
     static async getTransByOrderID(orderid) {
         const str = orderid.join(',');
-        console.log(str);
         const rs = await db.query(`SELECT * FROM "Transaction" WHERE "OrderID" IN (${str})`)
-        console.log(rs);
         return rs;
     }
 }

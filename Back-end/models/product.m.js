@@ -111,7 +111,7 @@ module.exports = class Product{
             );
         
             // Lấy danh sách 8 sản phẩm ngẫu nhiên có category giống với productCategory.CatID
-            const randomProducts = await db.many(
+            const randomProducts = await db.manyOrNone(
               'SELECT * FROM "Products" WHERE "CatID" = $1 AND "ProID" != $2 ORDER BY random() LIMIT 8',
               [productCategory.CatID, proid]
             );

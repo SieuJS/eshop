@@ -16,7 +16,9 @@ module.exports = {
 
             const data = await transM.transaction(id, amount, orderID);
 
-            res.json({message : "The transaction is success"})
+            setTimeout(() => {
+                res.json({message : "The transaction is success"})
+            },5000)
         } catch (error) {
             console.log(error);
             try {

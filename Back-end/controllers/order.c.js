@@ -134,8 +134,10 @@ module.exports = {
                           trans.forEach(async tran => {
                             if (tran.Status == "success") {
                               await orderM.updateStatus(tran.OrderID, 'success');
+                              console.log(tran.OrderID);
+                              console.log(products);
                               for (const product of products) {
-                                let item = new orderDetailM(orderid, product);
+                                let item = new orderDetailM(tran.OrderID, product);
                                 await orderDetailM.insert(item);
                               }
                             }

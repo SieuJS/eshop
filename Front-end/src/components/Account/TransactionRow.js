@@ -18,9 +18,8 @@ export default function TransactionRow({ transaction, count }) {
         setMoneyStatus(moneyState);
         
         // styling for data
-        const tempDate = transaction.Date;
-        const date = tempDate.substring(0, 10);
-        const transTime = tempDate.substring(11, 16);
+        const date = new Date(Date.parse(transaction.Date)).toString().split(' GMT')[0];
+        const transTime = date.substring(11, 16);
         const tempAmount = parseInt(transaction.Amount);
         const tempBalance = parseInt(transaction.Balance);
         const amount = formatWithDot(tempAmount);
@@ -41,7 +40,7 @@ export default function TransactionRow({ transaction, count }) {
         <>
             <tr className="text-center">
                 <td>{count}</td>
-                <td>{transInfo.transDate} {transInfo.transTime}</td>
+                <td>{transInfo.transDate}</td>
                 <td><p className={status ? "text-success" : "text-danger"}>{transaction.Status}</p></td>
                 <td><p className={moneyStatus ? "text-primary" : "text-warning"}>{transInfo.amount}</p></td>
                 <td>{transInfo.balance}</td>

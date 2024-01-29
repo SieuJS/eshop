@@ -24,7 +24,7 @@ export default function OrderRow({ anOrder, count }) {
                 );
                 setDetails(data.detail);
                 const tempDate = anOrder.OrderDate;
-                const date = tempDate.substring(0, 10);
+                const date = new Date(Date.parse(tempDate)).toString().split(' GMT')[0];
                 const ordTime = tempDate.substring(11, 16);
                 const tempPrice = parseInt(anOrder.Total);
                 const price = formatWithDot(tempPrice);
@@ -46,7 +46,7 @@ export default function OrderRow({ anOrder, count }) {
         <>
             <tr className="text-center">
                 <td>{count}</td>
-                <td>{orderInfo.orderDate} {orderInfo.orderTime}</td>
+                <td>{orderInfo.orderDate} </td>
                 <td>{anOrder.Address} {anOrder.Phone}</td>
                 <td>
                     {details.length > 0 && details.map(detail => {
