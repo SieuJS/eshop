@@ -1,4 +1,6 @@
-
+.trans-table {
+    table-layout: fixed;
+}
 
 .trans-body{
     max-height: 512px;
@@ -18,8 +20,4 @@ white-space: nowrap;
     justify-content: center;
     align-items: center;
     gap : 1rem
-}
-
-.trans-row {
-    min-height: 73px;
 }
