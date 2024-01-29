@@ -41,6 +41,9 @@ function App() {
     if(token){
       navigate(inPath);
     }
+    else {
+      navigate('/login')
+    }
   },[token])
 
   return (
