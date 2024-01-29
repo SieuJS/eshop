@@ -137,7 +137,7 @@ function Transaction() {
 
   return (
     <div>
-    <div className="chart-card">
+    <div className="chart-card overflow-x-scroll">
       {
         error &&
        <Modal
@@ -165,8 +165,9 @@ function Transaction() {
         </Fade>
       </Modal>
   }
-      <div className="card-header d-flex justify-content-between">
-        <h2>TRANSACTIONS LIST</h2>
+
+<div className=" d-flex justify-content-between ">
+        <h2 className="text-center">TRANSACTIONS LIST</h2>
         <form className="trans-search">
           <input
             type="text"
@@ -182,6 +183,7 @@ function Transaction() {
         </form>
       </div>
       <div className="card-body">
+      
       {isLoading && (
             <div className="d-flex justify-content-center w-100">
               <ClipLoader
@@ -223,9 +225,9 @@ function Transaction() {
               {filler()}
           </tbody>
         </table>
+       
       </div>
-
-      <div className="card-header">
+      <div className="">
         <Pagination
           className="pagination text-light"
           count={(trans && trans.totalPage) || 1}

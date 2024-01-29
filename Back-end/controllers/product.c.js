@@ -60,19 +60,31 @@ module.exports = {
         }
     },
     getById: async (req,res,next) => {
-        const id = req.params.proid;
-        const rs = await productM.getById(id);
-        rs[0].Price = parseInt(rs[0].Price,10);
-        res.json(rs);
+        try {
+
+            const id = req.params.proid;
+            const rs = await productM.getById(id);
+            rs[0].Price = parseInt(rs[0].Price,10);
+            res.json(rs);
+        }
+        catch (e) {
+            next(e);
+        }
     },
     getSameProduct: async (req,res,next) => {
-        const id = req.params.proid;
-        const rs = await productM.getSameProduct(id);
-        const productsWithIntPrice = rs.map(product => ({
-            ...product,
-            Price: parseInt(product.Price, 10)
-        }));
-        res.json(productsWithIntPrice);
+        try {
+
+            const id = req.params.proid;
+            const rs = await productM.getSameProduct(id);
+            const productsWithIntPrice = rs.map(product => ({
+                ...product,
+                Price: parseInt(product.Price, 10)
+            }));
+            res.json(productsWithIntPrice);
+        }
+        catch (e) {
+            next(e);
+        }
     },
     // deleteCategory: async (req, res, next) => {
     //     try {

@@ -1,5 +1,6 @@
 const orderM = require('../models/order.m')
 const orderDetailM = require('../models/orderDetail.m')
+const productM = require("../models/product.m")
 const accM = require('../models/acc.m')
 const jwt = require('jsonwebtoken')
 const jwtSecondKey = process.env.JWT_SECOND
@@ -26,6 +27,10 @@ module.exports = {
       var orderid;
       try {
         orderid = await orderM.insert(date, userId, total, address, phone, 'pending');
+        for (const product of products) {
+          let item = new orderDetailM(orderid, product);
+          await orderDetailM.insert(item);
+        }
       }
       catch (e) {
         console.log(e);
@@ -87,18 +92,19 @@ module.exports = {
               //Nếu server hoạt động trở lại
               if (response) {
                 clearInterval(reconnect)    //Xóa interval
-                const pendingOrders = await orderM.getAllPending(); //Lấy toàn bộ đơn hàng pending
-                const orderIDs = pendingOrders.map(item => {
-                  return item.OrderID
-                })
+                // const pendingOrders = await orderM.getAllPending(); //Lấy toàn bộ đơn hàng pending
+                // const orderIDs = pendingOrders.map(item => {
+                //   return item.OrderID
+                // })
 
                 //Tạo token với dữ liệu là các orderid của các đơn hàng pending
-                if (pendingOrders.length !== 0) {
+                if (orderid) {
+                  console.log(orderid)
                   var newToken;
                   try {
                     newToken = jwt.sign(
                       {
-                        orderids: orderIDs
+                        orderid: orderid
                       },
                       jwtSecondKey,
                       { expiresIn: "1h" }
@@ -112,7 +118,7 @@ module.exports = {
                   }
 
                   try {
-                    //Fetch đến server Payment để lấy các trans có orderid nằm trong danh sách orderid trên
+                    //Fetch đến server Payment để lấy trans có orderid trên
                     fetch(paymentServerURL + '/api/trans/get-trans-by-orderid', {
                       method: 'GET',
                       headers: {
@@ -123,23 +129,25 @@ module.exports = {
                       .then(res => {
                         return res.json()
                       })
-                      .then(trans => {
-                        if (trans) {
-                          //Trước tiên ta chuyển tất cả các order đang pending sang trạng thái fail
-                          pendingOrders.forEach(async order => {
-                            await orderM.updateStatus(order.OrderID,'fail');
-                          })
-
+                      .then(async trans => {
+                        if (trans.length != 0) {
+                          console.log(trans);
                           //Sau đó chuyển tất cả các order có trans = success, tức là đã thực hiện trans về trạng thái success
-                          trans.forEach(async tran => {
-                            if (tran.Status == "success") {
-                              await orderM.updateStatus(tran.OrderID, 'success');
-                              for (const product of products) {
-                                let item = new orderDetailM(orderid, product);
-                                await orderDetailM.insert(item);
-                              }
+                          if (trans[0].Status=="success") {
+                            await orderM.updateStatus(orderid, 'success');
+                          }
+                          else if (trans[0].Status == "fail") {
+                            await orderM.updateStatus(orderid, 'fail');
+                            for (const product of products) {
+                              await productM.updateQuantity(product.ProID,product.orderQuantity);
                             }
-                          });
+                          }
+                        }
+                        else { //Trường hợp chưa có transaction nào được thực hiện
+                          await orderM.updateStatus(orderid, 'fail');
+                          for (const product of products) {
+                            await productM.updateQuantity(product.ProID,product.orderQuantity);
+                          }
                         }
                       })
                   }

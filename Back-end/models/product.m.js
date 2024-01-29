@@ -111,7 +111,7 @@ module.exports = class Product{
             );
         
             // Lấy danh sách 8 sản phẩm ngẫu nhiên có category giống với productCategory.CatID
-            const randomProducts = await db.many(
+            const randomProducts = await db.manyOrNone(
               'SELECT * FROM "Products" WHERE "CatID" = $1 AND "ProID" != $2 ORDER BY random() LIMIT 8',
               [productCategory.CatID, proid]
             );
@@ -120,6 +120,14 @@ module.exports = class Product{
           } catch (error) {
             throw(error);
           }
+    }
+    static async updateQuantity(proid, amount) {
+        try {
+            const rs = db.query(`UPDATE "Products" SET "Quantity" = "Quantity" + ${amount} WHERE "ProID" = ${proid}`)
+        }
+        catch (e) {
+            throw(e);
+        }
     }
     
     // static async getMaxID() {

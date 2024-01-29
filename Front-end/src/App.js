@@ -38,8 +38,12 @@ function App() {
   },[])
 
   useEffect(()=> {
+    console.log(inPath)
     if(token){
       navigate(inPath);
+    }
+    else if (inPath !== "/"){
+      navigate('/home')
     }
     else {
       navigate('/login')
@@ -62,8 +66,9 @@ function App() {
           }
         >
           <Routes>
+          
           <Route path='/home' exact element={<Home />} />
-          <Route path='/' element={<Navigate to="/home" />} />
+          {/* <Route path=''exact element={<Navigate to="/home" />} /> */}
             <Route path='/admin/*' element={<Admin />} />
             {(
               <Route path="/account" element={<AccountLayout />}>
@@ -78,14 +83,14 @@ function App() {
                 }
               </Route>
             )}
-            <Route path="/*" element={<Shop />} />
             {
               !token &&
               <>
                 <Route path="/login" element={<Auth />} />
-                <Route path="/*" element={<Navigate to="/login" />} />
+                <Route path="/*" element={<Navigate to="/login"/>} />
               </>
             }
+            <Route path='/'exact element={<Navigate to="/home" />} />
           </Routes>
         </AuthContext.Provider>
       

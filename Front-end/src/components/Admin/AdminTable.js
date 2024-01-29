@@ -55,7 +55,7 @@ export default function DataTable(props) {
                   <td>{user.Username}</td>
                   <td>{user.Name}</td>
                   <td>{user.Email}</td>
-                  <td>{user.DOB}</td>
+                  <td>{new Date(Date.parse(user.DOB)).toUTCString().split('GMT')[0].split(', ')[1]}</td>
                   <td>{user.Role.trim().toLowerCase()}</td>
                   <td>
                     {user.Role.trim().toLowerCase() !== 'admin' ? user.Permission !== 1 ? (
