@@ -36,17 +36,10 @@ function App() {
   useEffect(()=> {
     setInPath(location.pathname)
   },[])
-
+  console.log(inPath)
   useEffect(()=> {
-    console.log(inPath)
     if(token){
-      navigate(inPath);
-    }
-    else if (inPath !== "/"){
-      navigate('/home')
-    }
-    else {
-      navigate('/login')
+      navigate(inPath)
     }
   },[token])
 
@@ -69,6 +62,7 @@ function App() {
           
           <Route path='/home' exact element={<Home />} />
           {/* <Route path=''exact element={<Navigate to="/home" />} /> */}
+          <Route path='/*' element={<Shop/>} />
             <Route path='/admin/*' element={<Admin />} />
             {(
               <Route path="/account" element={<AccountLayout />}>
@@ -90,7 +84,7 @@ function App() {
                 <Route path="/*" element={<Navigate to="/login"/>} />
               </>
             }
-            <Route path='/'exact element={<Navigate to="/home" />} />
+            
           </Routes>
         </AuthContext.Provider>
       
