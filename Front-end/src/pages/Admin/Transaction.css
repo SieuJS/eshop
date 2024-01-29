@@ -1,7 +1,4 @@
-table {
-    table-layout: fixed;
-    overflow-x : scroll;
-}
+
 
 .trans-body{
     max-height: 512px;
