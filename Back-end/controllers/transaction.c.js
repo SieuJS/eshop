@@ -18,9 +18,9 @@ module.exports = {
                 jwtSecondKey,
                 { expiresIn: "1h" }
             );
-
+            
             const response = await fetch(
-                `https://localhost:5001/api/trans/get-by-page?userID=${userId}&page=${page}&per_page=${per_page}`,
+                `${process.env.PAYMENT_SERVER_HOST}/api/trans/get-by-page?userID=${userId}&page=${page}&per_page=${per_page}`,
                 {
                     method: 'GET',
                     headers: {

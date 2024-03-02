@@ -1,4 +1,5 @@
 import './App.css';
+import React, {Suspense} from 'react';
 import Home from "./pages/Home.js";
 /* import Detail from "./pages/Detail.js";
 import Cart from "./pages/Cart.js";
@@ -40,16 +41,15 @@ function App() {
       navigate('/home')
     }
   },[])
-  console.log(inPath)
   useEffect(()=> {
-    if(token){
+    if(token && inPath){
       navigate(inPath)
+      setInPath(null);
     }
   },[token])
 
   return (
     <>
-      
         <AuthContext.Provider
           value={
             {
@@ -63,7 +63,6 @@ function App() {
           }
         >
           <Routes>
-          
           <Route path='/home' exact element={<Home />} />
           {/* <Route path=''exact element={<Navigate to="/home" />} /> */}
           <Route path='/*' element={<Shop/>} />
@@ -71,12 +70,12 @@ function App() {
             {(
               <Route path="/account" element={<AccountLayout />}>
                 { token &&
-                  <>
-                <Route index element={<AccountDashboard />} />
-                <Route path="editinfo" element={<EditInfo />} />
+                <>
+                <Route index element={<AccountDashboard />}/>
+                <Route path="editinfo" element={<EditInfo/>}/>
                 <Route path="orders" element={<Orders />} />
-                <Route path="password" element={<Password />} />
-                <Route path="transaction" element={<Transaction />} />
+                <Route path="password" element={<Password />}/>
+                <Route path="transaction" element={<Transaction />}/>
                 </>
                 }
               </Route>
@@ -85,7 +84,7 @@ function App() {
               !token &&
               <>
                 <Route path="/login" element={<Auth />} />
-                <Route path="/*" element={<Navigate to="/login"/>} />
+                <Route path="/*" element={<Navigate to="/login"/>}/>
               </>
             }
             

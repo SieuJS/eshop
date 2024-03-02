@@ -13,10 +13,10 @@ import Categories from './pages/Admin/Categories';
 import Dashboard from './pages/Admin/Dashboard'
 import CatContextProvider from './context/CatContext';
 import Landing from './pages/Admin/Landing';
-import Transaction from "./pages/Admin/Transaction"
-import AdminAddAccount from './components/Admin/AdminAddAccount'
-import AdminEditAccount from './components/Admin/AdminEditAccount'
-import AdminAuth from "./pages/Admin/Auth"
+import Transaction from "./pages/Admin/Transaction";
+import AdminAddAccount from './components/Admin/AdminAddAccount';
+import AdminEditAccount from './components/Admin/AdminEditAccount';
+import AdminAuth from "./pages/Admin/Auth";
 
 function Admin() {
 

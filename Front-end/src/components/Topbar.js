@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 
 export default function Topbar() {
     const auth = useContext(AuthContext);
-    const [keyword, setKeyword] = useState();
+    const [keyword, setKeyword] = useState('');
     const navigate = useNavigate();
     const submitHandler = (e) => {
         e.preventDefault();

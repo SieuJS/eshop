@@ -54,37 +54,37 @@ function Landing() {
 
   // }, [])
 
-  useEffect(() => {
-    if (auth.isLoggedIn) {
-      setSocket(
-        io.connect(BACK_END_SERVER, {
-          query: { token: `Bearer ${auth.token}` },
-        })
-      );
-    }
-  }, [auth.isLoggedIn]);
+  // useEffect(() => {
+  //   if (auth.isLoggedIn) {
+  //     setSocket(
+  //       io.connect(BACK_END_SERVER, {
+  //         query: { token: `Bearer ${auth.token}` },
+  //       })
+  //     );
+  //   }
+  // }, [auth.isLoggedIn]);
 
-  useEffect(() => {
-    // no-op if the socket is already connected
-    if (socket) {
-      socket
-        .on("connect", () => {
-          console.log("connect success");
-        })
-        .on("connect_error", (err) => {
-          console.log("err");
-          console.log(err);
-        })
-        .on("statistic", (data) => {
-          setStatData(data);
-        });
-    }
-    return () => {
-      if (socket) {
-        socket.disconnect();
-      }
-    };
-  }, [socket]);
+  // useEffect(() => {
+  //   // no-op if the socket is already connected
+  //   if (socket) {
+  //     socket
+  //       .on("connect", () => {
+  //         console.log("connect success");
+  //       })
+  //       .on("connect_error", (err) => {
+  //         console.log("err");
+  //         console.log(err);
+  //       })
+  //       .on("statistic", (data) => {
+  //         setStatData(data);
+  //       });
+  //   }
+  //   return () => {
+  //     if (socket) {
+  //       socket.disconnect();
+  //     }
+  //   };
+  // }, [socket]);
 
   const banHandler = (userId, permission) => {
     setUsersData(usersData.map((user) => user.ID === userId ? {...user, Permission:permission} : user))
@@ -95,6 +95,7 @@ function Landing() {
   useEffect(() => {
     const fetchUsers = async () => {
       let data;
+      
       try {
         data = await sendRequest(reqUrl, "GET" ,{
           authorization : `Bearer ${auth.token}`

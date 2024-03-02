@@ -176,8 +176,10 @@ module.exports = {
     }
     const { username, password } = req.body;
     let identifierUser
+    console.log("get in login")
     try {
       identifierUser = await accM.getByUsername(username);
+      
     } catch (err) {
       console.error(err)
       return next(new HttpError("Some error occurs when find your account", 500));

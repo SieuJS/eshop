@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const pgp = require('pg-promise')({
     capSQL: true
 });
+
 const cn = {
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,

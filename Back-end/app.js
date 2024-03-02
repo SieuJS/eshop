@@ -14,7 +14,7 @@ const authGoogleRoute = require("./routes/auth/auth-google.r.js");
 const categoryRoute = require("./routes/category.r")
 const productRoute = require("./routes/product.r")
 const orderRoute = require('./routes/order.r.js')
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const secret = "My secret";
 const searchC = require("./controllers/search.c.js");
 const adminRoute = require("./routes/admin.js");
@@ -57,13 +57,11 @@ app.use((req, res, next) => {
   next();
 });
 app.get('/', async (req, res) => {
-  return res.status(404).json({message : "faile"})
   const delay = () => {
   setTimeout(()=> {
     return res.json({message : "Chao "})
-  }, 5000)
+  }, 1000)
   }
-  
   await delay();
 })
 app.use("/api/account", accountRoute);
@@ -92,12 +90,16 @@ const server = https.createServer({
     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
 }, app);
 
+
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+});
+
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
   },
 });
-
 
 
 io.use((socket, next) => {
@@ -128,7 +130,7 @@ io.use((socket, next) => {
   });
 
 
-  const getAllStats = async () => {
+  const getAllStats = async (req, res, next) => {
     let prodStat , accStat, catStat, orderStat;
     try {
       prodStat = await ProdStats();
@@ -154,8 +156,3 @@ io.use((socket, next) => {
   }, 10*1000)
 
 });
-
-server.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
-

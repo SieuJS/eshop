@@ -17,7 +17,7 @@ module.exports = class Account {
             const data = await db.oneOrNone(`SELECT * FROM "Users" WHERE "Username" = $1`, [un]);
             return data;
         } catch (error) {
-            throw error;
+            throw error
         }
     }
 

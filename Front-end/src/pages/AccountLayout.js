@@ -17,11 +17,11 @@ export default function AccountLayout() {
             <div className="container-fluid mb-5 my-2 py-2">
                 <div className="row border px-xl-5 bg-light py-4">
                     <div className="col-lg-3 d-none d-lg-block">
-                        <SideBar />
+                        <SideBar/>
                     </div>
                     <div className="col-lg-9 bg-light">
                         {!auth.isLoggedIn && "You are not sign in yet"}
-                        <Outlet />
+                        <Outlet/>
                     </div>
                 </div>
             </div>

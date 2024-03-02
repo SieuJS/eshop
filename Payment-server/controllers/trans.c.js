@@ -35,6 +35,7 @@ module.exports = {
 
     async getTransByPage (req, res, next){
         try {
+            console.log("determin in payment")
             const page = req.query.page || 1;
             let perPage = (req.query.per_page ? parseInt(req.query.per_page) : 7);
             const userID = req.query.userID;
@@ -43,11 +44,12 @@ module.exports = {
             // if (userID) {
             //     accID = await accM.getIdByUserID(userID);
             // }
+            
             const pageSize = perPage; // số dòng trên 1 trang  
             const result = await transM.getByPage(userID, page, pageSize);
-            res.json(result);
+            return res.json(result);
         } catch (error) {
-            next(new HttpError(error.message,500));
+            return next(new HttpError(error.message,500));
         }
     },
     async getTransByOrderID (req,res,next) {

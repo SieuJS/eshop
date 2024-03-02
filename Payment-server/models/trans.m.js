@@ -40,6 +40,7 @@ module.exports = class Trans {
 
     static async getByPage(userID, page, pageSize) {
         try {
+           
             const offset = (page - 1) * pageSize;
             const limit = pageSize;
             const userIDCondition = userID ? `WHERE tb2."ShopID" = '${userID}'` : ''
