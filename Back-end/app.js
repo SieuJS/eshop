@@ -59,7 +59,7 @@ app.use((req, res, next) => {
 app.get('/', async (req, res) => {
   const delay = () => {
   setTimeout(()=> {
-    return res.json({message : "Chao "})
+    return res.json({message : "Chao " + port})
   }, 1000)
   }
   await delay();
@@ -84,20 +84,18 @@ app.use((error, req, res, next) => {
   res.json({ message: error.message || "There some errors occured " });
 });
 
-// const server = http.createServer(app);
-const server = https.createServer({
-    key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
-    cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
-}, app);
+const server = http.createServer(app);
+// const server = https.createServer({
+//     key: fs.readFileSync(path.join(__dirname,'cert','key.pem')),
+//     cert: fs.readFileSync(path.join(__dirname,'cert','cert.pem'))
+// }, app);
 
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
   },
 });
 
@@ -155,4 +153,8 @@ io.use((socket, next) => {
     await getAllStats()
   }, 10*1000)
 
+});
+
+server.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });
